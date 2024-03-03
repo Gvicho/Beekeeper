@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/splashFragment">
+
+
+
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.beekeeper.presenter.screen.home.HomeFragment"
+        tools:layout="@layout/fragment_home" />
+
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.beekeeper.presenter.screen.splash.SplashFragment"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_splash_screen" >
+
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_navigation_home2"
+            app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.beekeeper.presenter.screen.authentification.login.LoginFragment"
+        android:label="fragment_login_screen"
+        tools:layout="@layout/fragment_login_screen" >
+        <action
+            android:id="@+id/action_loginFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_loginFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.example.beekeeper.presenter.screen.authentification.register.RegistrationFragment"
+        android:label="fragment_registration"
+        tools:layout="@layout/fragment_registration" />
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.example.beekeeper.presenter.screen.authentification.reset_password.ResetPasswordFragment"
+        android:label="fragment_reset_password"
+        tools:layout="@layout/fragment_reset_password" />
+    <fragment
+        android:id="@+id/savedAnalyticsFragment"
+        android:name="com.example.beekeeper.presenter.screen.saved_analytics.SavedAnalyticsFragment"
+        android:label="fragment_saved_analytics"
+        tools:layout="@layout/fragment_saved_analytics" />
+    <fragment
+        android:id="@+id/damagedBeehivesFragment"
+        android:name="com.example.beekeeper.presenter.screen.damaged_beehives.DamagedBeehivesFragment"
+        android:label="fragment_damaged_beehives"
+        tools:layout="@layout/fragment_damaged_beehives" />
+    <fragment
+        android:id="@+id/shareOrGetFragment"
+        android:name="com.example.beekeeper.presenter.screen.share_or_get_analytics.ShareOrGetFragment"
+        android:label="fragment_share_or_get"
+        tools:layout="@layout/fragment_share_or_get" />
+</navigation>

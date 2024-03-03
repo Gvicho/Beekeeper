@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Color when the item is selected -->
+    <item android:color="@color/honey" android:state_checked="true" /> <!-- Replace #FF0000 with your selected color -->
+
+    <!-- Default color -->
+    <item android:color="@color/black"/> <!-- Replace #888888 with your default color -->
+</selector>
