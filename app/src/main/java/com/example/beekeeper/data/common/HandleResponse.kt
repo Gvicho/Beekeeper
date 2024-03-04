@@ -1,6 +1,5 @@
 package com.example.beekeeper.data.common
-import android.util.Log
-import com.example.beekeeper.data.common.Resource
+import com.example.beekeeper.domain.common.Resource
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuthException
 import kotlinx.coroutines.flow.flow

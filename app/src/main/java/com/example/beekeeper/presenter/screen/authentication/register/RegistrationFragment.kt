@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.beekeeper.data.common.Resource
+import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.databinding.FragmentRegistrationBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint

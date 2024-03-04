@@ -1,6 +1,6 @@
-package com.example.beekeeper.domain.repository
+package com.example.beekeeper.domain.repository.auth
 
-import com.example.beekeeper.data.common.Resource
+import com.example.beekeeper.domain.common.Resource
 import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.flow.Flow
 
