@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.screen.authentification.reset_password
+package com.example.beekeeper.presenter.screen.authentication.reset_password
 
 import com.example.beekeeper.databinding.FragmentResetPasswordBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
