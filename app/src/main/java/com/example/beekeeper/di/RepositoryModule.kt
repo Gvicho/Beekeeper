@@ -1,6 +1,10 @@
 package com.example.beekeeper.di
 
 
+import com.example.beekeeper.data.common.HandleResponse
+import com.example.beekeeper.data.repository.AuthRepositoryImpl
+import com.example.beekeeper.domain.repository.AuthRepository
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +29,13 @@ object RepositoryModule {
 //            handleResponse = handleResponse
 //        )
 //    }
+
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(firebaseAuth: FirebaseAuth, handleResponse: HandleResponse): AuthRepository {
+        return AuthRepositoryImpl(firebaseAuth,handleResponse)
+    }
 
 
 }

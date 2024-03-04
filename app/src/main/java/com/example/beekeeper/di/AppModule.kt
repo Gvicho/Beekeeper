@@ -2,6 +2,7 @@ package com.example.beekeeper.di
 
 
 import com.example.beekeeper.BuildConfig
+import com.google.firebase.auth.FirebaseAuth
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -52,4 +53,11 @@ object AppModule { //stuff that are here should be singleton
     }
 
     // add service provide
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
+
 }

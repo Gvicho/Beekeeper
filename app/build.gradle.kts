@@ -7,6 +7,7 @@ plugins {
 
     // for ksp
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 
@@ -61,6 +62,7 @@ dependencies {
 
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
     ksp("androidx.room:room-compiler:2.6.1")// for room
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")// for okHttp logger interceptor
@@ -112,4 +114,9 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
+    implementation("com.google.firebase:firebase-analytics")
+
+
 }

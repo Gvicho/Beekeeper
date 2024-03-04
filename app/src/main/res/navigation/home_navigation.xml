@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/loginFragment">
 
 
 
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.beekeeper.presenter.screen.authentification.login.LoginFragment"
+        android:name="com.example.beekeeper.presenter.screen.authentication.login.LoginFragment"
         android:label="fragment_login_screen"
         tools:layout="@layout/fragment_login_screen" >
         <action
@@ -44,12 +44,12 @@
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
-        android:name="com.example.beekeeper.presenter.screen.authentification.register.RegistrationFragment"
+        android:name="com.example.beekeeper.presenter.screen.authentication.register.RegistrationFragment"
         android:label="fragment_registration"
         tools:layout="@layout/fragment_registration" />
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.example.beekeeper.presenter.screen.authentification.reset_password.ResetPasswordFragment"
+        android:name="com.example.beekeeper.presenter.screen.authentication.reset_password.ResetPasswordFragment"
         android:label="fragment_reset_password"
         tools:layout="@layout/fragment_reset_password" />
     <fragment
