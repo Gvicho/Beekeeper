@@ -39,6 +39,8 @@ class LogInViewModel @Inject constructor(
             LoginEvent.ResetErrorStatus -> {
                 updateErrorMessage(null)
             }
+
+            LoginEvent.MoveUserToResetPageEvent -> setNavigationEventFlowToPasswordReset()
         }
     }
 
@@ -90,6 +92,12 @@ class LogInViewModel @Inject constructor(
         }
     }
 
+    private fun setNavigationEventFlowToPasswordReset(){
+        viewModelScope.launch {
+            _loginPageNavigationEvent.emit(LoginNavigationEvent.NavigateToResetPasswordPageEvent)
+        }
+    }
+
     private fun updateErrorMessage(message:String?){
         _loginUIState.update {
             it.copy(errorMessage = message)
@@ -100,6 +108,7 @@ class LogInViewModel @Inject constructor(
     sealed interface LoginNavigationEvent{
         data object NavigateToHomePageEvent:LoginNavigationEvent
         data object NavigateToRegistrationEvent:LoginNavigationEvent
+        data object NavigateToResetPasswordPageEvent:LoginNavigationEvent
     }
 
 }

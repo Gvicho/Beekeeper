@@ -10,6 +10,7 @@ import com.example.beekeeper.presenter.state.auth.register.RegisterState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class RegistrationViewModel @Inject constructor(private val registerUseCase: Reg
     val navigationEventFlow get() = _navigationEventFlow
 
     private val _registrationState = MutableStateFlow(RegisterState())
-    val registrationState = _registrationState
+    val registrationState = _registrationState.asStateFlow()
 
     fun onEvent(event: RegisterEvent){
         when(event){
@@ -61,12 +62,12 @@ class RegistrationViewModel @Inject constructor(private val registerUseCase: Reg
                     }
                     is Resource.Success -> {
                         _registrationState.update {
-                            it.copy(userAuthenticator = UserAuthenticator(email,password))
+                            it.copy(userAuthenticator = UserAuthenticator(email,password), isLoading = false)
                         }
                     }
                     is Resource.Failed -> {
                         _registrationState.update {
-                            it.copy(errorMessage = result.message)
+                            it.copy(errorMessage = result.message, isLoading = false)
                         }
                     }
                 }

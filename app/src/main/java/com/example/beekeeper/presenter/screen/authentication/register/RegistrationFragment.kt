@@ -46,13 +46,17 @@ class RegistrationFragment : BaseFragment<FragmentRegistrationBinding>(FragmentR
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.navigationEventFlow.collect{
-                    when(it){
-                        is RegistrationViewModel.NavigationEvent.NavigateBackToLoginPage -> {
-                            returnResultAndFinishRegistration(it.email,it.password)
-                            closeRegistrationFragment()
-                        }
-                    }
+                    handleNavigation(it)
                 }
+            }
+        }
+    }
+
+    private fun handleNavigation(navigationEvent: RegistrationViewModel.NavigationEvent){
+        when(navigationEvent){
+            is RegistrationViewModel.NavigationEvent.NavigateBackToLoginPage -> {
+                returnResultAndFinishRegistration(navigationEvent.email,navigationEvent.password)
+                closeRegistrationFragment()
             }
         }
     }

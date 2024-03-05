@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class CancelSessionUseCase@Inject constructor(private val credentialsRepository: CredentialsRepository) {
 
-    suspend operator fun invoke() =credentialsRepository.clearToken()
+    suspend operator fun invoke() { credentialsRepository.clearToken() }
 
 }

@@ -33,27 +33,41 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
         animations()
     }
     override fun bind() {
-        binding.apply {
+        bindLoginBtnClickListener()
+        bindRegisterBtnClickListener()
+        bindResetPasswordTvClickListener()
 
+        ifOnDebugModeFillFields()
+
+        setRegistrationFragmentResultListener()
+    }
+
+    private fun bindLoginBtnClickListener(){
+        binding.apply{
             btnLogIn.setOnClickListener{
                 val email = etEmail.text.toString()
                 val password = etPassword.text.toString()
                 val rememberedChecked = cbRememberMe.isChecked
                 viewModel.onEvent(LoginEvent.LoginUserEvent(email,password,rememberedChecked))
             }
+        }
+    }
 
+    private fun bindRegisterBtnClickListener(){
+        binding.apply{
             btnRegister.setOnClickListener{
                 viewModel.onEvent(LoginEvent.MoveUserToRegistrationEvent)
             }
+        }
+    }
 
+    private fun bindResetPasswordTvClickListener(){
+        binding.apply{
             tvRecoverPassword.setOnClickListener {
-                navigateToResetPasswordPage()
+                viewModel.onEvent(LoginEvent.MoveUserToResetPageEvent)
             }
         }
 
-        ifOnDebugModeFillFields()
-
-        setRegistrationFragmentResultListener()
     }
 
     private fun ifOnDebugModeFillFields(){
@@ -112,14 +126,21 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.loginPageNavigationEvent.collect{navigationEvent ->
-                    when(navigationEvent){
-                        LogInViewModel.LoginNavigationEvent.NavigateToHomePageEvent -> navigateToHomePage()
-                        LogInViewModel.LoginNavigationEvent.NavigateToRegistrationEvent -> navigateToRegistrationPage()
-                    }
+                    handleNavigation(navigationEvent)
                 }
             }
         }
     }
+
+    private fun handleNavigation(navigationEvent:LogInViewModel.LoginNavigationEvent){
+        when(navigationEvent){
+            LogInViewModel.LoginNavigationEvent.NavigateToHomePageEvent -> navigateToHomePage()
+            LogInViewModel.LoginNavigationEvent.NavigateToRegistrationEvent -> navigateToRegistrationPage()
+            LogInViewModel.LoginNavigationEvent.NavigateToResetPasswordPageEvent -> navigateToResetPasswordPage()
+        }
+    }
+
+
 
     private fun bindResponseStateObserver(){
         lifecycleScope.launch {
@@ -158,6 +179,6 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
 
 
     private fun navigateToResetPasswordPage(){
-        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToResetPasswordFragment())
+        findNavController().safeNavigateWithArgs(R.id.action_loginFragment_to_resetPasswordFragment)
     }
 }
