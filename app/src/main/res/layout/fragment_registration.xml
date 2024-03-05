@@ -6,7 +6,7 @@
     android:padding="16dp"
     android:layout_height="match_parent"
     tools:context=".presenter.screen.authentication.register.RegistrationFragment"
-    android:background="@color/white">
+    android:background="@color/bg_sky">
 
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="e_mail"
+        android:hint="@string/email"
         android:textSize="25sp"
         android:textColorHint="#322E2E"
         android:textColor="#009688"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="password"
+        android:hint="@string/password"
         android:textSize="25sp"
         android:textColorHint="#322E2E"
         android:textColor="#009688"
@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="repeat_pasword"
+        android:hint="@string/repeat_password"
         android:textSize="25sp"
         android:textColor="#009688"
         android:textColorHint="#322E2E"
@@ -48,16 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="#ffce31"
-        android:text="Register"
-        android:textColor="#FFF" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnLogIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="#ffce31"
-        android:text="Log in"
+        android:text="@string/register"
         android:textColor="#FFF" />
 
     <ProgressBar

@@ -1,8 +1,8 @@
 package com.example.beekeeper.data.repository
 
 import com.example.beekeeper.data.common.HandleResponse
-import com.example.beekeeper.data.common.Resource
-import com.example.beekeeper.domain.repository.AuthRepository
+import com.example.beekeeper.domain.common.Resource
+import com.example.beekeeper.domain.repository.auth.AuthRepository
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +16,6 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
     override suspend fun register(email: String, password: String): Flow<Resource<AuthResult>> {
 
-
         return handleResponse.safeApiCall {
             firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         }.map {
@@ -28,24 +27,13 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
-
-
     }
 
     override suspend fun login(email: String, password: String): Flow<Resource<AuthResult>> {
 
         return handleResponse.safeApiCall {
             firebaseAuth.signInWithEmailAndPassword(email, password).await()
-        }.map {
-            when(it){
-                is Resource.Success -> Resource.Success(it.responseData)
-                is Resource.Failed -> Resource.Failed(it.message)
-                is Resource.Loading -> Resource.Loading()
-
-            }
         }
-
-
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.beekeeper.data.common
+package com.example.beekeeper.domain.common
 
 sealed class Resource<out D: Any>(
 ) {

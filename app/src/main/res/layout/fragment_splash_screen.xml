@@ -3,19 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presenter.screen.splash.SplashFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presenter.screen.splash.SplashFragment"
+    android:background="@color/honey_background">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_launcher_background"/>
+        android:src="@mipmap/ic_beekeeper_logo"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/RoundedCorners"/>
 
     <TextView
+        android:id="@+id/splashLable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="bottom|center_horizontal"
         android:textColor="@color/black"
-        android:text="@string/splash"/>
+        android:text="@string/made_by_konstantine_and_george"
+        android:layout_marginBottom="50dp"
+        android:textAppearance="@style/heading"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:padding="16dp"/>
 
 </FrameLayout>

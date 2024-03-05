@@ -2,6 +2,7 @@ package com.example.beekeeper.di
 
 
 import com.example.beekeeper.BuildConfig
+import com.example.beekeeper.data.source.remote.internet.service.FarmsService
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -52,7 +53,11 @@ object AppModule { //stuff that are here should be singleton
             .build()
     }
 
-    // add service provide
+    @Singleton
+    @Provides
+    fun provideFarmsService(retrofit: Retrofit): FarmsService {
+        return retrofit.create(FarmsService::class.java)
+    }
 
     @Provides
     @Singleton

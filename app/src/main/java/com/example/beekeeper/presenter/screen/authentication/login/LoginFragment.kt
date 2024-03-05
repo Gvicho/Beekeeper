@@ -2,16 +2,19 @@ package com.example.beekeeper.presenter.screen.authentication.login
 
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.example.beekeeper.BuildConfig
 import com.example.beekeeper.R
-import com.example.beekeeper.data.common.Resource
 import com.example.beekeeper.databinding.FragmentLoginScreenBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
+import com.example.beekeeper.presenter.event.LoginEvent
+import com.example.beekeeper.presenter.extension.safeNavigateWithArgs
+import com.example.beekeeper.presenter.extension.showSnackBar
+import com.example.beekeeper.presenter.state.auth.login.LoginUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -20,83 +23,120 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
 
     private val viewModel: LogInViewModel by viewModels()
 
+    companion object {
+        private const val TEST_EMAIL = "admin@mail.com"
+        private const val TEST_PASSWORD = "TBC_2024"
+    }
 
     override fun setUp() {
-
-        binding.btnLogIn.isEnabled = true
-        anims()
-
+        super.setUp()
+        animations()
     }
+    override fun bind() {
+        binding.apply {
 
-    override fun listeners() {
-        binding.btnLogIn.setOnClickListener {
-            viewModel.logIn(binding.etEmail.text.toString(), binding.etPassword.text.toString())
-            bindObservers()
-        }
-
-        binding.btnRegister.setOnClickListener {
-//            openRegister()
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
+            btnLogIn.setOnClickListener{
+                val email = etEmail.text.toString()
+                val password = etPassword.text.toString()
+                val rememberedChecked = cbRememberMe.isChecked
+                viewModel.onEvent(LoginEvent.LoginUserEvent(email,password,rememberedChecked))
             }
-        })
 
-        binding.tvRecoverPassword.setOnClickListener{
-//            openRecover()
+            btnRegister.setOnClickListener{
+                viewModel.onEvent(LoginEvent.MoveUserToRegistrationEvent)
+            }
         }
 
+        ifOnDebugModeFillFields()
+
+        setRegistrationFragmentResultListener()
     }
+
+    private fun ifOnDebugModeFillFields(){
+        if(BuildConfig.DEBUG){
+            binding.apply {
+                etEmail.setText(TEST_EMAIL)
+                etPassword.setText(TEST_PASSWORD)
+            }
+        }
+    }
+
+    private fun handleResponse(loginState: LoginUiState){
+        loginState.errorMessage?.let {
+            errorWhileRegistration(it)
+        }
+
+        showOrHideProgressBar(loginState.isLoading)
+
+        loginState.accessToken?.let {
+            successRegistration()
+        }
+    }
+
+    private fun successRegistration(){
+        binding.root.showSnackBar("Successful Login")
+    }
+
+    private fun showOrHideProgressBar(isLoading:Boolean){
+        binding.apply {
+            pbLogIn.visibility = if(isLoading) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun errorWhileRegistration(errorMessage:String){
+        binding.root.showSnackBar(errorMessage)
+        viewModel.onEvent(LoginEvent.ResetErrorStatus)
+    }
+
+    private fun setRegistrationFragmentResultListener(){
+        parentFragmentManager.setFragmentResultListener("requestKey", this) { _, bundle ->
+            val email = bundle.getString("Email")
+            val password = bundle.getString("Password")
+
+            binding.etEmail.setText(email)
+            binding.etPassword.setText(password)
+        }
+    }
+
 
     override fun bindObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.logInFlow.collect {
-                    when (it) {
-                        is Resource.Loading -> {
-                            binding.pbLogIn.visibility = View.VISIBLE
-                        }
+        bindNavigationEventsObserver()
+        bindResponseStateObserver()
+    }
 
-                        is Resource.Success -> {
-                            val activeUser = it.responseData
-
-                            binding.pbLogIn.visibility = View.GONE
-                            Toast.makeText(requireContext(), "Log In  Success", Toast.LENGTH_SHORT).show()
-
-
-                        }
-
-                        is Resource.Failed -> {
-                            binding.pbLogIn.visibility = View.GONE
-                            val errorMessage = it.message
-                            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT)
-                                .show()
-
-                        }
+    private fun bindNavigationEventsObserver(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.loginPageNavigationEvent.collect{navigationEvent ->
+                    when(navigationEvent){
+                        LogInViewModel.LoginNavigationEvent.NavigateToHomePageEvent -> navigateToHomePage()
+                        LogInViewModel.LoginNavigationEvent.NavigateToRegistrationEvent -> navigateToRegistrationPage()
                     }
                 }
             }
         }
     }
 
-//    private fun openHome() {
-//        val action = LogInFragmentDirections.actionLoginFragmentToHomeFragment()
-//        findNavController().navigate(action)
-//    }
-//
-//    private fun openRecover() {
-//        val action = LogInFragmentDirections.actionLoginFragmentToRecoverPasswordFragment()
-//        findNavController().navigate(action)
-//    }
-//
-//    private fun openRegister() {
-//        val action = LogInFragmentDirections.actionLoginFragmentToRegisterFragment()
-//        findNavController().navigate(action)
-//    }
+    private fun bindResponseStateObserver(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.loginUIState.collect{loginState ->
+                    handleResponse(loginState)
+                }
+            }
+        }
+    }
+
+    private fun navigateToHomePage(){
+        findNavController().safeNavigateWithArgs(R.id.action_loginFragment_to_navigation_home)
+    }
+
+    private fun navigateToRegistrationPage(){
+        findNavController().safeNavigateWithArgs(R.id.action_loginFragment_to_registrationFragment)
+    }
 
 
-    private fun anims(){
+    private fun animations(){
         val slideDownAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
         val slideInRight = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_right)
         val slideInLeft = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)

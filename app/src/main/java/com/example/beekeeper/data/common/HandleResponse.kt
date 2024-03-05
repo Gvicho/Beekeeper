@@ -1,9 +1,10 @@
 package com.example.beekeeper.data.common
-import android.util.Log
-import com.example.beekeeper.data.common.Resource
+import com.example.beekeeper.domain.common.Resource
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuthException
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import retrofit2.Response
 
 class HandleResponse {
 
@@ -40,6 +41,21 @@ class HandleResponse {
                 return "Failed"
 
             }
+        }
+    }
+
+    fun <T : Any> safeApiCallRetrofit(call: suspend () -> Response<T>): Flow<Resource<T>> = flow {
+        try {
+            emit(Resource.Loading())
+            val response = call()
+            val body = response.body()
+            if (response.isSuccessful && body != null) {
+                emit(Resource.Success(responseData = body))
+            } else {
+                emit(Resource.Failed(message = response.errorBody()?.string() ?: ""))
+            }
+        } catch (e: Throwable) {
+            emit(Resource.Failed(message  = e.message ?: ""))
         }
     }
 
