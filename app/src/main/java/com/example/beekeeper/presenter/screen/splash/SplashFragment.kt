@@ -1,5 +1,6 @@
 package com.example.beekeeper.presenter.screen.splash
 
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +21,10 @@ class SplashFragment : BaseFragment<FragmentSplashScreenBinding>(FragmentSplashS
 
     override fun loadData() {
         viewModel.navigateToNextScreen()
+    }
+
+    override fun bind() {
+        animation()
     }
 
     override fun bindObservers() {
@@ -49,6 +54,13 @@ class SplashFragment : BaseFragment<FragmentSplashScreenBinding>(FragmentSplashS
 
     private fun navigateToLoginPage(){
         findNavController().safeNavigateWithArgs(R.id.action_splashFragment_to_loginFragment)
+    }
+
+    private fun animation(){
+        val slideDownAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
+        val slideInBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
+        binding.logo.startAnimation(slideDownAnimation)
+        binding.splashLable.startAnimation(slideInBottom)
     }
 
 }

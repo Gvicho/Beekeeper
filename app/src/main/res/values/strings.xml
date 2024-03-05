@@ -9,4 +9,11 @@
     <string name="saved_analytics">Saved Analytics</string>
     <string name="damaged_beehives">Damaged Beehives</string>
     <string name="share_get">Share/Get</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="requestkey">requestKey</string>
+    <string name="successful_registration">Successful Registration</string>
+    <string name="register">Register</string>
+    <string name="repeat_password">repeat_password</string>
+    <string name="made_by_konstantine_and_george">Made by Konstantine And George</string>
 </resources>
