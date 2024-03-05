@@ -45,6 +45,10 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
             btnRegister.setOnClickListener{
                 viewModel.onEvent(LoginEvent.MoveUserToRegistrationEvent)
             }
+
+            tvRecoverPassword.setOnClickListener {
+                navigateToResetPasswordPage()
+            }
         }
 
         ifOnDebugModeFillFields()
@@ -150,5 +154,10 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
             btnRegister.startAnimation(slideInLeft)
             tvRecoverPassword.startAnimation(slideInBottom)
         }
+    }
+
+
+    private fun navigateToResetPasswordPage(){
+        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToResetPasswordFragment())
     }
 }

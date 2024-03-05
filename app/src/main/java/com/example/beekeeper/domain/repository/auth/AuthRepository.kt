@@ -8,4 +8,6 @@ interface AuthRepository {
 
     suspend fun register(email: String, password: String): Flow<Resource<AuthResult>>
     suspend fun login(email: String, password: String): Flow<Resource<AuthResult>>
+
+    suspend fun recoverPassword(email: String): Flow<Resource<Boolean>>
 }

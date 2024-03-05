@@ -3,7 +3,6 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="splash">Splash</string>
     <string name="saved_analytics">Saved Analytics</string>
@@ -18,4 +17,8 @@
     <string name="made_by_konstantine_and_george">Made by Konstantine And George</string>
     <string name="name">Name</string>
     <string name="tbilisi_gorgasali_str_n46">Tbilisi, Gorgasali str. N46</string>
+    <string name="reset_password">Reset password</string>
+    <string name="reset_instructions">Enter the email associated with your account and we\'ll send an email with instructions to reset your password.</string>
+    <string name="e_mail">E-mail</string>
+    <string name="send_instructions">Send Instructions</string>
 </resources>
