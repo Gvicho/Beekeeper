@@ -14,7 +14,7 @@ import com.example.beekeeper.databinding.FragmentRegistrationBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.RegisterEvent
 import com.example.beekeeper.presenter.extension.showSnackBar
-import com.example.beekeeper.presenter.state.RegisterState
+import com.example.beekeeper.presenter.state.auth.register.RegisterState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

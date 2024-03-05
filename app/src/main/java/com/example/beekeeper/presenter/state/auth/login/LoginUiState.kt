@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.state
+package com.example.beekeeper.presenter.state.auth.login
 
 data class LoginUiState(
     val isLoading :Boolean = false,

@@ -57,6 +57,9 @@ kapt {
 }
 
 dependencies {
+    implementation("androidx.viewpager2:viewpager2:1.0.0") // viewPager2
+    implementation("me.relex:circleindicator:2.1.6") // for circle indicator
+
     implementation("androidx.work:work-runtime-ktx:2.9.0")//for workManager
     implementation("androidx.hilt:hilt-work:1.2.0")
 
@@ -89,7 +92,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0") // for glide
 
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1") // coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // coroutines
 
 
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0") // For ViewModel

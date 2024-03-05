@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.model
+package com.example.beekeeper.presenter.model.auth.register
 
 data class UserAuthenticator(
     val email:String,

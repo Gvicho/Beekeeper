@@ -14,7 +14,7 @@ import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.LoginEvent
 import com.example.beekeeper.presenter.extension.safeNavigateWithArgs
 import com.example.beekeeper.presenter.extension.showSnackBar
-import com.example.beekeeper.presenter.state.LoginUiState
+import com.example.beekeeper.presenter.state.auth.login.LoginUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

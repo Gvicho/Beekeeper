@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.auth.RegisterUseCase
 import com.example.beekeeper.presenter.event.RegisterEvent
-import com.example.beekeeper.presenter.model.UserAuthenticator
-import com.example.beekeeper.presenter.state.RegisterState
+import com.example.beekeeper.presenter.model.auth.register.UserAuthenticator
+import com.example.beekeeper.presenter.state.auth.register.RegisterState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
