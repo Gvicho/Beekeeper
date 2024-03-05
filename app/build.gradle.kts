@@ -35,7 +35,7 @@ android {
             buildConfigField("String","BASE_URL","\"https://rameRealuri\"")
         }
         debug {
-            buildConfigField("String","BASE_URL","\"https://run.mocky.io/v3/\"")
+            buildConfigField("String","BASE_URL","\"https://6ebae387-dddf-4cec-9159-fdf3e93dc6dd.mock.pstmn.io/\"")
         }
     }
     compileOptions {

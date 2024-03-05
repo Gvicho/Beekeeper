@@ -43,7 +43,7 @@ class LogInViewModel @Inject constructor(
     }
 
 
-    fun logIn(email: String, password: String, rememberMe:Boolean) {
+    private fun logIn(email: String, password: String, rememberMe:Boolean) {
 
         viewModelScope.launch {
             loginUseCase(email, password).collect {result->
