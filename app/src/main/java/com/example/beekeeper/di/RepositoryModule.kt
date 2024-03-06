@@ -1,20 +1,27 @@
 package com.example.beekeeper.di
 
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.example.beekeeper.data.common.HandleResponse
 import com.example.beekeeper.data.repository.AuthRepositoryImpl
 import com.example.beekeeper.data.repository.DataStoreRepositoryImpl
 import com.example.beekeeper.data.repository.FarmsRepositoryImpl
+import com.example.beekeeper.data.repository.StorageRepositoryImpl
 import com.example.beekeeper.data.source.remote.internet.service.FarmsService
 import com.example.beekeeper.domain.repository.auth.AuthRepository
 import com.example.beekeeper.domain.repository.farms.FarmsRepository
 import com.example.beekeeper.domain.repository.save_credentials.CredentialsRepository
+import com.example.beekeeper.domain.repository.storage.StorageRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -49,6 +56,11 @@ object RepositoryModule {
             datastore = dataStore
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideImageRepository(storage: FirebaseStorage, @ApplicationContext context: Context): StorageRepository =
+        StorageRepositoryImpl(storage, context.contentResolver)
 
 
 }

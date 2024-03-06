@@ -5,11 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".presenter.screen.damaged_beehives.DamagedBeehivesFragment">
 
-    <TextView
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:id="@+id/btnLaunch"
+        android:layout_height="wrap_content"
+        android:text="Launch"/>
+
+    <ProgressBar
+        android:id="@+id/pbUpload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@color/black"
-        android:text="Damaged Beehives Page"/>
-
+        android:layout_marginTop="15dp"
+        android:visibility="gone"
+/>
 </FrameLayout>

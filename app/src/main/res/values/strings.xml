@@ -21,4 +21,7 @@
     <string name="reset_instructions">Enter the email associated with your account and we\'ll send an email with instructions to reset your password.</string>
     <string name="e_mail">E-mail</string>
     <string name="send_instructions">Send Instructions</string>
+    <string name="remember_me">Remember me</string>
+    <string name="log_in">Log in</string>
+    <string name="forgot_password">Forgot password?</string>
 </resources>

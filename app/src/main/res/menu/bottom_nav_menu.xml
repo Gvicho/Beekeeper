@@ -6,8 +6,9 @@
 
     <item
         android:id="@+id/damagedBeehivesFragment"
-        android:icon="@drawable/ic_warn_damage_24"
-        android:title="@string/damaged_beehives" />
+        android:icon="@drawable/ic_beehives"
+        android:title="@string/damaged_beehives"
+        />
 
     <item
         android:id="@+id/navigation_home"
