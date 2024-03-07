@@ -61,7 +61,7 @@ class ReportUploaderWorker@AssistedInject constructor(
                 damageDescription = damageDescription,
                 damageLevelIndicator = damageLevelIndicator,
                 dateUploaded = dateUploaded,
-                imageUris = imageUris.map { it.toString() }
+                imageUris = downloadUrls.map { it }
 
             )
 
