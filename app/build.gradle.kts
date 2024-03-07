@@ -58,6 +58,10 @@ kapt {
 }
 
 dependencies {
+
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")// Firebase storage
+
     implementation("androidx.viewpager2:viewpager2:1.0.0") // viewPager2
     implementation("me.relex:circleindicator:2.1.6") // for circle indicator
 
@@ -66,8 +70,6 @@ dependencies {
 
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
-    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
-    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     ksp("androidx.room:room-compiler:2.6.1")// for room
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")// for okHttp logger interceptor
