@@ -7,6 +7,8 @@ import com.example.beekeeper.data.source.remote.bluetooth.conroller.BluetoothCon
 import com.example.beekeeper.data.source.remote.internet.service.FarmsService
 import com.example.beekeeper.domain.controller.bluetooth.BluetoothController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -77,6 +79,16 @@ object AppModule { //stuff that are here should be singleton
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
+
+    @Singleton
+    @Provides
+    fun provideFirebaseDatabase(): FirebaseDatabase {
+        return FirebaseDatabase.getInstance()
     }
 
 }

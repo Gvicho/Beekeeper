@@ -11,9 +11,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.databinding.FragmentDamagedBeehivesBinding
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
+import com.example.beekeeper.presenter.model.damagedBeehives.DamageReportUI
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -21,35 +23,41 @@ import kotlinx.coroutines.launch
 class DamagedBeehivesFragment :
     BaseFragment<FragmentDamagedBeehivesBinding>(FragmentDamagedBeehivesBinding::inflate) {
 
-        private val viewModel: DamagedBeehivesViewModel by viewModels()
+    private val viewModel: DamagedBeehivesViewModel by viewModels()
 
     private val activityResultLauncher =
         registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions())
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
         { permissions ->
             // Handle Permission granted/rejected
             var permissionGranted = true
             permissions.entries.forEach {
-                if (it.key in arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,) && !it.value)
+                if (it.key in arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE) && !it.value)
                     permissionGranted = false
             }
             if (!permissionGranted) {
-                Toast.makeText(requireContext(),
+                Toast.makeText(
+                    requireContext(),
                     "Permission request denied",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
             }
         }
 
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    private val pickMultipleMedia = registerForActivityResult(
+        ActivityResultContracts.PickMultipleVisualMedia(
+            10
+        )
+    ) { uris ->
         // Callback is invoked after the user selects a media item or closes the
         // photo picker.
-        if (uri != null) {
+        if (uris != null) {
 
-            val imageStream = requireContext().contentResolver.openInputStream(uri)
-            viewModel.uploadImage(imageStream)
-            Log.d("PhotoPicker", "Selected URI: $uri")
+            viewModel.uploadImage(uris)
+            Log.d("PhotoPicker", "Selected URI: $uris")
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -63,6 +71,7 @@ class DamagedBeehivesFragment :
     override fun listeners() {
 
         binding.btnLaunch.setOnClickListener {
+
             requestPermissions()
         }
     }
@@ -79,9 +88,12 @@ class DamagedBeehivesFragment :
                         is Resource.Success -> {
                             val url = it.responseData
                             binding.pbUpload.visibility = View.GONE
-                            Toast.makeText(requireContext(), "Registration Success", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                "Registration Success",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             d("FirebaseResultUrl", url)
-
 
 
                         }
@@ -98,6 +110,7 @@ class DamagedBeehivesFragment :
             }
         }
     }
+
     private fun requestPermissions() {
         activityResultLauncher.launch(arrayOf(Manifest.permission.CAMERA))
     }
