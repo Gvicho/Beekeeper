@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/damagedBeehivesFragment">
+    app:startDestination="@id/splashFragment">
 
 
 
@@ -72,5 +72,14 @@
         android:id="@+id/shareOrGetFragment"
         android:name="com.example.beekeeper.presenter.screen.share_or_get_analytics.ShareOrGetFragment"
         android:label="fragment_share_or_get"
-        tools:layout="@layout/fragment_share_or_get" />
+        tools:layout="@layout/fragment_share_or_get" >
+        <action
+            android:id="@+id/action_shareOrGetFragment_to_scanBottomSheet"
+            app:destination="@id/scanBottomSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/scanBottomSheet"
+        android:name="com.example.beekeeper.presenter.screen.share_or_get_analytics.scan.ScanBottomSheet"
+        android:label="ScanBottomSheet"
+        tools:layout="@layout/bottom_sheet_scan_connect"/>
 </navigation>

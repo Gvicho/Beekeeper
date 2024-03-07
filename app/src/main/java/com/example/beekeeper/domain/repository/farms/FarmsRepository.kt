@@ -1,7 +1,7 @@
 package com.example.beekeeper.domain.repository.farms
 
 import com.example.beekeeper.domain.common.Resource
-import com.example.beekeeper.domain.model.Farm
+import com.example.beekeeper.domain.model.farms.Farm
 import kotlinx.coroutines.flow.Flow
 
 interface FarmsRepository {

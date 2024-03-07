@@ -1,4 +1,4 @@
-package com.example.beekeeper.domain.model
+package com.example.beekeeper.domain.model.farms
 
 data class Owner(
     val id: Int,

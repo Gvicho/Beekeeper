@@ -12,4 +12,12 @@
         android:textColor="@color/black"
         android:text="Share or Get analytics page"/>
 
+    <Button
+        android:id="@+id/scanBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="open scanner"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginBottom="20dp"/>
+
 </FrameLayout>

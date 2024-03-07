@@ -1,6 +1,6 @@
 package com.example.beekeeper.presenter.mappers
 
-import com.example.beekeeper.domain.model.Owner
+import com.example.beekeeper.domain.model.farms.Owner
 import com.example.beekeeper.presenter.model.home.OwnerUi
 
 fun Owner.toUI(): OwnerUi {

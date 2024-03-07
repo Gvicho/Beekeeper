@@ -1,4 +1,4 @@
-package com.example.beekeeper.domain.model
+package com.example.beekeeper.domain.model.farms
 
 data class Location(
     val latitude: Double,

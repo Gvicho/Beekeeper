@@ -8,7 +8,6 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -20,13 +19,6 @@ class AuthRepositoryImpl @Inject constructor(
 
         return handleResponse.safeApiCall {
             firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-        }.map {
-            when (it) {
-                is Resource.Success -> Resource.Success(it.responseData)
-                is Resource.Failed -> Resource.Failed(it.message)
-                is Resource.Loading -> Resource.Loading()
-
-            }
         }
 
     }
