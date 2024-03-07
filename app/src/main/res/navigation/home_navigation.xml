@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/damagedBeehivesFragment">
+    app:startDestination="@id/addReportFragment">
 
 
 
@@ -67,7 +67,11 @@
         android:id="@+id/damagedBeehivesFragment"
         android:name="com.example.beekeeper.presenter.screen.damaged_beehives.DamagedBeehivesFragment"
         android:label="fragment_damaged_beehives"
-        tools:layout="@layout/fragment_damaged_beehives" />
+        tools:layout="@layout/fragment_damaged_beehives" >
+        <action
+            android:id="@+id/action_damagedBeehivesFragment_to_addReportFragment"
+            app:destination="@id/addReportFragment" />
+    </fragment>
     <fragment
         android:id="@+id/shareOrGetFragment"
         android:name="com.example.beekeeper.presenter.screen.share_or_get_analytics.ShareOrGetFragment"
@@ -82,4 +86,9 @@
         android:name="com.example.beekeeper.presenter.screen.share_or_get_analytics.scan.ScanBottomSheet"
         android:label="ScanBottomSheet"
         tools:layout="@layout/bottom_sheet_scan_connect"/>
+    <fragment
+        android:id="@+id/addReportFragment"
+        android:name="com.example.beekeeper.presenter.screen.damaged_beehives.AddReportFragment"
+        android:label="fragment_add_report"
+        tools:layout="@layout/fragment_add_report" />
 </navigation>

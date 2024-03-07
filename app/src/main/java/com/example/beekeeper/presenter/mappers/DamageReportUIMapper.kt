@@ -6,10 +6,9 @@ import com.example.beekeeper.presenter.model.damagedBeehives.DamageReportUI
 
 fun DamageReportUI.toDomain() = DamageReport(
     id = id,
-    location = location,
     damageDescription = damageDescription,
     damageLevelIndicator = damageLevelIndicator,
     dateUploaded = dateUploaded,
-    damageReason = damageReason,
     imageUris = imageUris
+
 )
