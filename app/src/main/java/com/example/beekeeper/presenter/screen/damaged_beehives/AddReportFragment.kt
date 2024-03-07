@@ -2,25 +2,19 @@ package com.example.beekeeper.presenter.screen.damaged_beehives
 
 import android.Manifest
 import android.net.Uri
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.beekeeper.R
+import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.databinding.FragmentAddReportBinding
-import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
+import com.example.beekeeper.presenter.extension.showSnackBar
+import com.example.beekeeper.presenter.state.damage_report.DamageReportState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,7 +22,6 @@ import kotlinx.coroutines.launch
 class AddReportFragment : BaseFragment<FragmentAddReportBinding>(FragmentAddReportBinding::inflate) {
 
     private val viewModel: AddReportViewModel by viewModels()
-    private val imagesHolder = mutableListOf<Uri>()
     private val activityResultLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -56,59 +49,56 @@ class AddReportFragment : BaseFragment<FragmentAddReportBinding>(FragmentAddRepo
             10
         )
     ) { uris ->
-
-        if (uris != null) {
-
-            viewModel.uploadImage(uris)
-
-        } else {
+        uris?.let {
+            uriList += it
+            binding.root.showSnackBar("added ${it.size}")
         }
     }
+     private var uriList = listOf<Uri>()
     override fun bindObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uploadFlow.collect {
-                    when (it) {
-                        is Resource.Loading -> {
-                            binding.pbUpload.visibility = View.VISIBLE
-                        }
-
-                        is Resource.Success -> {
-                            val url = it.responseData
-                            binding.pbUpload.visibility = View.GONE
-                            Toast.makeText(
-                                requireContext(),
-                                "Registration Success",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.d("FirebaseResultUrl", url)
-
-
-                        }
-
-                        is Resource.Failed -> {
-                            binding.pbUpload.visibility = View.GONE
-                            val errorMessage = it.message
-                            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT)
-                                .show()
-
-                        }
-                    }
+                viewModel.reportUIState.collect {
+                   handleReportState(it)
                 }
             }
         }
     }
 
+    private fun handleReportState(state:DamageReportState){
 
+        showOrHideProgressBar(state.isLoading)
+
+        state.uploadSuccess.let {
+            findNavController().popBackStack()
+        }
+
+    }
+
+    private fun showOrHideProgressBar(isLoading:Boolean){
+        binding.apply {
+            pbUpload.visibility = if(isLoading) View.VISIBLE else View.GONE
+        }
+    }
 
     override fun setUp() {
 
     }
 
     override fun listeners() {
-    binding.btnLaunch.setOnClickListener {
-        requestPermissions()
-    }
+        binding.btnPick.setOnClickListener {
+            requestPermissions()
+        }
+
+        binding.btnUpload.setOnClickListener {
+            if(uriList.isNotEmpty()){
+                viewModel.uploadImage(uriList)
+                binding.root.showSnackBar("start of sending")
+            }
+            else{
+                binding.root.showSnackBar("no Images !! ")
+            }
+        }
 
     }
 

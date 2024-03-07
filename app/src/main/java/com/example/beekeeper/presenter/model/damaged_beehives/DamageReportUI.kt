@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.model.damagedBeehives
+package com.example.beekeeper.presenter.model.damaged_beehives
 
 import android.net.Uri
 

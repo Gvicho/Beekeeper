@@ -4,38 +4,47 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
-import com.example.beekeeper.domain.usecase.storage.UploadImageUseCase
+import com.example.beekeeper.domain.usecase.damage_report.UploadDamageReportUseCase
 import com.example.beekeeper.presenter.mappers.toDomain
-import com.example.beekeeper.presenter.model.damagedBeehives.DamageReportUI
+import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
+import com.example.beekeeper.presenter.state.damage_report.DamageReportState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddReportViewModel @Inject constructor(private val uploadImageUseCase: UploadImageUseCase)
-    : ViewModel(){
+class AddReportViewModel @Inject constructor(
+    private val uploadDamageReportUseCase: UploadDamageReportUseCase
+) : ViewModel(){
 
-    private val _uploadFlow = MutableSharedFlow<Resource<String>>()
-    val uploadFlow: SharedFlow<Resource<String>> = _uploadFlow.asSharedFlow()
+    private val _reportUIState =  MutableStateFlow(DamageReportState())
+    val reportUIState : StateFlow<DamageReportState> = _reportUIState
 
 
     fun uploadImage(uris: List<Uri>) {
         viewModelScope.launch {
-            uploadImageUseCase.invoke(    DamageReportUI(
-                id = "prodesset",
+            uploadDamageReportUseCase(
+                DamageReportUI(
+                id = "55555",
                 damageDescription = "dolores",
                 damageLevelIndicator = 8408,
                 dateUploaded = "ocurreret",
                 imageUris = uris
-            ).toDomain()).collect {
-                when (it) {
-                    is Resource.Loading -> _uploadFlow.emit(Resource.Loading())
-                    is Resource.Success -> _uploadFlow.emit(Resource.Success(it.responseData))
-                    is Resource.Failed -> _uploadFlow.emit(Resource.Failed(it.message))
+            ).toDomain()
+            ).collect{result->
+                when(result){
+                    is Resource.Failed -> {
 
+                    }
+                    is Resource.Loading -> {
+                        _reportUIState.update { it.copy(isLoading = true) }
+                    }
+                    is Resource.Success -> {
+                        _reportUIState.update { it.copy(isLoading = false, uploadSuccess = Unit) }
+                    }
                 }
             }
         }
