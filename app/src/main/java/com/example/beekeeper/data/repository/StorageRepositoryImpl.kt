@@ -26,19 +26,18 @@ class StorageRepositoryImpl @Inject constructor(
         try {
             emit(Resource.Loading())
             val downloadUrls: MutableList<String> = mutableListOf()
-            for (each in report.imageUris){
+            for (each in report.imageUris) {
                 val storageRef = storage.reference.child("images/${each.lastPathSegment}")
                 storageRef.putFile(each).await()
                 downloadUrls.add(storageRef.downloadUrl.await().toString())
             }
             val readyDamageReport = DamageReportDto(
                 id = report.id,
-                location = report.location,
                 damageDescription = report.damageDescription,
                 damageLevelIndicator = report.damageLevelIndicator,
                 dateUploaded = report.dateUploaded,
-                damageReason = report.damageReason,
-                imageUris = downloadUrls
+                imageUris = report.imageUris.map { it.toString() }
+
             )
 
             val reportRef = database.reference.child("damageReports").child(readyDamageReport.id)

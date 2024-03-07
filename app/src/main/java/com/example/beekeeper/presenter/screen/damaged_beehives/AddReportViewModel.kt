@@ -7,17 +7,15 @@ import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.storage.UploadImageUseCase
 import com.example.beekeeper.presenter.mappers.toDomain
 import com.example.beekeeper.presenter.model.damagedBeehives.DamageReportUI
-import com.google.firebase.auth.AuthResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
-class DamagedBeehivesViewModel @Inject constructor(private val uploadImageUseCase: UploadImageUseCase)
+class AddReportViewModel @Inject constructor(private val uploadImageUseCase: UploadImageUseCase)
     : ViewModel(){
 
     private val _uploadFlow = MutableSharedFlow<Resource<String>>()
@@ -27,12 +25,10 @@ class DamagedBeehivesViewModel @Inject constructor(private val uploadImageUseCas
     fun uploadImage(uris: List<Uri>) {
         viewModelScope.launch {
             uploadImageUseCase.invoke(    DamageReportUI(
-                id = "parturientjj",
-                location = "lobortis",
-                damageDescription = "splendide",
-                damageLevelIndicator = "volumus",
-                dateUploaded = 3268,
-                damageReason = "mea",
+                id = "prodesset",
+                damageDescription = "dolores",
+                damageLevelIndicator = 8408,
+                dateUploaded = "ocurreret",
                 imageUris = uris
             ).toDomain()).collect {
                 when (it) {

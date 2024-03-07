@@ -34,6 +34,8 @@ abstract class BaseBottomSheetFragment<VB : ViewBinding>(private val inflate: In
 
     open fun setUp(){}
 
+    open fun listeners(){}
+
     open fun bind(){}
 
     open fun bindViewActionListeners() {}
