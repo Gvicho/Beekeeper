@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentSplashScreenBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
-import com.example.beekeeper.presenter.extension.safeNavigateWithArgs
+import com.example.beekeeper.presenter.extension.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -49,11 +49,11 @@ class SplashFragment : BaseFragment<FragmentSplashScreenBinding>(FragmentSplashS
     }
 
     private fun navigateToHomePage(){
-        findNavController().safeNavigateWithArgs(R.id.action_splashFragment_to_navigation_home2)
+        findNavController().safeNavigate(R.id.action_splashFragment_to_navigation_home2)
     }
 
     private fun navigateToLoginPage(){
-        findNavController().safeNavigateWithArgs(R.id.action_splashFragment_to_loginFragment)
+        findNavController().safeNavigate(R.id.action_splashFragment_to_loginFragment)
     }
 
     private fun animation(){

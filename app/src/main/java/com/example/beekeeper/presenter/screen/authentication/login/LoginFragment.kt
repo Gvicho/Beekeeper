@@ -12,7 +12,7 @@ import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentLoginScreenBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.LoginEvent
-import com.example.beekeeper.presenter.extension.safeNavigateWithArgs
+import com.example.beekeeper.presenter.extension.safeNavigate
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.state.auth.login.LoginUiState
 import dagger.hilt.android.AndroidEntryPoint
@@ -153,11 +153,11 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
     }
 
     private fun navigateToHomePage(){
-        findNavController().safeNavigateWithArgs(R.id.action_loginFragment_to_navigation_home)
+        findNavController().safeNavigate(R.id.action_loginFragment_to_navigation_home)
     }
 
     private fun navigateToRegistrationPage(){
-        findNavController().safeNavigateWithArgs(R.id.action_loginFragment_to_registrationFragment)
+        findNavController().safeNavigate(R.id.action_loginFragment_to_registrationFragment)
     }
 
 
@@ -179,6 +179,6 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
 
 
     private fun navigateToResetPasswordPage(){
-        findNavController().safeNavigateWithArgs(R.id.action_loginFragment_to_resetPasswordFragment)
+        findNavController().safeNavigate(R.id.action_loginFragment_to_resetPasswordFragment)
     }
 }

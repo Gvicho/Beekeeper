@@ -1,22 +1,11 @@
 package com.example.beekeeper.presenter.screen.damaged_beehives
 
-import android.Manifest
-import android.util.Log
-import android.util.Log.d
-import android.view.View
-import android.widget.Toast
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentDamagedBeehivesBinding
-import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
+import com.example.beekeeper.presenter.extension.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DamagedBeehivesFragment :
@@ -26,10 +15,8 @@ class DamagedBeehivesFragment :
 
     }
 
-    override fun listeners() {
-
+    override fun setListeners() {
         binding.btnLaunch.setOnClickListener {
-
             openAddReportFragment()
         }
     }
@@ -37,7 +24,7 @@ class DamagedBeehivesFragment :
 
 
     private fun openAddReportFragment() {
-        findNavController().navigate(DamagedBeehivesFragmentDirections.actionDamagedBeehivesFragmentToAddReportFragment())
+        findNavController().safeNavigate(R.id.action_damagedBeehivesFragment_to_addReportFragment)
     }
 
 

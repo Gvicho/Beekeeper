@@ -69,7 +69,7 @@ class AddReportFragment : BaseFragment<FragmentAddReportBinding>(FragmentAddRepo
 
         showOrHideProgressBar(state.isLoading)
 
-        state.uploadSuccess.let {
+        state.uploadSuccess?.let {
             findNavController().popBackStack()
         }
 
@@ -85,7 +85,7 @@ class AddReportFragment : BaseFragment<FragmentAddReportBinding>(FragmentAddRepo
 
     }
 
-    override fun listeners() {
+    override fun setListeners() {
         binding.btnPick.setOnClickListener {
             requestPermissions()
         }
@@ -105,4 +105,6 @@ class AddReportFragment : BaseFragment<FragmentAddReportBinding>(FragmentAddRepo
     private fun requestPermissions() {
         activityResultLauncher.launch(arrayOf(Manifest.permission.CAMERA))
     }
+
+
 }
