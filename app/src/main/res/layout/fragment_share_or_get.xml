@@ -20,4 +20,14 @@
         android:layout_gravity="top|center_horizontal"
         android:layout_marginBottom="20dp"/>
 
+    <TextView
+        android:id="@+id/tvServiceNotAvailable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:text="Without Bluetooth permission this service is not available"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="60dp"
+        android:visibility="gone"/>
+
 </FrameLayout>

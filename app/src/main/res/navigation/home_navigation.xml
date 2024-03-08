@@ -80,6 +80,14 @@
         <action
             android:id="@+id/action_shareOrGetFragment_to_scanBottomSheet"
             app:destination="@id/scanBottomSheet" />
+        <argument
+            android:name="name"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="address"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
     <dialog
         android:id="@+id/scanBottomSheet"
