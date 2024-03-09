@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import com.example.beekeeper.data.broadcast_receiver.BluetoothStateReceiver
 import com.example.beekeeper.data.broadcast_receiver.FoundDeviceReceiver
@@ -108,9 +109,11 @@ class BluetoothControllerImpl(
 
     override fun startDiscovery() {
 
-        if(!hasPermissions(Manifest.permission.BLUETOOTH_SCAN)){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !hasPermissions(Manifest.permission.BLUETOOTH_SCAN)) {
+            Log.d("tag1234","starting scann Failed No permission")
             return
         }
+        Log.d("tag1234","starting scann")
 
         context.registerReceiver(
             foundDevicesReceiver,
@@ -126,7 +129,7 @@ class BluetoothControllerImpl(
     }
 
     override fun stopDiscovery() {
-        if(!hasPermissions(Manifest.permission.BLUETOOTH_SCAN)){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !hasPermissions(Manifest.permission.BLUETOOTH_SCAN)){
             return
         }
 
@@ -135,7 +138,7 @@ class BluetoothControllerImpl(
 
     override fun startBluetoothServer(): Flow<SocketConnectionResult> {
         return flow{
-            if(!hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)) {
                 throw SecurityException("No BLUETOOTH_CONNECT permission")
             }
 
@@ -169,98 +172,118 @@ class BluetoothControllerImpl(
 
     override fun connectToDevice(device: BluetoothDeviceDomainModel): Flow<SocketConnectionResult> {
         return flow {
-            if(!hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)) {
                 throw SecurityException("No BLUETOOTH_CONNECT permission")
             }
 
             val bluetoothDevice = bluetoothAdapter?.getRemoteDevice(device.address)
 
-            currentClientSocket = bluetoothDevice
-                ?.createRfcommSocketToServiceRecord(UUID.fromString(SERVICE_UUID))
+            val tempSocket = bluetoothDevice?.createRfcommSocketToServiceRecord(UUID.fromString(SERVICE_UUID))
 
-            // we already got the device
-
+            // Stop discovery to save resources
             stopDiscovery()
 
-            if(bluetoothAdapter?.bondedDevices?.contains(bluetoothDevice) == false){
-
-            }
-
-            currentClientSocket?.let {socket->
+            tempSocket?.let { socket ->
                 try {
                     socket.connect()
+                    currentClientSocket = socket
                     emit(SocketConnectionResult.ConnectionEstablished)
-                }catch (e: IOException){
-                    socket.close()
-                    currentClientSocket = null
+                } catch (e: IOException) {
+                    Log.e("BluetoothController", "Connection failed: ${e.message}")
                     emit(SocketConnectionResult.Error("Connection was interrupted"))
+                } finally {
+                    if (!socket.isConnected) {
+                        socket.close()
+                    }
                 }
             }
-
-            currentClientSocket?.let {
-                handleInputStream(it)
-            }
-
         }.onCompletion {
             closeConnection()
         }.flowOn(Dispatchers.IO)
     }
 
     override fun closeConnection() {
-        currentClientSocket?.close()
         currentServerSocket?.close()
-        currentClientSocket = null
         currentServerSocket = null
     }
 
     override fun release() {
         if(isFoundDevicesReceiverRegistered)context.unregisterReceiver(foundDevicesReceiver)
         if(isBluetoothStateReceiverRegistered)context.unregisterReceiver(bluetoothStateReceiver)
+        currentClientSocket?.close()
+        currentClientSocket = null
         closeConnection()
     }
 
-    override suspend fun handleInputStream(socket: BluetoothSocket): Flow<Resource<BeehiveAnalytics>> {
-        return flow {
-            emit(Resource.Loading())
-            val inputStream = socket.inputStream
-            val buffer = ByteArray(1024)
-            var message = ""
+    override suspend fun handleInputStream(): Flow<Resource<BeehiveAnalytics>> {
+        currentClientSocket?.let { socket ->
+            sendStartMessage()
+            return flow {
+                emit(Resource.Loading())
+                val inputStream = socket.inputStream
+                val buffer = ByteArray(1024)
+                var message = ""
 
-            try {
-                val bytes = inputStream.read(buffer)
-                val incomingMessage = String(buffer, 0, bytes)
-                message += incomingMessage
+                while (true) {
+                    try {
+                        val bytes = inputStream.read(buffer)
+                        val incomingMessage = String(buffer, 0, bytes)
+                        message += incomingMessage
 
-                // Check if the message ends with a newline character
-                if (message.endsWith("\n")) {
-                    // Remove the newline character
-                    message = message.trim()
+                        // Check if the message ends with a newline character
+                        if (message.endsWith("\n")) {
+                            // Remove the newline character
+                            message = message.trim()
 
-                    // Split the message into id, weightData, and temperatureData
-                    val parts = message.split(";")
-                    val id = parts[0].toInt()
-                    val weightData = parts[1].split(",").map { it.toDouble() }
-                    val temperatureData = parts[2].split(",").map { it.toDouble() }
+                            // Split the message into id, weightData, and temperatureData
+                            val parts = message.split(";")
+                            val id = parts[0].toInt()
+                            val weightData = parts[1].split(",").map { it.toDouble() }
+                            val temperatureData = parts[2].split(",").map { it.toDouble() }
 
-                    // Create a BeehiveData object
-                    val beehiveData = BeehiveAnalytics(id, weightData, temperatureData)
-                    Log.d("BluetoothController", "Incoming BeehiveData: $beehiveData")
-                    emit(Resource.Success(beehiveData))
-                    socket.close()
+                            // Create a BeehiveData object
+                            val beehiveData = BeehiveAnalytics(id, weightData, temperatureData)
+                            Log.d("BluetoothController", "Incoming BeehiveData: $beehiveData")
+                            emit(Resource.Success(beehiveData))
+
+                            // Close and reset the socket
+                            socket.close()
+                            currentClientSocket = null
+                            break
+                        }
+
+                    } catch (e: IOException) {
+                        emit(Resource.Failed(e.message ?: "Empty IO Exception"))
+                        break
+                    }
                 }
 
-            } catch (e: IOException) {
-                emit(Resource.Failed(e.message?:"Empty IO Exception"))
+            }.flowOn(Dispatchers.IO)
+        }
+        return flow {
+            emit(Resource.Failed("No connected device"))
+        }
+    }
+
+    // Function to send a "start" message to the Arduino
+    private fun sendStartMessage() {
+        try {
+            currentClientSocket?.let { socket ->
+                val outputStream = socket.outputStream
+                outputStream.write("start\n".toByteArray())
+                outputStream.flush()
+                Log.d("BluetoothController", "Sent start message to Arduino")
             }
-
-
-        }.flowOn(Dispatchers.IO)
+        } catch (e: IOException) {
+            Log.e("BluetoothController", "Error sending start message: ${e.message}")
+            // Handle the error or close the socket if necessary
+        }
     }
 
 
     private fun updatePairedDevices(){
 
-        if(!hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)) {
             return
         }
 
@@ -273,7 +296,11 @@ class BluetoothControllerImpl(
     }
 
     private fun hasPermissions(permission:String):Boolean{  // Util function for checking permissions
-        return context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            true
+        } else {
+            context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     companion object{

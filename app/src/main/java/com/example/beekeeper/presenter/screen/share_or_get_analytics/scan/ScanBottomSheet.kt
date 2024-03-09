@@ -75,7 +75,7 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
             arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT)
         } else {
             // Before Android 12, you might not need to request permissions at runtime for Bluetooth
-            arrayOf() // Or specific permissions your app requires on older Android versions
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION) // Or specific permissions your app requires on older Android versions
         }
 
         // Request the permissions

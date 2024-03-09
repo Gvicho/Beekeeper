@@ -116,4 +116,9 @@ class ScanViewModel @Inject constructor(
         _state.update { it.copy(errorMessage = null) }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        bluetoothController.stopDiscovery()
+    }
+
 }

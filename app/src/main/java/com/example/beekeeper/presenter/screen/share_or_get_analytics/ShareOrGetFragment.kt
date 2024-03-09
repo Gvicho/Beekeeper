@@ -9,13 +9,19 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentShareOrGetBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.extension.safeNavigate
 import com.example.beekeeper.presenter.extension.showSnackBar
+import com.example.beekeeper.presenter.model.bluetooth_device.BluetoothDeviceUIModel
+import com.example.beekeeper.presenter.state.bluetooth_beehive.ReceivedBeehiveAnalyticsState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShareOrGetBinding::inflate) {
@@ -33,13 +39,12 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
     private val isBluetoothEnabled:Boolean
         get() = bluetoothAdapter?.isEnabled == true
 
+    private var connectedDevice:BluetoothDeviceUIModel? = null
 
+    private val enableBluetoothLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ){}
     override fun bind() {
-
-        val enableBluetoothLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ){}
-
         val permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ){permissions->
@@ -84,8 +89,11 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
         setFragmentResultListener("device") { key, bundle ->
             // Handle the result here
             val name = bundle.getString("name")
-            val address = bundle.getString("address")
-            binding.root.showSnackBar("Connected to $name")
+            val address = bundle.getString("address")?:""
+            name?.let {
+                connectedDevice = BluetoothDeviceUIModel(name = it, address = address) // if name isn't null then mac address is for sure not null
+            }
+            viewModel.handleInput()
         }
 
     }
@@ -103,7 +111,13 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
 
     private fun bindScanButton(){
         binding.scanBtn.setOnClickListener{
-            openScanBottomSheet()
+            if(isBluetoothEnabled){
+                openScanBottomSheet()
+            }else{
+                enableBluetoothLauncher.launch(
+                    Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                )
+            }
         }
     }
 
@@ -111,6 +125,41 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
         findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_scanBottomSheet)
     }
 
+    override fun bindObservers() {
+        bindReceivedAnalyticsObserver()
+    }
 
+    private fun bindReceivedAnalyticsObserver(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.receivedBeehiveAnalyticsState.collect{
+                    handleResponse(it)
+                }
+            }
+        }
+    }
+
+    private fun handleResponse(receivedAnalyticsState: ReceivedBeehiveAnalyticsState){
+        receivedAnalyticsState.errorMessage?.let {
+            errorWhileRegistration(it)
+        }
+
+        showOrHideProgressBar(receivedAnalyticsState.isLoading)
+
+        receivedAnalyticsState.receivedBeehiveAnalytics?.let {
+            binding.root.showSnackBar("${it.temperatureData}")
+        }
+    }
+
+    private fun showOrHideProgressBar(isLoading:Boolean){
+        binding.apply {
+            progressBar.visibility = if(isLoading) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun errorWhileRegistration(errorMessage:String){
+        binding.root.showSnackBar(errorMessage)
+        viewModel.resetErrorMessageToNull()
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.example.beekeeper.domain.controller.bluetooth
 
-import android.bluetooth.BluetoothSocket
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.common.SocketConnectionResult
 import com.example.beekeeper.domain.model.BeehiveAnalytics
@@ -29,6 +28,6 @@ interface BluetoothController {
 
     fun release()
 
-    suspend fun handleInputStream(socket: BluetoothSocket) : Flow<Resource<BeehiveAnalytics>>
+    suspend fun handleInputStream() : Flow<Resource<BeehiveAnalytics>>
 
 }

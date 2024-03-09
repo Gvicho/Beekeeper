@@ -16,6 +16,7 @@ class FoundDeviceReceiver(
     override fun onReceive(context: Context?, intent: Intent?) {
         when(intent?.action){
             BluetoothDevice.ACTION_FOUND -> {
+                Log.d("tag1234","device found")
                 val device = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     intent.getParcelableExtra(
                         BluetoothDevice.EXTRA_DEVICE,
