@@ -51,7 +51,7 @@ class ReportRepositoryImpl(
 
             val uploadWorkRequest = OneTimeWorkRequestBuilder<ReportUploaderWorker>()
                 .setInputData(inputData)
-             //   .setConstraints(constraints)
+                .setConstraints(constraints)
                 .addTag("Report")
                 .build()
 

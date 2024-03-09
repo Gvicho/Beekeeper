@@ -18,12 +18,8 @@ import kotlinx.coroutines.withContext
 @HiltWorker
 class ReportUploaderWorker@AssistedInject constructor(
     @Assisted ctx: Context,
-    @Assisted workerParameters: WorkerParameters,
+    @Assisted workerParameters: WorkerParameters
 ): CoroutineWorker(ctx, workerParameters) {
-
-    init {
-        Log.d("tag123", "Work  init")
-    }
 
     private val storage: FirebaseStorage = FirebaseStorage.getInstance()
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()

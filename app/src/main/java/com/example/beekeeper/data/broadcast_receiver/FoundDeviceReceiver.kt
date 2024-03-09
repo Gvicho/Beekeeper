@@ -25,7 +25,6 @@ class FoundDeviceReceiver(
                 } else {
                     intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 }
-                Log.d("broadcastReceiverTag","address -> ${device?.address} , name -> ${device?.name}")
                 device?.let(onDeviceFound)  // if device exists we call onDeviceFound on this device
             }
         }
