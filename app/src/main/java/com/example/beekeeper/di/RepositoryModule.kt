@@ -45,11 +45,12 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideReportRepository(
+    fun provideReportRepository(database: FirebaseDatabase,
         @ApplicationContext context: Context
     ): ReportRepository {
         return ReportRepositoryImpl(
-            context = context
+            context = context,
+            database =  database
         )
     }
 

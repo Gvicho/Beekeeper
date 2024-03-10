@@ -12,3 +12,11 @@ fun DamageReportUI.toDomain() = DamageReport(
     imageUris = imageUris
 
 )
+
+fun DamageReport.toPresentation() = DamageReportUI(
+    id = id,
+    damageDescription = damageDescription,
+    damageLevelIndicator = damageLevelIndicator,
+    dateUploaded = dateUploaded,
+    imageUris = imageUris
+)

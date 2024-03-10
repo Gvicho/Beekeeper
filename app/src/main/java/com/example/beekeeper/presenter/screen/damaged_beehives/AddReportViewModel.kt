@@ -28,7 +28,7 @@ class AddReportViewModel @Inject constructor(
         viewModelScope.launch {
             uploadDamageReportUseCase(
                 DamageReportUI(
-                id = "55555",
+                id = "55555789",
                 damageDescription = "dolores",
                 damageLevelIndicator = 8408,
                 dateUploaded = "ocurreret",

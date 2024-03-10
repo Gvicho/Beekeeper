@@ -23,7 +23,7 @@
         app:srcCompat="@drawable/ic_add" />
 
     <ProgressBar
-        android:id="@+id/pbUpload"
+        android:id="@+id/pbReports"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
