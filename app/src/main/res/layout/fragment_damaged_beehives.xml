@@ -7,6 +7,16 @@
     tools:context=".presenter.screen.damaged_beehives.DamagedBeehivesFragment">
 
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginStart="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/reportsRecyclerView"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnLaunch"
         android:layout_width="wrap_content"

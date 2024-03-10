@@ -92,7 +92,7 @@ class AddReportFragment : BaseFragment<FragmentAddReportBinding>(FragmentAddRepo
 
         binding.btnUpload.setOnClickListener {
             if(uriList.isNotEmpty()){
-                viewModel.uploadImage(uriList)
+                viewModel.uploadImage(desc = binding.etDescription.text.toString(), damageLevel = binding.sbDamageLevel.progress, uriList)
                 binding.root.showSnackBar("start of sending")
             }
             else{

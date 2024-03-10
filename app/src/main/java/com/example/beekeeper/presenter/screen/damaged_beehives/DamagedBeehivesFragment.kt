@@ -8,9 +8,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentDamagedBeehivesBinding
 import com.example.beekeeper.domain.common.Resource
+import com.example.beekeeper.presenter.adapter.damaged_beehives.ReportsRecyclerAdapter
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.extension.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,9 +23,11 @@ class DamagedBeehivesFragment :
     BaseFragment<FragmentDamagedBeehivesBinding>(FragmentDamagedBeehivesBinding::inflate) {
 
     private val viewModel: DamagedBeehivesViewModel by viewModels()
+    private lateinit var reportsAdapter: ReportsRecyclerAdapter
 
     override fun setUp() {
         //viewModel.test()
+        initRecycler()
         viewModel.getReports()
         bindObservers()
     }
@@ -52,6 +56,7 @@ class DamagedBeehivesFragment :
                         is Resource.Success -> {
                             binding.pbReports.visibility = View.GONE
                             val res = it.responseData
+                            reportsAdapter.submitList(res)
 
                             d("DamageReports", "$res")
 
@@ -69,6 +74,16 @@ class DamagedBeehivesFragment :
                     }
                 }
             }
+        }
+
+    }
+
+    private fun initRecycler(){
+        reportsAdapter = ReportsRecyclerAdapter()
+        binding.apply {
+            reportsRecyclerView.adapter = reportsAdapter
+            reportsRecyclerView.layoutManager =   LinearLayoutManager(requireContext())
+
         }
 
     }

@@ -13,35 +13,41 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class AddReportViewModel @Inject constructor(
     private val uploadDamageReportUseCase: UploadDamageReportUseCase
-) : ViewModel(){
+) : ViewModel() {
 
-    private val _reportUIState =  MutableStateFlow(DamageReportState())
-    val reportUIState : StateFlow<DamageReportState> = _reportUIState
+    private val _reportUIState = MutableStateFlow(DamageReportState())
+    val reportUIState: StateFlow<DamageReportState> = _reportUIState
 
 
-    fun uploadImage(uris: List<Uri>) {
+    fun uploadImage(desc: String, damageLevel: Int, uris: List<Uri>) {
         viewModelScope.launch {
             uploadDamageReportUseCase(
                 DamageReportUI(
-                id = "55555789",
-                damageDescription = "dolores",
-                damageLevelIndicator = 8408,
-                dateUploaded = "ocurreret",
-                imageUris = uris
-            ).toDomain()
-            ).collect{result->
-                when(result){
+                    id = 10000 + Random(System.currentTimeMillis()).nextInt(900000),
+                    damageDescription = desc,
+                    damageLevelIndicator = damageLevel,
+                    dateUploaded = LocalDateTime.now()
+                        .format(DateTimeFormatter.ofPattern("dd MMMM, yyyy")),
+                    imageUris = uris
+                ).toDomain()
+            ).collect { result ->
+                when (result) {
                     is Resource.Failed -> {
 
                     }
+
                     is Resource.Loading -> {
                         _reportUIState.update { it.copy(isLoading = true) }
                     }
+
                     is Resource.Success -> {
                         _reportUIState.update { it.copy(isLoading = false, uploadSuccess = Unit) }
                     }

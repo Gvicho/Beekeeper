@@ -29,7 +29,7 @@ class ReportUploaderWorker@AssistedInject constructor(
 
         val  imageUris= inputData.getStringArray("ReportImages")
         val  damageDescription= inputData.getString("ReportDamageDescription")
-        val  id= inputData.getString("ReportId")
+        val  id= inputData.getInt("ReportId", 0)
         val  dateUploaded= inputData.getString("ReportDateUploaded")
         val damageLevelIndicator = inputData.getInt("ReportDamageLevelIndicator", 0)
 
@@ -61,7 +61,7 @@ class ReportUploaderWorker@AssistedInject constructor(
 
             )
 
-            val reportRef = database.reference.child("damageReports").child(readyDamageReport.id)
+            val reportRef = database.reference.child("damageReports").child(readyDamageReport.id.toString())
             reportRef.setValue(readyDamageReport).await()
 
 
