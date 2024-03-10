@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".presenter.screen.damaged_beehives.AddReportFragment">
+    tools:context=".presenter.screen.damaged_beehives.report.AddReportFragment">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvAddBeehive"

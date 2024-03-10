@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.screen.damaged_beehives
+package com.example.beekeeper.presenter.screen.damaged_beehives.report
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel

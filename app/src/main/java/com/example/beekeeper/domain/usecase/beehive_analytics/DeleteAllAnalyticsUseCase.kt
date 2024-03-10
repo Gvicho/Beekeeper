@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 class DeleteAllAnalyticsUseCase  @Inject constructor(private val beehiveAnalyticsRepository: BeehiveAnalyticsRepository) {
 
-    suspend operator fun invoke() =
+    operator fun invoke() =
         beehiveAnalyticsRepository.deleteAllFromLocal()
 
 }

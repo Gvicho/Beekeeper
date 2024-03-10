@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -68,17 +69,18 @@ class ReportRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllDamageReports(): Flow<Resource<List<DamageReport>>> = flow {
+    override fun getAllDamageReports(): Flow<Resource<List<DamageReport>>> = flow {
         try {
             emit(Resource.Loading())
 
             val snapshot = database.reference.child("damageReports").get().await()
             val reports = snapshot.children.mapNotNull { it.getValue(DamageReportDto::class.java) }
-
+            Log.d("DamageReports","repository- $reports")
             emit(Resource.Success(reports.map { it.toDomain() }))
+
         } catch (e: Exception) {
             emit(Resource.Failed(e.message ?: "Failed to fetch damage reports"))
         }
 
-    }
+    }.flowOn(Dispatchers.IO)
 }

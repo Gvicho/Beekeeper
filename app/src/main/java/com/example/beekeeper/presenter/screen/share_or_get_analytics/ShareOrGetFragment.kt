@@ -16,11 +16,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentShareOrGetBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
+import com.example.beekeeper.presenter.event.get_analytics.GetAnalyticsEvent
 import com.example.beekeeper.presenter.extension.safeNavigate
 import com.example.beekeeper.presenter.extension.showSnackBar
+import com.example.beekeeper.presenter.model.beehive_analytics.BeehiveAnalyticsUI
 import com.example.beekeeper.presenter.model.bluetooth_device.BluetoothDeviceUIModel
-import com.example.beekeeper.presenter.state.bluetooth_beehive.ReceivedBeehiveAnalyticsState
+import com.example.beekeeper.presenter.state.get_analytics.ReceivedBeehiveAnalyticsState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -93,7 +97,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
             name?.let {
                 connectedDevice = BluetoothDeviceUIModel(name = it, address = address) // if name isn't null then mac address is for sure not null
             }
-            viewModel.handleInput()
+            viewModel.onEvent(GetAnalyticsEvent.HandleInput)
         }
 
     }
@@ -121,12 +125,28 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
         }
     }
 
-    private fun openScanBottomSheet(){
-        findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_scanBottomSheet)
-    }
-
     override fun bindObservers() {
         bindReceivedAnalyticsObserver()
+        bindNavigationObservers()
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun bindNavigationObservers(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.pageNavigationEvent
+                    .debounce(1000) // Debounce for 1 second (1000 milliseconds)
+                    .collect { event ->
+                        handleNavigation(event)
+                    }
+            }
+        }
+    }
+
+    private fun handleNavigation(event: ShareOrGetViewModel.GetAnalyticsPageNavigationEvents){
+        when(event){
+            is ShareOrGetViewModel.GetAnalyticsPageNavigationEvents.NavigateToAnalyticsPreviewPage -> openAnalyticsPreview(event.beehiveAnalytics)
+        }
     }
 
     private fun bindReceivedAnalyticsObserver(){
@@ -147,7 +167,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
         showOrHideProgressBar(receivedAnalyticsState.isLoading)
 
         receivedAnalyticsState.receivedBeehiveAnalytics?.let {
-            binding.root.showSnackBar("${it.temperatureData}")
+            binding.root.showSnackBar("Success")
         }
     }
 
@@ -159,7 +179,22 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
 
     private fun errorWhileRegistration(errorMessage:String){
         binding.root.showSnackBar(errorMessage)
-        viewModel.resetErrorMessageToNull()
+        viewModel.onEvent(GetAnalyticsEvent.ResetErrorMessageToNull)
+    }
+
+    private fun openScanBottomSheet(){
+        findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_scanBottomSheet)
+    }
+
+    private fun openAnalyticsPreview(beehiveAnalytics:BeehiveAnalyticsUI){
+
+        val action = ShareOrGetFragmentDirections.actionShareOrGetFragmentToReceivedAnalyticsBottomSheet(
+            id = beehiveAnalytics.id,
+            weightData = beehiveAnalytics.weightData.toFloatArray(),
+            temperatureData = beehiveAnalytics.temperatureData.toFloatArray()
+        )
+
+        findNavController().navigate(action)
     }
 
 }

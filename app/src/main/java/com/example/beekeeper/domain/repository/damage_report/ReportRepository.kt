@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface ReportRepository {
     fun uploadReport(damageReport: DamageReport): Flow<Resource<Unit>>
 
-    suspend fun getAllDamageReports(): Flow<Resource<List<DamageReport>>>
+    fun getAllDamageReports(): Flow<Resource<List<DamageReport>>>
 }

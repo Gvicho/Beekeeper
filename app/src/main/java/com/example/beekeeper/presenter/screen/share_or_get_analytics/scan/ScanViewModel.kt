@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.SocketConnectionResult
 import com.example.beekeeper.domain.controller.bluetooth.BluetoothController
+import com.example.beekeeper.presenter.event.get_analytics.ScanEvent
 import com.example.beekeeper.presenter.mappers.bluetooth.toDomain
 import com.example.beekeeper.presenter.mappers.bluetooth.toUI
 import com.example.beekeeper.presenter.model.bluetooth_device.BluetoothDeviceUIModel
@@ -54,35 +55,30 @@ class ScanViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun startScan(){
+    fun onEvent(event:ScanEvent){
+        when(event){
+            is ScanEvent.ConnectToDevice -> connectToDevice(event.device)
+            ScanEvent.ResetErrorMessageToNull -> onResetErrorMessage()
+            ScanEvent.StartScan -> startScan()
+            ScanEvent.StopScan -> stopScan()
+        }
+    }
+
+    private fun startScan(){
         bluetoothController.startDiscovery()
     }
 
-    fun stopScan(){
+    private fun stopScan(){
         bluetoothController.stopDiscovery()
     }
 
 
-    fun connectToDevice(device:BluetoothDeviceUIModel){
+    private fun connectToDevice(device:BluetoothDeviceUIModel){
         _state.update { it.copy(isConnecting = true) }
         deviceConnectionJob = bluetoothController.connectToDevice(device.toDomain()).listen() //  this can be changed with handler
         // we save it here so that we can cancel it when we want it
     }
 
-//    fun disconnectFromDevice(){
-//        deviceConnectionJob?.cancel()
-//        bluetoothController.closeConnection()
-//        _state.update { it.copy(isConnecting = false, isConnected = false) }
-//    }
-
-//    fun waitForIncomingConnections(){
-//        _state.update { it.copy(isConnecting = true) }
-//        deviceConnectionJob = bluetoothController
-//            .startBluetoothServer()
-//            .listen()
-//
-//        // we reuse listen twise
-//    }
 
     private fun Flow<SocketConnectionResult>.listen(): Job {  // we can keep track of this job, and maybe cancel if we want it
         return onEach{result->
@@ -102,23 +98,24 @@ class ScanViewModel @Inject constructor(
                     ) }
                 }
             }
-        }.catch {throeable ->
+        }.catch {throwable ->
             // everything we catch in flow will be trowed here
             bluetoothController.closeConnection()
             _state.update { it.copy(
                 isConnected = false,
-                isConnecting = false
+                isConnecting = false,
+                errorMessage = throwable.message
             ) }
         }.launchIn(viewModelScope)
     }
 
-    fun onResetErrorMessage(){
+    private fun onResetErrorMessage(){
         _state.update { it.copy(errorMessage = null) }
     }
 
     override fun onCleared() {
         super.onCleared()
-        bluetoothController.stopDiscovery()
+        stopScan()
     }
 
 }

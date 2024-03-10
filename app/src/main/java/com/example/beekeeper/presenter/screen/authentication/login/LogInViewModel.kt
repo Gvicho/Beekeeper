@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class LogInViewModel @Inject constructor(
     val loginUIState : StateFlow<LoginUiState> = _loginUIState
 
     private val _loginPageNavigationEvent = MutableSharedFlow<LoginNavigationEvent>()
-    val loginPageNavigationEvent get() = _loginPageNavigationEvent
+    val loginPageNavigationEvent get() = _loginPageNavigationEvent.asSharedFlow()
 
 
     fun onEvent(event: LoginEvent){

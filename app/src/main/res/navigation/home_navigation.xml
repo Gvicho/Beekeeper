@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/damagedBeehivesFragment">
+    app:startDestination="@id/splashFragment">
 
 
 
@@ -88,6 +88,9 @@
             android:name="address"
             app:argType="string"
             android:defaultValue=""/>
+        <action
+            android:id="@+id/action_shareOrGetFragment_to_receivedAnalyticsBottomSheet"
+            app:destination="@id/receivedAnalyticsBottomSheet" />
     </fragment>
     <dialog
         android:id="@+id/scanBottomSheet"
@@ -96,7 +99,22 @@
         tools:layout="@layout/bottom_sheet_scan_connect"/>
     <fragment
         android:id="@+id/addReportFragment"
-        android:name="com.example.beekeeper.presenter.screen.damaged_beehives.AddReportFragment"
+        android:name="com.example.beekeeper.presenter.screen.damaged_beehives.report.AddReportFragment"
         android:label="fragment_add_report"
         tools:layout="@layout/fragment_add_report" />
+    <dialog
+        android:id="@+id/receivedAnalyticsBottomSheet"
+        android:name="com.example.beekeeper.presenter.screen.share_or_get_analytics.view_received_analytics.ReceivedAnalyticsBottomSheet"
+        android:label="ReceivedAnalyticsBottomSheet" >
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="weightData"
+            app:argType="float[]" />
+        <argument
+            android:name="temperatureData"
+            app:argType="float[]" />
+    </dialog>
 </navigation>

@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 class GetAnalyticsByIdUseCase @Inject constructor(private val beehiveAnalyticsRepository: BeehiveAnalyticsRepository) {
 
-    suspend operator fun invoke(id: Int) =
+    operator fun invoke(id: Int) =
         beehiveAnalyticsRepository.getAnalyticsByIdFromLocal(id)
 
 }

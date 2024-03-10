@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
@@ -18,6 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.beekeeper.databinding.BottomSheetScanConnectBinding
 import com.example.beekeeper.presenter.adapter.scan_list_recycler.BluetoothDevicesRecyclerAdapter
 import com.example.beekeeper.presenter.base_fragment.BaseBottomSheetFragment
+import com.example.beekeeper.presenter.event.get_analytics.ScanEvent
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.model.bluetooth_device.BluetoothDeviceUIModel
 import com.example.beekeeper.presenter.state.bluetooth_beehive.ScanPageUIState
@@ -34,7 +34,7 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
     private lateinit var scannedDevicesRecyclerAdapter :BluetoothDevicesRecyclerAdapter
 
     private val bluetoothManager by lazy {
-        requireContext().applicationContext.getSystemService(BluetoothManager::class.java) // if in activity requireContext() is not nececery
+        requireContext().applicationContext.getSystemService(BluetoothManager::class.java) // if in activity requireContext() is not needed
     }
 
     private val bluetoothAdapter by lazy {
@@ -55,10 +55,10 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
 
         val permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
-        ){pers->
+        ){permissions->
             // here we handle permissions
             val canEnableBluetooth = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                pers[Manifest.permission.BLUETOOTH_CONNECT] == true
+                permissions[Manifest.permission.BLUETOOTH_CONNECT] == true
             }else{
                 true
             }
@@ -86,7 +86,7 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
         setAdapterToPairedDevicesRecycler()
         setAdapterToScannedDevicesRecycler()
 
-        viewModel.startScan()
+        viewModel.onEvent(ScanEvent.StartScan)
     }
 
     private fun setAdapterToPairedDevicesRecycler(){
@@ -104,7 +104,7 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
     private fun bindStateObserver(){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.state.collect(){
+                viewModel.state.collect{
                     handleUiState(it)
                 }
             }
@@ -116,7 +116,7 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
 
         state.errorMessage?.let {
             showErrorMessage(it)
-            viewModel.onResetErrorMessage()
+            viewModel.onEvent(ScanEvent.ResetErrorMessageToNull)
         }
 
         showLoader(state.isConnecting)
@@ -124,9 +124,6 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
         if(state.isConnected){
             returnPickedDevice()
         }
-
-
-        Log.d("tag123","Fragment, Handler ${state}")
 
         if(state.pairedDevices.isNotEmpty()){
             pairedDevicesRecyclerAdapter.submitList(state.pairedDevices)
@@ -156,12 +153,12 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
 
     override fun onClick(device: BluetoothDeviceUIModel) {
         resultDevice = device
-        viewModel.connectToDevice(resultDevice?:BluetoothDeviceUIModel())
+        viewModel.onEvent(ScanEvent.ConnectToDevice(device))
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.stopScan()
+        viewModel.onEvent(ScanEvent.StopScan)
     }
 }
 

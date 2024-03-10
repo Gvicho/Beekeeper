@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class InsertAnalyticsUseCase @Inject constructor(private val beehiveAnalyticsRepository: BeehiveAnalyticsRepository) {
 
-    suspend operator fun invoke(analytics: BeehiveAnalytics) =
+    operator fun invoke(analytics: BeehiveAnalytics) =
         beehiveAnalyticsRepository.insertAnalyticsInLocal(analytics)
 
 }

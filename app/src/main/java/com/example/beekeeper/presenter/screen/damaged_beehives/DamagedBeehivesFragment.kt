@@ -23,7 +23,7 @@ class DamagedBeehivesFragment :
     private val viewModel: DamagedBeehivesViewModel by viewModels()
 
     override fun setUp() {
-        viewModel.test()
+        //viewModel.test()
         viewModel.getReports()
         bindObservers()
     }
@@ -53,8 +53,7 @@ class DamagedBeehivesFragment :
                             binding.pbReports.visibility = View.GONE
                             val res = it.responseData
 
-                            d("DamageReports", res.toString())
-
+                            d("DamageReports", "$res")
 
                         }
 
@@ -63,7 +62,7 @@ class DamagedBeehivesFragment :
                             val errorMessage = it.message
                             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT)
                                 .show()
-                            d("DamageReports", errorMessage.toString())
+                            d("DamageReports", errorMessage)
 
                         }
 
