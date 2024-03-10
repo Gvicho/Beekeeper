@@ -3,6 +3,8 @@ package com.example.beekeeper.presenter.screen.damaged_beehives
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
+import com.example.beekeeper.domain.model.BeehiveAnalytics
+import com.example.beekeeper.domain.usecase.beehive_analytics.InsertAnalyticsUseCase
 import com.example.beekeeper.domain.usecase.damage_report.GetAllReportsUseCase
 import com.example.beekeeper.presenter.mappers.toPresentation
 import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
@@ -14,7 +16,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DamagedBeehivesViewModel @Inject constructor(private val getAllReportsUseCase: GetAllReportsUseCase) :
+class DamagedBeehivesViewModel @Inject constructor(
+    private val getAllReportsUseCase: GetAllReportsUseCase,
+    private val insertAnalyticsUseCase: InsertAnalyticsUseCase
+) :
     ViewModel() {
 
 
@@ -28,7 +33,7 @@ class DamagedBeehivesViewModel @Inject constructor(private val getAllReportsUseC
                 when (it) {
                     is Resource.Loading -> _reportsFlow.emit(Resource.Loading())
                     is Resource.Success -> {
-                        _reportsFlow.emit(Resource.Success(it.responseData.map {report ->
+                        _reportsFlow.emit(Resource.Success(it.responseData.map { report ->
                             report.toPresentation()
                         }))
                     }
@@ -36,6 +41,18 @@ class DamagedBeehivesViewModel @Inject constructor(private val getAllReportsUseC
                     is Resource.Failed -> _reportsFlow.emit(Resource.Failed(it.message))
                 }
             }
+        }
+    }
+
+    fun test() {
+        viewModelScope.launch {
+            insertAnalyticsUseCase.invoke(
+                BeehiveAnalytics(
+                    id = 9881,
+                    weightData = listOf(),
+                    temperatureData = listOf()
+                )
+            )
         }
     }
 }

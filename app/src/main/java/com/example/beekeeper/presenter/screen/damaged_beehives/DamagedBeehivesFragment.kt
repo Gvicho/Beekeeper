@@ -23,7 +23,7 @@ class DamagedBeehivesFragment :
     private val viewModel: DamagedBeehivesViewModel by viewModels()
 
     override fun setUp() {
-
+        viewModel.test()
         viewModel.getReports()
         bindObservers()
     }
