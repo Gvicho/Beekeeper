@@ -27,7 +27,7 @@ class AddReportViewModel @Inject constructor(
     val reportUIState: StateFlow<DamageReportState> = _reportUIState
 
 
-    fun uploadImage(desc: String, damageLevel: Int, uris: List<Uri>) {
+    fun uploadReport(desc: String, damageLevel: Int, uris: List<Uri>) {
         viewModelScope.launch {
             uploadDamageReportUseCase(
                 DamageReportUI(

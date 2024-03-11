@@ -33,7 +33,7 @@ class ReportsRecyclerAdapter() :
             model = currentList[adapterPosition]
             val picturesList = model.imageUris
             picturesList.let {
-                val picturesAdapter = PicturesRecyclerAdapter(it.map { uri-> uri.toString() })
+                val picturesAdapter = ReportPicturesRecyclerAdapter(it.map { uri-> uri.toString() })
                 binding.picturesRecyclerView.adapter = picturesAdapter
                 
             }

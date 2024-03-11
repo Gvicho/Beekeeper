@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class DamagedBeehivesViewModel @Inject constructor(
     private val getAllReportsUseCase: GetAllReportsUseCase,
-    private val insertAnalyticsUseCase: InsertAnalyticsUseCase
 ) :
     ViewModel() {
 
@@ -44,15 +43,5 @@ class DamagedBeehivesViewModel @Inject constructor(
         }
     }
 
-    fun test() {
-        viewModelScope.launch {
-            insertAnalyticsUseCase.invoke(
-                BeehiveAnalytics(
-                    id = 9881,
-                    weightData = listOf(),
-                    temperatureData = listOf()
-                )
-            )
-        }
-    }
+
 }

@@ -2,15 +2,13 @@ package com.example.beekeeper.presenter.adapter.damaged_beehives
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.beekeeper.databinding.DamagedPictureRecyclerItemBinding
 import com.example.beekeeper.presenter.extension.loadImage
 
 
-class PicturesRecyclerAdapter(private val images: List<String>) :
-    RecyclerView.Adapter<PicturesRecyclerAdapter.PicturesViewHolder>() {
+class ReportPicturesRecyclerAdapter(private val images: List<String>) :
+    RecyclerView.Adapter<ReportPicturesRecyclerAdapter.PicturesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PicturesViewHolder {
         val binding = DamagedPictureRecyclerItemBinding.inflate(

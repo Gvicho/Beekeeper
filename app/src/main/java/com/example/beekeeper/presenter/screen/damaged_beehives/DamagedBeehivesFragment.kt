@@ -26,7 +26,6 @@ class DamagedBeehivesFragment :
     private lateinit var reportsAdapter: ReportsRecyclerAdapter
 
     override fun setUp() {
-        //viewModel.test()
         initRecycler()
         viewModel.getReports()
         bindObservers()
@@ -65,8 +64,6 @@ class DamagedBeehivesFragment :
                         is Resource.Failed -> {
                             binding.pbReports.visibility = View.GONE
                             val errorMessage = it.message
-                            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT)
-                                .show()
                             d("DamageReports", errorMessage)
 
                         }
