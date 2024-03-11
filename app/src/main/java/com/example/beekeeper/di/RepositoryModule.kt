@@ -6,19 +6,19 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.example.beekeeper.data.common.HandleResponse
 import com.example.beekeeper.data.repository.AuthRepositoryImpl
+import com.example.beekeeper.data.repository.BeehiveAnalyticsRepositoryImpl
 import com.example.beekeeper.data.repository.DataStoreRepositoryImpl
 import com.example.beekeeper.data.repository.FarmsRepositoryImpl
 import com.example.beekeeper.data.repository.ReportRepositoryImpl
-import com.example.beekeeper.data.repository.StorageRepositoryImpl
+import com.example.beekeeper.data.source.local.dao.BeehiveAnalyticsDao
 import com.example.beekeeper.data.source.remote.internet.service.FarmsService
+import com.example.beekeeper.domain.repository.analytics.BeehiveAnalyticsRepository
 import com.example.beekeeper.domain.repository.auth.AuthRepository
 import com.example.beekeeper.domain.repository.damage_report.ReportRepository
 import com.example.beekeeper.domain.repository.farms.FarmsRepository
 import com.example.beekeeper.domain.repository.save_credentials.CredentialsRepository
-import com.example.beekeeper.domain.repository.storage.StorageRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,32 +46,40 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideReportRepository(
+        database: FirebaseDatabase,
         @ApplicationContext context: Context
     ): ReportRepository {
         return ReportRepositoryImpl(
-            context = context
+            context = context,
+            database = database
         )
     }
 
 
     @Provides
     @Singleton
-    fun provideAuthRepository(firebaseAuth: FirebaseAuth, handleResponse: HandleResponse): AuthRepository {
-        return AuthRepositoryImpl(firebaseAuth,handleResponse)
+    fun provideAuthRepository(
+        firebaseAuth: FirebaseAuth,
+        handleResponse: HandleResponse
+    ): AuthRepository {
+        return AuthRepositoryImpl(firebaseAuth, handleResponse)
     }
 
     @Provides
     @Singleton
-    fun provideDataStoreRepository(dataStore: DataStore<Preferences>):CredentialsRepository {
+    fun provideDataStoreRepository(dataStore: DataStore<Preferences>): CredentialsRepository {
         return DataStoreRepositoryImpl(
             datastore = dataStore
         )
     }
 
+
     @Provides
     @Singleton
-    fun provideStorageRepository(storage: FirebaseStorage, database: FirebaseDatabase): StorageRepository =
-        StorageRepositoryImpl(storage, database)
+    fun provideBeehiveAnalyticsRepository(analyticsDao: BeehiveAnalyticsDao): BeehiveAnalyticsRepository {
+        return BeehiveAnalyticsRepositoryImpl(analyticsDao)
 
+
+    }
 
 }
