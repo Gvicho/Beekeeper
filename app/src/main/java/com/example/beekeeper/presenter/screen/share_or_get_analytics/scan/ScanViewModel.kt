@@ -1,6 +1,5 @@
 package com.example.beekeeper.presenter.screen.share_or_get_analytics.scan
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.SocketConnectionResult
@@ -36,8 +35,6 @@ class ScanViewModel @Inject constructor(
         bluetoothController.scannedDevices,
         _state
     ){pairedDevices,scannedDevices,state ->  // if any of them changes
-        Log.d("tag123","in ViewModel got update on list")
-        Log.d("tag123","in ViewModel $scannedDevices , $pairedDevices ")
         state.copy(
             scannedDevices = withContext(Dispatchers.Default){scannedDevices.map { it.toUI() }} ,
             pairedDevices = withContext(Dispatchers.Default){pairedDevices.map { it.toUI() }}

@@ -39,12 +39,12 @@ class BeehiveAnalyticsRepositoryImpl @Inject constructor(private val analyticsDa
             }
         }
 
-    override fun deleteAllFromLocal(): Flow<Resource<Boolean>> =
+    override fun deleteAllFromLocal(): Flow<Resource<Unit>> =
         flow {
             try {
                 emit(Resource.Loading())
                 analyticsDao.deleteAll()
-                emit(Resource.Success(true))
+                emit(Resource.Success(Unit))
             } catch (e: Exception) {
                 emit(Resource.Failed("Error"))
             }
@@ -61,12 +61,12 @@ class BeehiveAnalyticsRepositoryImpl @Inject constructor(private val analyticsDa
             }
         }
 
-    override fun deleteAnalyticsByIdFromLocal(id: Int): Flow<Resource<Boolean>> =
+    override fun deleteAnalyticsByIdFromLocal(id: Int): Flow<Resource<Unit>> =
         flow {
             try {
                 emit(Resource.Loading())
                 analyticsDao.deleteAnalyticsById(id)
-                emit(Resource.Success(true))
+                emit(Resource.Success(Unit))
             } catch (e: Exception) {
                 emit(Resource.Failed("Error"))
             }

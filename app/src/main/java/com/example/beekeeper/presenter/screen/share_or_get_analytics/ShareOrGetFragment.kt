@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
@@ -24,6 +25,7 @@ import com.example.beekeeper.presenter.model.bluetooth_device.BluetoothDeviceUIM
 import com.example.beekeeper.presenter.state.get_analytics.ReceivedBeehiveAnalyticsState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
@@ -84,11 +86,10 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
         }
 
         getScanResult()
-
+        getBooleanResult()
     }
 
     private fun getScanResult(){
-
         // Register the listener
         setFragmentResultListener("device") { key, bundle ->
             // Handle the result here
@@ -99,7 +100,17 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
             }
             viewModel.onEvent(GetAnalyticsEvent.HandleInput)
         }
+    }
 
+    private fun getBooleanResult() {
+        setFragmentResultListener("booleanResultKey") { key, bundle ->
+            // Handle the boolean result here
+            val booleanResult = bundle.getBoolean("booleanResult")
+            if(booleanResult){
+                openSaveAnalyticsPage()
+                Log.d("tag123","received true it saved")
+            }
+        }
     }
 
     private fun disableScannerBtn(){
@@ -184,6 +195,13 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
 
     private fun openScanBottomSheet(){
         findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_scanBottomSheet)
+    }
+
+    private fun openSaveAnalyticsPage(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(100) // Wait for 100 milliseconds
+            findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_savedAnalyticsFragment)
+        }
     }
 
     private fun openAnalyticsPreview(beehiveAnalytics:BeehiveAnalyticsUI){

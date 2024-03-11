@@ -47,7 +47,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private fun handleResponse(homeScreenState:HomeScreenState){
         homeScreenState.errorMessage?.let {
-            errorWhileRegistration(it)
+            showErrorMessage(it)
         }
 
         showOrHideProgressBar(homeScreenState.isLoading)
@@ -63,7 +63,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
-    private fun errorWhileRegistration(errorMessage:String){
+    private fun showErrorMessage(errorMessage:String){
         binding.root.showSnackBar(errorMessage)
         viewModel.onEvent(HomePageEvent.ResetErrorMessage)
     }

@@ -91,6 +91,9 @@
         <action
             android:id="@+id/action_shareOrGetFragment_to_receivedAnalyticsBottomSheet"
             app:destination="@id/receivedAnalyticsBottomSheet" />
+        <action
+            android:id="@+id/action_shareOrGetFragment_to_savedAnalyticsFragment"
+            app:destination="@id/savedAnalyticsFragment" />
     </fragment>
     <dialog
         android:id="@+id/scanBottomSheet"

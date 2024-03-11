@@ -59,16 +59,18 @@ class ReceivedAnalyticsViewModel@Inject constructor(
                 }
             }
             is Resource.Success -> {
-                _saveAnalyticsState.update {
-                    if(result.responseData == -1L){
+                if(result.responseData == -1L){
+                    _saveAnalyticsState.update {
                         it.copy(isLoading = false, errorMessage = "Unknown DataBase Error message")
-                    }else{
+                    }
+                }else{
+                    _saveAnalyticsState.update {
                         it.copy(isLoading = false, saveStatus = Unit)
                     }
+                    _pageNavigationEvent.emit(
+                        GetAnalyticsPageNavigationEvents.NavigateBack
+                    )
                 }
-                _pageNavigationEvent.emit(
-                    GetAnalyticsPageNavigationEvents.NavigateBack
-                )
             }
         }
     }

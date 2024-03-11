@@ -1,6 +1,8 @@
 package com.example.beekeeper.presenter.screen.share_or_get_analytics.view_received_analytics
 
+import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -107,8 +109,16 @@ class ReceivedAnalyticsBottomSheet :BaseBottomSheetFragment<BottomSheetReceivedA
         binding.root.showSnackBar(errorMessage)
         viewModel.onEvent(AnalyticsPreviewEvent.ResetErrorMessageToNull)
     }
+     private fun setResult(){
+         // In the new fragment, when you need to set the result
+         val result = Bundle().apply {
+             putBoolean("booleanResult", true) // Or false, depending on your logic
+         }
+         setFragmentResult("booleanResultKey", result)
+     }
 
     private fun closeBottomSheet(){
+        setResult()
         dismiss()
     }
 
