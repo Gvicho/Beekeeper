@@ -17,7 +17,7 @@ import com.example.beekeeper.domain.repository.analytics.BeehiveAnalyticsReposit
 import com.example.beekeeper.domain.repository.auth.AuthRepository
 import com.example.beekeeper.domain.repository.damage_report.ReportRepository
 import com.example.beekeeper.domain.repository.farms.FarmsRepository
-import com.example.beekeeper.domain.repository.save_credentials.CredentialsRepository
+import com.example.beekeeper.domain.repository.data_store.DataStoreRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
@@ -68,7 +68,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideDataStoreRepository(dataStore: DataStore<Preferences>): CredentialsRepository {
+    fun provideDataStoreRepository(dataStore: DataStore<Preferences>): DataStoreRepository {
         return DataStoreRepositoryImpl(
             datastore = dataStore
         )

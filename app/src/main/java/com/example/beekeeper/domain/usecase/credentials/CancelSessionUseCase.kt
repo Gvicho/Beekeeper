@@ -1,10 +1,11 @@
 package com.example.beekeeper.domain.usecase.credentials
 
-import com.example.beekeeper.domain.repository.save_credentials.CredentialsRepository
+import com.example.beekeeper.domain.repository.data_store.DataStoreRepository
+import com.example.beekeeper.domain.utils.PreferencesKeys
 import javax.inject.Inject
 
-class CancelSessionUseCase@Inject constructor(private val credentialsRepository: CredentialsRepository) {
+class CancelSessionUseCase@Inject constructor(private val dataStoreRepository: DataStoreRepository) {
 
-    suspend operator fun invoke() { credentialsRepository.clearToken() }
+    suspend operator fun invoke() { dataStoreRepository.clearString(PreferencesKeys.TOKEN) }
 
 }
