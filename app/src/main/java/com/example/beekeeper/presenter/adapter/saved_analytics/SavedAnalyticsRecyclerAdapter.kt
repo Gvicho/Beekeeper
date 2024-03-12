@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.beekeeper.databinding.ItemAnalyticsBinding
-import com.example.beekeeper.presenter.model.saved_analytics.SavedAnalyticsPartialUI
+import com.example.beekeeper.presenter.model.beehive_analytics.saved_analytics.SavedAnalyticsPartialUI
 
 class SavedAnalyticsRecyclerAdapter (
     private val listener: ClickListener
@@ -35,8 +35,9 @@ class SavedAnalyticsRecyclerAdapter (
                 tvBeehiveId.text = id.toString()
                 tvSaveTime.text = analytics.saveTime
             }
+            bindUserBackgroundColor(analytics.isSelected)
             bindItemsClickListener(id)
-            bindItemsOnLongClickListener(id)
+            bindItemsLongClickListener(id)
         }
 
         private fun bindUserBackgroundColor(isSelected:Boolean){
@@ -44,17 +45,18 @@ class SavedAnalyticsRecyclerAdapter (
             else binding.root.setBackgroundColor(Color.WHITE)
         }
 
-        private fun bindItemsClickListener(id: Int){
+        private fun bindItemsClickListener(id:Int){
             binding.root.setOnClickListener{
                 listener.onClick(id)
             }
         }
 
-        private fun bindItemsOnLongClickListener(id:Int){
-            binding.root.setOnClickListener{
-
+        private fun bindItemsLongClickListener(id:Int){
+            binding.root.setOnLongClickListener{
                 listener.onLongClick(id)
+                true
             }
+
         }
     }
 
@@ -64,6 +66,7 @@ class SavedAnalyticsRecyclerAdapter (
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is AnalyticsViewHolder)holder.bind(position)
+
     }
 
     interface ClickListener{

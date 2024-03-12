@@ -7,16 +7,65 @@
     tools:context=".presenter.screen.saved_analytics.SavedAnalyticsFragment"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvHeader"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Damage Reports"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Saved Analytics"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginStart="20dp"/>
+
+        <Button
+            android:id="@+id/reloadBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reload"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="end"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/buttonsLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:layout_marginStart="20dp"/>
+
+        <Button
+            android:id="@+id/UploadBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+            android:id="@+id/tvSelectedCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:text="0"/>
+
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

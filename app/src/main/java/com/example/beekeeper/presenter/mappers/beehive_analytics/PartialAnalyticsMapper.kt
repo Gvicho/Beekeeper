@@ -1,7 +1,7 @@
 package com.example.beekeeper.presenter.mappers.beehive_analytics
 
 import com.example.beekeeper.domain.model.analytics.SavedAnalyticsPartial
-import com.example.beekeeper.presenter.model.saved_analytics.SavedAnalyticsPartialUI
+import com.example.beekeeper.presenter.model.beehive_analytics.saved_analytics.SavedAnalyticsPartialUI
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

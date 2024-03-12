@@ -1,9 +1,7 @@
 package com.example.beekeeper.presenter
 
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -15,6 +13,7 @@ import com.example.beekeeper.R
 import com.example.beekeeper.databinding.ActivityMainBinding
 import com.example.beekeeper.presenter.adapter.options.OptionsRecyclerAdapter
 import com.example.beekeeper.presenter.model.drawer_menu.Options
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { controller, destination, _ ->
             when (destination.id) {
                 R.id.splashFragment, R.id.loginFragment, R.id.registrationFragment, R.id.resetPasswordFragment, R.id.addReportFragment -> {
                     binding.appBarMain.contentMain.navView.visibility = View.GONE

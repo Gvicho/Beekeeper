@@ -26,6 +26,23 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
         bindAnalyticsRecyclerAdapter()
     }
 
+    override fun setListeners() {
+        bindDeleteBtnListener()
+        bindReloadListener()
+    }
+
+    private fun bindDeleteBtnListener(){
+        binding.deleteBtn.setOnClickListener{
+            viewModel.onEvent(SavedAnalyticsEvent.DeleteAnalytics)
+        }
+    }
+
+    private fun bindReloadListener(){
+        binding.reloadBtn.setOnClickListener{
+            viewModel.onEvent(SavedAnalyticsEvent.LoadAnalyticsList)
+        }
+    }
+
     private fun bindAnalyticsRecyclerAdapter(){
         analyticsRecyclerAdapter = SavedAnalyticsRecyclerAdapter(this)
         binding.analyticsRecycler.adapter = analyticsRecyclerAdapter
@@ -39,13 +56,13 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.beehiveAnalyticsState.collect{
-                    handleResponse(it)
+                    handleNewState(it)
                 }
             }
         }
     }
 
-    private fun handleResponse(savedAnalyticsState: SavedAnalyticsState){
+    private fun handleNewState(savedAnalyticsState: SavedAnalyticsState){
         savedAnalyticsState.errorMessage?.let {
             showErrorMessage(it)
         }
@@ -54,6 +71,21 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
 
         savedAnalyticsState.savedBeehiveAnalyticsList?.let {
             analyticsRecyclerAdapter.submitList(it)
+        }
+
+        handleSelectedList(savedAnalyticsState.selectedItemsList)
+    }
+
+    private fun handleSelectedList(selectedIdList: List<Int>){
+        showOrHideButtonsLine(selectedIdList.isNotEmpty())
+        binding.apply {
+            tvSelectedCount.text = selectedIdList.size.toString()
+        }
+    }
+
+    private fun showOrHideButtonsLine(isLoading:Boolean){
+        binding.apply {
+            buttonsLine.visibility = if(isLoading) View.VISIBLE else View.GONE
         }
     }
 
@@ -69,11 +101,11 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
     }
 
     override fun onClick(id: Int) {
-        binding.root.showSnackBar("$id was pressed")
+        viewModel.onEvent(SavedAnalyticsEvent.OnItemClick(id))
     }
 
     override fun onLongClick(id: Int) {
-        binding.root.showSnackBar("$id was long pressed")
+        viewModel.onEvent(SavedAnalyticsEvent.OnLongItemClick(id))
     }
 
 }

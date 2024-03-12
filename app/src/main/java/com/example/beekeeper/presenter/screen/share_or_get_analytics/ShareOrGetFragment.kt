@@ -196,7 +196,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
     }
 
     private fun openSaveAnalyticsPage(){
-        findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_savedAnalyticsFragment)
+        //findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_savedAnalyticsFragment)
     }
 
     private fun openAnalyticsPreview(beehiveAnalytics:BeehiveAnalyticsUI){

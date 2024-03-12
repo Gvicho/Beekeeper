@@ -1,5 +1,6 @@
 package com.example.beekeeper.presenter.screen.saved_analytics
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
@@ -10,8 +11,10 @@ import com.example.beekeeper.presenter.mappers.beehive_analytics.toUI
 import com.example.beekeeper.presenter.state.analytics.SavedAnalyticsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,16 +29,21 @@ class SavedAnalyticsViewModel@Inject constructor(
     private val _beehiveAnalyticsState =  MutableStateFlow(SavedAnalyticsState())
     val beehiveAnalyticsState : StateFlow<SavedAnalyticsState> = _beehiveAnalyticsState
 
+    private val _savedAnalyticsPageNavigationEvent = MutableSharedFlow<SavedAnalyticsNavigationEvents>()
+    val savedAnalyticsPageNavigationEvent get() = _savedAnalyticsPageNavigationEvent.asSharedFlow()
+
     init {
         loadAnalytics()
     }
 
     fun onEvent(event:SavedAnalyticsEvent){
         when(event){
-            is SavedAnalyticsEvent.DeleteAnalyticsOnId -> deleteAnalyticsById(event.id)
             SavedAnalyticsEvent.LoadAnalyticsList -> loadAnalytics()
             SavedAnalyticsEvent.ResetErrorMessageToNull -> updateErrorMessageToNull()
-            is SavedAnalyticsEvent.UploadAnalyticsOnDataBase -> TODO()
+            SavedAnalyticsEvent.DeleteAnalytics -> deleteAnalytics()
+            is SavedAnalyticsEvent.OnItemClick -> onClick(event.id)
+            is SavedAnalyticsEvent.OnLongItemClick -> onLongClick(event.id)
+            SavedAnalyticsEvent.UploadAnalyticsOnDataBase -> TODO()
         }
     }
 
@@ -76,6 +84,18 @@ class SavedAnalyticsViewModel@Inject constructor(
         }
     }
 
+    private fun deleteAnalytics(){
+        val list = _beehiveAnalyticsState.value.selectedItemsList
+        list.forEach{
+            deleteAnalyticsById(it)
+        }
+        viewModelScope.launch{
+            _beehiveAnalyticsState.update {
+                it.copy(selectedItemsList = emptyList())
+            }
+        }
+    }
+
     private fun deleteAnalyticsById(id:Int){
         viewModelScope.launch {
             deleteAnalyticsByIdUseCase(id).collect {result->
@@ -95,7 +115,7 @@ class SavedAnalyticsViewModel@Inject constructor(
                     }
                     is Resource.Failed -> {
                         _beehiveAnalyticsState.update {
-                            it.copy(errorMessage = result.message, isLoading = false)
+                            it.copy(errorMessage = "id: $id :${result.message}", isLoading = false)
                         }
                     }
                 }
@@ -104,4 +124,58 @@ class SavedAnalyticsViewModel@Inject constructor(
         }
     }
 
+    private fun onClick(id:Int){
+        val state = _beehiveAnalyticsState.value
+        viewModelScope.launch {
+            if(state.selectedItemsList.isEmpty()){
+                navigationEventToSavedAnalytic(id)
+            }else{
+                _beehiveAnalyticsState.update {savedState->
+                    if(savedState.selectedItemsList.contains(id)){
+                        Log.d("tag1234","onClick erase id: $id")
+                        savedState.copy(
+                            selectedItemsList = savedState.selectedItemsList.filter { it!=id },
+                            savedBeehiveAnalyticsList = savedState.savedBeehiveAnalyticsList?.map { if(it.beehiveId == id)it.copy(isSelected = !it.isSelected) else it }
+                        )
+                    }else{
+                        Log.d("tag1234","onClick insert id: $id")
+                        savedState.copy(
+                            selectedItemsList = savedState.selectedItemsList+id,
+                            savedBeehiveAnalyticsList = savedState.savedBeehiveAnalyticsList?.map { if(it.beehiveId == id)it.copy(isSelected = !it.isSelected) else it }
+                        )
+                    }
+
+                }
+            }
+        }
+
+    }
+
+    private fun onLongClick(id:Int){
+        _beehiveAnalyticsState.update {savedState->
+            if(savedState.selectedItemsList.contains(id)){
+                Log.d("tag1234","onLong erase id: $id")
+                savedState.copy(
+                    selectedItemsList = savedState.selectedItemsList.filter { it!=id },
+                    savedBeehiveAnalyticsList = savedState.savedBeehiveAnalyticsList?.map { if(it.beehiveId == id)it.copy(isSelected = !it.isSelected) else it }
+                )
+            }else{
+                Log.d("tag1234","onLong insert id: $id")
+                savedState.copy(
+                    selectedItemsList = savedState.selectedItemsList+id,
+                    savedBeehiveAnalyticsList = savedState.savedBeehiveAnalyticsList?.map { if(it.beehiveId == id)it.copy(isSelected = !it.isSelected) else it }
+                )
+            }
+        }
+    }
+
+    private fun navigationEventToSavedAnalytic(beehiveId: Int){
+        viewModelScope.launch {
+            _savedAnalyticsPageNavigationEvent.emit(SavedAnalyticsNavigationEvents.NavigateToAnalyticPreviewPage(beehiveId))
+        }
+    }
+
+    sealed interface SavedAnalyticsNavigationEvents{
+        data class NavigateToAnalyticPreviewPage(val beehiveId:Int): SavedAnalyticsNavigationEvents
+    }
 }
