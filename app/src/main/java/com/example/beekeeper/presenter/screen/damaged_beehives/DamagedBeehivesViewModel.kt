@@ -3,8 +3,6 @@ package com.example.beekeeper.presenter.screen.damaged_beehives
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
-import com.example.beekeeper.domain.model.BeehiveAnalytics
-import com.example.beekeeper.domain.usecase.beehive_analytics.InsertAnalyticsUseCase
 import com.example.beekeeper.domain.usecase.damage_report.GetAllReportsUseCase
 import com.example.beekeeper.presenter.mappers.toPresentation
 import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI

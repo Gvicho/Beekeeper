@@ -18,7 +18,7 @@ import com.example.beekeeper.data.source.remote.bluetooth.mapper.toModel
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.common.SocketConnectionResult
 import com.example.beekeeper.domain.controller.bluetooth.BluetoothController
-import com.example.beekeeper.domain.model.BeehiveAnalytics
+import com.example.beekeeper.domain.model.analytics.BeehiveAnalytics
 import com.example.beekeeper.domain.model.bluetooth_device.BluetoothDeviceDomainModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -240,9 +240,11 @@ class BluetoothControllerImpl(
                             val id = parts[0].toInt()
                             val weightData = parts[1].split(",").map { it.toDouble() }
                             val temperatureData = parts[2].split(",").map { it.toDouble() }
+                            val currentDateTime = System.currentTimeMillis()
+
 
                             // Create a BeehiveData object
-                            val beehiveData = BeehiveAnalytics(id, weightData, temperatureData)
+                            val beehiveData = BeehiveAnalytics(id, weightData, temperatureData, currentDateTime)
                             Log.d("BluetoothController", "Incoming BeehiveData: $beehiveData")
                             emit(Resource.Success(beehiveData))
 

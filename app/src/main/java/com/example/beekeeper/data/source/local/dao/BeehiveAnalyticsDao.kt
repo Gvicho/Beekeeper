@@ -4,7 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.beekeeper.data.source.local.entity.BeehiveAnalyticsEntity
+import com.example.beekeeper.data.source.local.model.BeehiveAnalyticsEntity
+import com.example.beekeeper.data.source.local.model.SavedAnalyticsPartialData
 
 @Dao
 interface BeehiveAnalyticsDao {
@@ -23,5 +24,8 @@ interface BeehiveAnalyticsDao {
 
     @Query("DELETE FROM BeehiveAnalyticsEntity WHERE id = :id")
     suspend fun deleteAnalyticsById(id: Int)
+
+    @Query("SELECT id, saveDateTime FROM BeehiveAnalyticsEntity")
+    suspend fun getAllAnalyticsPartial(): List<SavedAnalyticsPartialData>
 
 }

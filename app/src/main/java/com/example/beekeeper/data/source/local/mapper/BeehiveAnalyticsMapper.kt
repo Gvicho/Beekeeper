@@ -1,16 +1,22 @@
 package com.example.beekeeper.data.source.local.mapper
 
-import com.example.beekeeper.data.source.local.entity.BeehiveAnalyticsEntity
-import com.example.beekeeper.domain.model.BeehiveAnalytics
+import com.example.beekeeper.data.source.local.model.BeehiveAnalyticsEntity
+import com.example.beekeeper.domain.model.analytics.BeehiveAnalytics
 
-fun BeehiveAnalyticsEntity.toDomain() =  BeehiveAnalytics(
-    id = id,
-    weightData = weightData.toList().map { it.code.toDouble() },
-    temperatureData = temperatureData.toList().map { it.code.toDouble() },
-)
+fun BeehiveAnalyticsEntity.toDomain(): BeehiveAnalytics {
+    return BeehiveAnalytics(
+        id = id,
+        weightData = weightData.split(",").map { it.toDouble() },
+        temperatureData = temperatureData.split(",").map { it.toDouble() },
+        saveDateTime = saveDateTime
+    )
+}
 
-fun BeehiveAnalytics.toData() = BeehiveAnalyticsEntity(
-    id = id,
-    weightData = weightData.toString(),
-    temperatureData = temperatureData.toString()
-)
+fun BeehiveAnalytics.toEntity(): BeehiveAnalyticsEntity {
+    return BeehiveAnalyticsEntity(
+        id = id,
+        weightData = weightData.joinToString(","),
+        temperatureData = temperatureData.joinToString(","),
+        saveDateTime = saveDateTime
+    )
+}

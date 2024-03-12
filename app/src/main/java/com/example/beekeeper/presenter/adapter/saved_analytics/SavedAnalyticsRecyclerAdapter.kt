@@ -1,26 +1,27 @@
 package com.example.beekeeper.presenter.adapter.saved_analytics
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.beekeeper.databinding.ItemAnalyticsBinding
-import com.example.beekeeper.presenter.model.beehive_analytics.BeehiveAnalyticsUI
+import com.example.beekeeper.presenter.model.saved_analytics.SavedAnalyticsPartialUI
 
 class SavedAnalyticsRecyclerAdapter (
     private val listener: ClickListener
-) : ListAdapter<BeehiveAnalyticsUI, RecyclerView.ViewHolder>(
+) : ListAdapter<SavedAnalyticsPartialUI, RecyclerView.ViewHolder>(
     DIFF_CALLBACK
 ) {
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<BeehiveAnalyticsUI>() {
-            override fun areItemsTheSame(oldItem: BeehiveAnalyticsUI, newItem: BeehiveAnalyticsUI): Boolean {
-                return oldItem.id == newItem.id
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SavedAnalyticsPartialUI>() {
+            override fun areItemsTheSame(oldItem: SavedAnalyticsPartialUI, newItem: SavedAnalyticsPartialUI): Boolean {
+                return oldItem.beehiveId == newItem.beehiveId
             }
 
-            override fun areContentsTheSame(oldItem: BeehiveAnalyticsUI, newItem: BeehiveAnalyticsUI): Boolean {
+            override fun areContentsTheSame(oldItem: SavedAnalyticsPartialUI, newItem: SavedAnalyticsPartialUI): Boolean {
                 return oldItem == newItem
             }
         }
@@ -29,16 +30,30 @@ class SavedAnalyticsRecyclerAdapter (
     inner class AnalyticsViewHolder(private val binding: ItemAnalyticsBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(position:Int) {
             val analytics = currentList[position]
-            val id =analytics.id
+            val id =analytics.beehiveId
             binding.apply {
                 tvBeehiveId.text = id.toString()
+                tvSaveTime.text = analytics.saveTime
             }
             bindItemsClickListener(id)
+            bindItemsOnLongClickListener(id)
+        }
+
+        private fun bindUserBackgroundColor(isSelected:Boolean){
+            if(isSelected) binding.root.setBackgroundColor(Color.GRAY)
+            else binding.root.setBackgroundColor(Color.WHITE)
         }
 
         private fun bindItemsClickListener(id: Int){
             binding.root.setOnClickListener{
                 listener.onClick(id)
+            }
+        }
+
+        private fun bindItemsOnLongClickListener(id:Int){
+            binding.root.setOnClickListener{
+
+                listener.onLongClick(id)
             }
         }
     }
@@ -53,5 +68,6 @@ class SavedAnalyticsRecyclerAdapter (
 
     interface ClickListener{
         fun onClick(id:Int)
+        fun onLongClick(id:Int)
     }
 }

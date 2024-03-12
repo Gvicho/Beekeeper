@@ -2,7 +2,7 @@ package com.example.beekeeper.domain.controller.bluetooth
 
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.common.SocketConnectionResult
-import com.example.beekeeper.domain.model.BeehiveAnalytics
+import com.example.beekeeper.domain.model.analytics.BeehiveAnalytics
 import com.example.beekeeper.domain.model.bluetooth_device.BluetoothDeviceDomainModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow

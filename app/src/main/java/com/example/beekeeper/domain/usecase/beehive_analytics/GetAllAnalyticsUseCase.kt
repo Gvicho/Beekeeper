@@ -6,6 +6,6 @@ import javax.inject.Inject
 class GetAllAnalyticsUseCase  @Inject constructor(private val beehiveAnalyticsRepository: BeehiveAnalyticsRepository) {
 
     operator fun invoke() =
-        beehiveAnalyticsRepository.getAnalyticsFromLocal()
+        beehiveAnalyticsRepository.getPartialAnalyticsFromLocal()
 
 }

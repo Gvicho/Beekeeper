@@ -88,7 +88,7 @@ class SavedAnalyticsViewModel@Inject constructor(
                     is Resource.Success -> {
                         _beehiveAnalyticsState.update {analyticsState->
                             analyticsState.copy(isLoading = false,
-                                savedBeehiveAnalyticsList = analyticsState.savedBeehiveAnalyticsList?.filter { it.id!=id }
+                                savedBeehiveAnalyticsList = analyticsState.savedBeehiveAnalyticsList?.filter { it.beehiveId!=id }
                             )
                         }
 

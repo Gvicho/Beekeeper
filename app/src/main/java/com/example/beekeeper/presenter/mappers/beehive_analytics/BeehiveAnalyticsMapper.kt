@@ -1,6 +1,6 @@
 package com.example.beekeeper.presenter.mappers.beehive_analytics
 
-import com.example.beekeeper.domain.model.BeehiveAnalytics
+import com.example.beekeeper.domain.model.analytics.BeehiveAnalytics
 import com.example.beekeeper.presenter.model.beehive_analytics.BeehiveAnalyticsUI
 
 fun BeehiveAnalytics.toUI():BeehiveAnalyticsUI{
@@ -11,11 +11,12 @@ fun BeehiveAnalytics.toUI():BeehiveAnalyticsUI{
         },
         temperatureData = temperatureData.map {
             it.toFloat()
-        }
+        },
+        saveDateTime = saveDateTime
     )
 }
 
-fun BeehiveAnalyticsUI.toDomain():BeehiveAnalytics{
+fun BeehiveAnalyticsUI.toDomain(): BeehiveAnalytics {
     return BeehiveAnalytics(
         id = id,
         weightData = weightData.map {
@@ -23,6 +24,7 @@ fun BeehiveAnalyticsUI.toDomain():BeehiveAnalytics{
         },
         temperatureData = temperatureData.map {
             it.toDouble()
-        }
+        },
+        saveDateTime = saveDateTime
     )
 }

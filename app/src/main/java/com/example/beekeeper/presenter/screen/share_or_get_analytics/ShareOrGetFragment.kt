@@ -204,7 +204,8 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
         val action = ShareOrGetFragmentDirections.actionShareOrGetFragmentToReceivedAnalyticsBottomSheet(
             id = beehiveAnalytics.id,
             weightData = beehiveAnalytics.weightData.toFloatArray(),
-            temperatureData = beehiveAnalytics.temperatureData.toFloatArray()
+            temperatureData = beehiveAnalytics.temperatureData.toFloatArray(),
+            saveTime = beehiveAnalytics.saveDateTime
         )
 
         findNavController().navigate(action)

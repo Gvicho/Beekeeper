@@ -72,4 +72,8 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
         binding.root.showSnackBar("$id was pressed")
     }
 
+    override fun onLongClick(id: Int) {
+        binding.root.showSnackBar("$id was long pressed")
+    }
+
 }

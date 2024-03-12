@@ -43,11 +43,13 @@ class ReceivedAnalyticsBottomSheet :BaseBottomSheetFragment<BottomSheetReceivedA
         val id = args.id
         val weightData = args.weightData.toList()
         val temperatureData = args.temperatureData.toList()
+        val saveTime = args.saveTime
 
         beehiveAnalytics = BeehiveAnalyticsUI(
             id = id,
             weightData = weightData,
-            temperatureData = temperatureData
+            temperatureData = temperatureData,
+            saveDateTime = saveTime
         )
 
         binding.tvId.text = beehiveAnalytics.id.toString()
