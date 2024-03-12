@@ -34,6 +34,7 @@ class ShareOrGetViewModel @Inject constructor(
         when(event){
             GetAnalyticsEvent.HandleInput -> handleInput()
             GetAnalyticsEvent.ResetErrorMessageToNull -> resetErrorMessageToNull()
+            GetAnalyticsEvent.NavigateToSavedAnalytics -> navigationEventToSavedAnalytic()
         }
     }
 
@@ -76,8 +77,15 @@ class ShareOrGetViewModel @Inject constructor(
         bluetoothController.release()
     }
 
+    private fun navigationEventToSavedAnalytic(){
+        viewModelScope.launch {
+            _pageNavigationEvent.emit(GetAnalyticsPageNavigationEvents.NavigateToSavedAnalyticsPage)
+        }
+    }
+
     sealed interface GetAnalyticsPageNavigationEvents{
         data class NavigateToAnalyticsPreviewPage(val beehiveAnalytics:BeehiveAnalyticsUI): GetAnalyticsPageNavigationEvents
+        data object NavigateToSavedAnalyticsPage:GetAnalyticsPageNavigationEvents
     }
 
 }

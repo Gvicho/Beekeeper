@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
@@ -25,7 +24,6 @@ import com.example.beekeeper.presenter.model.bluetooth_device.BluetoothDeviceUIM
 import com.example.beekeeper.presenter.state.get_analytics.ReceivedBeehiveAnalyticsState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
@@ -107,8 +105,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
             // Handle the boolean result here
             val booleanResult = bundle.getBoolean("booleanResult")
             if(booleanResult){
-                openSaveAnalyticsPage()
-                Log.d("tag123","received true it saved")
+                viewModel.onEvent(GetAnalyticsEvent.NavigateToSavedAnalytics)
             }
         }
     }
@@ -146,7 +143,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.pageNavigationEvent
-                    .debounce(1000) // Debounce for 1 second (1000 milliseconds)
+                    .debounce(500) // Debounce for 1 second (1000 milliseconds)
                     .collect { event ->
                         handleNavigation(event)
                     }
@@ -157,6 +154,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
     private fun handleNavigation(event: ShareOrGetViewModel.GetAnalyticsPageNavigationEvents){
         when(event){
             is ShareOrGetViewModel.GetAnalyticsPageNavigationEvents.NavigateToAnalyticsPreviewPage -> openAnalyticsPreview(event.beehiveAnalytics)
+            ShareOrGetViewModel.GetAnalyticsPageNavigationEvents.NavigateToSavedAnalyticsPage -> openSaveAnalyticsPage()
         }
     }
 
@@ -198,10 +196,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
     }
 
     private fun openSaveAnalyticsPage(){
-        viewLifecycleOwner.lifecycleScope.launch {
-            delay(100) // Wait for 100 milliseconds
-            findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_savedAnalyticsFragment)
-        }
+        findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_savedAnalyticsFragment)
     }
 
     private fun openAnalyticsPreview(beehiveAnalytics:BeehiveAnalyticsUI){
