@@ -207,14 +207,6 @@ class BluetoothControllerImpl(
         currentServerSocket = null
     }
 
-    override fun release() {
-        if(isFoundDevicesReceiverRegistered)context.unregisterReceiver(foundDevicesReceiver)
-        if(isBluetoothStateReceiverRegistered)context.unregisterReceiver(bluetoothStateReceiver)
-        currentClientSocket?.close()
-        currentClientSocket = null
-        closeConnection()
-    }
-
     override suspend fun handleInputStream(): Flow<Resource<BeehiveAnalytics>> {
         currentClientSocket?.let { socket ->
             sendStartMessage()
@@ -303,6 +295,20 @@ class BluetoothControllerImpl(
         } else {
             context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
         }
+    }
+
+    override fun release() {
+        if(isFoundDevicesReceiverRegistered){
+            context.unregisterReceiver(foundDevicesReceiver)
+            isFoundDevicesReceiverRegistered = false
+        }
+        if(isBluetoothStateReceiverRegistered){
+            isBluetoothStateReceiverRegistered = false
+            context.unregisterReceiver(bluetoothStateReceiver)
+        }
+        currentClientSocket?.close()
+        currentClientSocket = null
+        closeConnection()
     }
 
     companion object{

@@ -32,10 +32,6 @@ class SavedAnalyticsViewModel@Inject constructor(
     private val _savedAnalyticsPageNavigationEvent = MutableSharedFlow<SavedAnalyticsNavigationEvents>()
     val savedAnalyticsPageNavigationEvent get() = _savedAnalyticsPageNavigationEvent.asSharedFlow()
 
-    init {
-        loadAnalytics()
-    }
-
     fun onEvent(event:SavedAnalyticsEvent){
         when(event){
             SavedAnalyticsEvent.LoadAnalyticsList -> loadAnalytics()

@@ -38,7 +38,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
 
     private val bluetoothAdapter by lazy {
         bluetoothManager?.adapter //if device doesn't support bluetooth then this will be null
-    } // where is all functionality: get your mac address, name do anything with bluetooth (get paired devices, scanned devices...)
+    } // here is all functionality: get your mac address, name do anything with bluetooth (get paired devices, scanned devices...)
 
     private val isBluetoothEnabled:Boolean
         get() = bluetoothAdapter?.isEnabled == true
@@ -196,7 +196,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
     }
 
     private fun openSaveAnalyticsPage(){
-        //findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_savedAnalyticsFragment)
+        findNavController().safeNavigate(R.id.action_shareOrGetFragment_to_savedAnalyticsFragment)
     }
 
     private fun openAnalyticsPreview(beehiveAnalytics:BeehiveAnalyticsUI){

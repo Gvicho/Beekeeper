@@ -93,7 +93,9 @@
             app:destination="@id/receivedAnalyticsBottomSheet" />
         <action
             android:id="@+id/action_shareOrGetFragment_to_savedAnalyticsFragment"
-            app:destination="@id/savedAnalyticsFragment" />
+            app:destination="@id/savedAnalyticsFragment"
+            app:popUpTo="@id/shareOrGetFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <dialog
         android:id="@+id/scanBottomSheet"

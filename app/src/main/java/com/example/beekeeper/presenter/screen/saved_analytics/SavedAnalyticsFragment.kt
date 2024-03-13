@@ -22,6 +22,10 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
     private val viewModel: SavedAnalyticsViewModel by viewModels()
     private lateinit var analyticsRecyclerAdapter: SavedAnalyticsRecyclerAdapter
 
+    override fun loadData() {
+        viewModel.onEvent(SavedAnalyticsEvent.LoadAnalyticsList)
+    }
+
     override fun bind() {
         bindAnalyticsRecyclerAdapter()
     }
