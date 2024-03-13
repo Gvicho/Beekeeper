@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.EOFException
 import java.io.IOException
 import java.util.UUID
 
@@ -248,6 +249,18 @@ class BluetoothControllerImpl(
 
                     } catch (e: IOException) {
                         emit(Resource.Failed(e.message ?: "Empty IO Exception"))
+                        break
+                    } catch (e: EOFException) {
+                        emit(Resource.Failed(e.message ?: "End of stream reached unexpectedly"))
+                        break
+                    } catch (e: SecurityException) {
+                        emit(Resource.Failed(e.message ?: "Security Exception occurred"))
+                        break
+                    } catch (e: IllegalArgumentException) {
+                        emit(Resource.Failed(e.message ?: "Invalid argument passed"))
+                        break
+                    } catch (e: NullPointerException) {
+                        emit(Resource.Failed(e.message ?: "Null Pointer Exception occurred"))
                         break
                     }
                 }

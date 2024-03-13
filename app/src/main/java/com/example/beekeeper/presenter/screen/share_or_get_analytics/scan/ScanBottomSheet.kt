@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
@@ -144,7 +145,8 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
     }
 
     private fun showErrorMessage(errorMessage:String){
-        binding.root.showSnackBar(errorMessage)
+        binding.errorViewHolder.showSnackBar(errorMessage)
+        Log.d("tag12345","error!!")
     }
 
     private fun showLoader(loading:Boolean){

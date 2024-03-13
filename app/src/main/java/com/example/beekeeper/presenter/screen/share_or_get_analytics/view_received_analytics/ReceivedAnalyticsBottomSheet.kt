@@ -108,7 +108,7 @@ class ReceivedAnalyticsBottomSheet :BaseBottomSheetFragment<BottomSheetReceivedA
     }
 
     private fun errorWhileRegistration(errorMessage:String){
-        binding.root.showSnackBar(errorMessage)
+        binding.errorViewHolder.showSnackBar(errorMessage)
         viewModel.onEvent(AnalyticsPreviewEvent.ResetErrorMessageToNull)
     }
      private fun setResult(){
