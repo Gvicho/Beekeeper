@@ -39,7 +39,7 @@
         android:theme="@style/Theme.Beekeeper"
         tools:targetApi="31">
         <activity
-            android:name=".presenter.MainActivity"
+            android:name=".presenter.screen.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

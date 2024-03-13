@@ -3,6 +3,7 @@ package com.example.beekeeper.presenter.screen.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.usecase.credentials.ReadSessionTokenUseCase
+import com.example.beekeeper.domain.usecase.dark_mode.ReadDarkModeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -12,8 +13,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel@Inject constructor(
-    private val readSessionTokenUseCase: ReadSessionTokenUseCase
+    private val readSessionTokenUseCase: ReadSessionTokenUseCase,
+    private val readDarkModeUseCase: ReadDarkModeUseCase
 ):ViewModel() {
+
+
+    private val _darkModeFlow = MutableSharedFlow<Boolean>()
+    val darkModeFlow: SharedFlow<Boolean> get() = _darkModeFlow
 
 
     private val _navigationEvent = MutableSharedFlow<SplashNavigationEvent>()
@@ -36,5 +42,14 @@ class SplashViewModel@Inject constructor(
     sealed interface SplashNavigationEvent{
         data object NavigateToLogin :SplashNavigationEvent
         data object NavigateToHome :SplashNavigationEvent
+    }
+
+    fun readDarkMode() {
+        viewModelScope.launch {
+            readDarkModeUseCase().collect{
+                _darkModeFlow.emit(it)
+            }
+        }
+
     }
 }

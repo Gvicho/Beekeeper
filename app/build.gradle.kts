@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId = "com.example.beekeeper"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -127,6 +127,8 @@ dependencies {
     implementation ("com.google.firebase:firebase-database-ktx")
 
     implementation ("androidx.activity:activity-ktx:1.8.2")
+
+    implementation("com.google.ai.client.generativeai:generativeai:0.1.2")
 
 
 }

@@ -28,7 +28,7 @@ object DataStoreModule {
                     emptyPreferences()
                 }
             ),
-            produceFile = { context.preferencesDataStoreFile("settings") })  // banal but gold
+            produceFile = { context.preferencesDataStoreFile("settings") })
     }
 
 }

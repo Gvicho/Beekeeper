@@ -1,7 +1,12 @@
 package com.example.beekeeper.presenter.screen.damaged_beehives.report
 
 import android.Manifest
+import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
+import com.bumptech.glide.request.transition.Transition
+import android.util.Log
+import android.util.Log.d
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -12,13 +17,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.beekeeper.databinding.DamagePicturesRecyclerItemBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.example.beekeeper.databinding.FragmentAddReportBinding
+import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.presenter.adapter.damaged_beehives.DamagePicturesRecyclerAdapter
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.state.damage_report.DamageReportState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -112,6 +123,9 @@ class AddReportFragment :
                 binding.root.showSnackBar("no Images !! ")
             }
         }
+        binding.btnGenerateDesc.setOnClickListener {
+
+        }
 
     }
 
@@ -127,6 +141,37 @@ class AddReportFragment :
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
     }
+
+    private fun bindGeneratedDesc() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.descFlow.collect {
+                    when (it) {
+                        is Resource.Loading -> {
+
+                        }
+
+                        is Resource.Success -> {
+                            val res = it.responseData
+                            d("ResultDescription", res)
+                            binding.etDescription.setText(res)
+
+
+                        }
+
+                        is Resource.Failed -> {
+                            val errorMessage = it.message
+                            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT)
+                                .show()
+                            Log.d("framgnetFailed", "fail")
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
 
 }

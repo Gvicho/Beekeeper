@@ -6,6 +6,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.example.beekeeper.data.common.HandleResponse
+import com.example.beekeeper.data.repository.AnalyzeDamageRepositoryImpl
 import com.example.beekeeper.data.repository.AuthRepositoryImpl
 import com.example.beekeeper.data.repository.BeehiveAnalyticsRepositoryImpl
 import com.example.beekeeper.data.repository.DataStoreRepositoryImpl
@@ -18,6 +19,8 @@ import com.example.beekeeper.domain.repository.auth.AuthRepository
 import com.example.beekeeper.domain.repository.damage_report.ReportRepository
 import com.example.beekeeper.domain.repository.farms.FarmsRepository
 import com.example.beekeeper.domain.repository.data_store.DataStoreRepository
+import com.example.beekeeper.domain.repository.evaluator.AnalyzeDamageRepository
+import com.google.ai.client.generativeai.GenerativeModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
@@ -79,6 +82,13 @@ object RepositoryModule {
     @Singleton
     fun provideBeehiveAnalyticsRepository(analyticsDao: BeehiveAnalyticsDao): BeehiveAnalyticsRepository {
         return BeehiveAnalyticsRepositoryImpl(analyticsDao)
+
+
+    }
+    @Provides
+    @Singleton
+    fun provideAnalyzeDamageRepository(generativeModel: GenerativeModel): AnalyzeDamageRepository {
+        return AnalyzeDamageRepositoryImpl(generativeModel)
 
 
     }
