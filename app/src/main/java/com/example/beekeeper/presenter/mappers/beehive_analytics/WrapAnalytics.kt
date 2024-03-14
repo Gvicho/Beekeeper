@@ -11,13 +11,15 @@ fun BeehiveAnalyticsUI.toChartData() : List<AnalyticsWrapper>{
             id = 1,
             analyticList = weightData,
             label = "Honey Weight",
-            analyticType = AnalyticType.BAR_CHART
+            analyticType = AnalyticType.BAR_CHART,
+            saveTime = saveDateTime
         ),
         AnalyticsWrapper(
             id = 2,
             analyticList = temperatureData,
             label = "Temperature",
-            analyticType = AnalyticType.LINE_CHART
+            analyticType = AnalyticType.LINE_CHART,
+            saveTime = saveDateTime
         )
     )
 }

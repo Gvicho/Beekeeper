@@ -17,6 +17,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import kotlin.math.ceil
 
 class ChartsRecyclerAdapter(private val analyticsList: List<AnalyticsWrapper>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -72,7 +73,7 @@ class ChartsRecyclerAdapter(private val analyticsList: List<AnalyticsWrapper>) :
                     position = XAxis.XAxisPosition.BOTTOM // Set the X-axis position to bottom
                     granularity = 1f // Show all X-axis labels
                     setDrawGridLines(false) // Disable X-axis grid lines
-                    valueFormatter = DateValueFormatter() // Set the custom ValueFormatter
+                    valueFormatter = DateValueFormatter(analyticsList[pos].saveTime) // Set the custom ValueFormatter
                 }
                 axisLeft.apply {
                     axisMinimum = 0f // Set the minimum Y-axis value to 0
@@ -104,24 +105,27 @@ class ChartsRecyclerAdapter(private val analyticsList: List<AnalyticsWrapper>) :
         fun bind(pos: Int) {
             val temperatureAnalytics = analyticsList[pos].analyticList
             lineChart = binding.lineChart
+            val minVal = temperatureAnalytics.min()-1
+            val maxVal = temperatureAnalytics.max()
+            val charGranularity = ceil((maxVal-minVal)/5)
 
             lineChart.apply {
                 description.isEnabled = false
                 setTouchEnabled(true)
                 isDragEnabled = true
-                setScaleEnabled(false)
-                setPinchZoom(false)
+                setScaleEnabled(true)
+                setPinchZoom(true)
 
                 xAxis.apply {
                     position = XAxis.XAxisPosition.BOTTOM
                     granularity = 1f
                     setDrawGridLines(false)
-                    valueFormatter = DateValueFormatter()
+                    valueFormatter = DateValueFormatter(analyticsList[pos].saveTime)
                 }
 
                 axisLeft.apply {
-                    axisMinimum = 2.5f
-                    granularity = 0.5f
+                    axisMinimum = minVal
+                    granularity = charGranularity
                     setDrawGridLines(true)
                 }
 
@@ -136,7 +140,7 @@ class ChartsRecyclerAdapter(private val analyticsList: List<AnalyticsWrapper>) :
                 setDrawValues(true)
                 setDrawCircles(false)
                 setDrawFilled(true)
-                mode = LineDataSet.Mode.CUBIC_BEZIER // Make the line smooth
+                //mode = LineDataSet.Mode.CUBIC_BEZIER // Make the line smooth
             }
 
             val data = LineData(dataSet)

@@ -4,7 +4,8 @@ data class AnalyticsWrapper(
     val id:Int,
     val analyticList:List<Float>,
     val label:String,
-    val analyticType:AnalyticType
+    val analyticType:AnalyticType,
+    val saveTime:Long
 )
 
 

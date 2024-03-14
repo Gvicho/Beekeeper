@@ -59,14 +59,14 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { controller, destination, _ ->
             when (destination.id) {
-                R.id.splashFragment, R.id.loginFragment, R.id.registrationFragment, R.id.resetPasswordFragment, R.id.addReportFragment -> {
-                    binding.appBarMain.contentMain.navView.visibility = View.GONE
-                    binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                R.id.damagedBeehivesFragment, R.id.navigation_home, R.id.shareOrGetFragment, R.id.savedAnalyticsFragment -> {
+                    binding.appBarMain.contentMain.navView.visibility = View.VISIBLE
+                    binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                 }
 
                 else -> {
-                    binding.appBarMain.contentMain.navView.visibility = View.VISIBLE
-                    binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                    binding.appBarMain.contentMain.navView.visibility = View.GONE
+                    binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 }
             }
         }

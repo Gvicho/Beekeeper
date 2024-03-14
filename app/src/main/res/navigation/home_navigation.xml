@@ -62,7 +62,11 @@
         android:id="@+id/savedAnalyticsFragment"
         android:name="com.example.beekeeper.presenter.screen.saved_analytics.SavedAnalyticsFragment"
         android:label="fragment_saved_analytics"
-        tools:layout="@layout/fragment_saved_analytics" />
+        tools:layout="@layout/fragment_saved_analytics" >
+        <action
+            android:id="@+id/action_savedAnalyticsFragment_to_analyticDetailsFragment"
+            app:destination="@id/analyticDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/damagedBeehivesFragment"
         android:name="com.example.beekeeper.presenter.screen.damaged_beehives.DamagedBeehivesFragment"
@@ -125,4 +129,14 @@
             android:name="saveTime"
             app:argType="long" />
     </dialog>
+    <fragment
+        android:id="@+id/analyticDetailsFragment"
+        android:name="com.example.beekeeper.presenter.screen.saved_analytics.analytic_details.AnalyticDetailsFragment"
+        android:label="fragment_analytic_details"
+        tools:layout="@layout/fragment_analytic_details" >
+        <argument
+            android:name="beehiveId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>
