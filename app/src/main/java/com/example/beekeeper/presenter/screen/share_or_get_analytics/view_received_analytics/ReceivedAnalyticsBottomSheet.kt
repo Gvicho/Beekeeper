@@ -10,10 +10,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.BottomSheetReceivedAnalyticsBinding
+import com.example.beekeeper.presenter.adapter.charts_recycler.ChartsRecyclerAdapter
 import com.example.beekeeper.presenter.base_fragment.BaseBottomSheetFragment
 import com.example.beekeeper.presenter.event.get_analytics.AnalyticsPreviewEvent
 import com.example.beekeeper.presenter.extension.showSnackBar
+import com.example.beekeeper.presenter.mappers.beehive_analytics.toChartData
 import com.example.beekeeper.presenter.model.beehive_analytics.BeehiveAnalyticsUI
+import com.example.beekeeper.presenter.model.beehive_analytics.analytics_wrapper.AnalyticsWrapper
 import com.example.beekeeper.presenter.state.get_analytics.SaveAnalyticsState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
@@ -27,9 +30,16 @@ class ReceivedAnalyticsBottomSheet :BaseBottomSheetFragment<BottomSheetReceivedA
 
     private lateinit var beehiveAnalytics:BeehiveAnalyticsUI
 
+    private lateinit var chartRecyclerAdapter: ChartsRecyclerAdapter
+
     override fun bind() {
         receivePassedAnalytics()
         bindSaveBtnListener()
+    }
+
+    private fun bindAdapterToChartsRecycler(list:List<AnalyticsWrapper>){
+        chartRecyclerAdapter = ChartsRecyclerAdapter(list)
+        binding.analyticsRecycler.adapter = chartRecyclerAdapter
     }
 
     private fun bindSaveBtnListener(){
@@ -52,7 +62,9 @@ class ReceivedAnalyticsBottomSheet :BaseBottomSheetFragment<BottomSheetReceivedA
             saveDateTime = saveTime
         )
 
+        val chartsList = beehiveAnalytics.toChartData()
         binding.tvId.text = beehiveAnalytics.id.toString()
+        bindAdapterToChartsRecycler(chartsList)
     }
 
     override fun bindObserves() {
