@@ -5,12 +5,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presenter.screen.saved_analytics.analytic_details.AnalyticDetailsFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/grey_transparent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Received Analytics: "
+        android:text="Saved Analytics: "
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
@@ -43,6 +44,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Time:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="20dp"/>
+        <TextView
+            android:id="@+id/tvSaveTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01/01"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"
