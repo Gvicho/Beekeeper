@@ -7,11 +7,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.databinding.FragmentHomeBinding
 import com.example.beekeeper.presenter.adapter.FarmsRecyclerAdapter
 import com.example.beekeeper.presenter.adapter.ItemClickCallBack
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
-import com.example.beekeeper.presenter.event.HomePageEvent
+import com.example.beekeeper.presenter.event.home.HomePageEvent
+import com.example.beekeeper.presenter.extension.safeNavigate
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.model.home.LocationUi
 import com.example.beekeeper.presenter.state.home.HomeScreenState
@@ -54,7 +56,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         showOrHideProgressBar(homeScreenState.isLoading)
 
-        homeScreenState.accessToken?.let {
+        homeScreenState.farmList?.let {
             farmsRecyclerAdapter.submitList(it)
         }
     }
@@ -78,8 +80,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             startActivity(intent)
         }
     }
+
+    private fun navigateToDetails(farmId: Int) {
+        val action = HomeFragmentDirections.actionNavigationHomeToFarmDetailsFragment(farmId)
+        findNavController().safeNavigate(action)
+    }
+
     override fun onItemClick(id: Int) {
-        binding.root.showSnackBar("Open Details Page")
+        navigateToDetails(id)
     }
 
     override fun onLocationButtonClick(location: LocationUi) {

@@ -76,7 +76,8 @@ class ReportRepositoryImpl @Inject constructor(
             val snapshot = database.reference.child("damageReports").get().await()
             val reports = snapshot.children.mapNotNull { it.getValue(DamageReportDto::class.java) }
             Log.d("DamageReports","repository- $reports")
-            emit(Resource.Success(reports.map { it.toDomain() }))
+            emit(Resource.Success(reports.map {
+                it.toDomain() }))
 
         } catch (e: Exception) {
             emit(Resource.Failed(e.message ?: "Failed to fetch damage reports"))

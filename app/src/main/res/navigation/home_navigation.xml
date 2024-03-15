@@ -11,7 +11,11 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.beekeeper.presenter.screen.home.HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_farmDetailsFragment"
+            app:destination="@id/farmDetailsFragment" />
+    </fragment>
 
 
     <fragment
@@ -114,7 +118,8 @@
     <dialog
         android:id="@+id/receivedAnalyticsBottomSheet"
         android:name="com.example.beekeeper.presenter.screen.share_or_get_analytics.view_received_analytics.ReceivedAnalyticsBottomSheet"
-        android:label="ReceivedAnalyticsBottomSheet" >
+        android:label="ReceivedAnalyticsBottomSheet"
+        tools:layout="@layout/bottom_sheet_received_analytics">
         <argument
             android:name="id"
             app:argType="integer"
@@ -136,6 +141,16 @@
         tools:layout="@layout/fragment_analytic_details" >
         <argument
             android:name="beehiveId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+    <fragment
+        android:id="@+id/farmDetailsFragment"
+        android:name="com.example.beekeeper.presenter.screen.home.farm_details_page.FarmDetailsFragment"
+        android:label="fragment_farm_details"
+        tools:layout="@layout/fragment_farm_details" >
+        <argument
+            android:name="farmId"
             app:argType="integer"
             android:defaultValue="-1" />
     </fragment>

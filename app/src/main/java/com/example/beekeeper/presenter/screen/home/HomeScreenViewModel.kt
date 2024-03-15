@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.farms.GetFarmsListUseCase
-import com.example.beekeeper.presenter.event.HomePageEvent
-import com.example.beekeeper.presenter.mappers.toUI
+import com.example.beekeeper.presenter.event.home.HomePageEvent
+import com.example.beekeeper.presenter.mappers.home.toUI
 import com.example.beekeeper.presenter.state.home.HomeScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +62,7 @@ class HomeScreenViewModel @Inject constructor(
                         }
 
                         _homeUIState.update {
-                            it.copy(accessToken = list, isLoading = false)
+                            it.copy(farmList = list, isLoading = false)
                         }
                     }
                     is Resource.Failed -> {

@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.mappers
+package com.example.beekeeper.presenter.mappers.home
 
 import com.example.beekeeper.domain.model.farms.Farm
 import com.example.beekeeper.presenter.model.home.FarmUi

@@ -1,4 +1,4 @@
-package com.example.beekeeper.data.source.remote.internet.model
+package com.example.beekeeper.data.source.remote.internet.model.farm
 
 import com.squareup.moshi.Json
 
