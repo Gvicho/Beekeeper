@@ -1,6 +1,7 @@
 package com.example.beekeeper.presenter.adapter.scan_list_recycler
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -34,6 +35,11 @@ class BluetoothDevicesRecyclerAdapter (
                 tvAddress.text = device.address
             }
             bindItemsClickListener(device)
+            bindIfBeehive(device.isBeehive)
+        }
+
+        private fun bindIfBeehive(isBeehive:Boolean){
+            binding.iconBeehive.visibility = if(isBeehive) View.VISIBLE else View.GONE
         }
 
         private fun bindItemsClickListener(device:BluetoothDeviceUIModel){

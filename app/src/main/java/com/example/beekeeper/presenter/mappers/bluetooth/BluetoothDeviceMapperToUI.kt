@@ -7,7 +7,8 @@ import com.example.beekeeper.presenter.model.bluetooth_device.BluetoothDeviceUIM
 fun BluetoothDeviceDomainModel.toUI() : BluetoothDeviceUIModel {
     return BluetoothDeviceUIModel(
         name = name,
-        address = address
+        address = address,
+        isBeehive = name?.contains("beehive", ignoreCase = true)?:false  // check if in name is beehive
     )
 }
 
