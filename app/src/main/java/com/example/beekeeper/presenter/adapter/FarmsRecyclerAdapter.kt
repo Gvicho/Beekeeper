@@ -56,7 +56,7 @@ class FarmsRecyclerAdapter (
 
             binding.apply {
                 tvName.text = farm.farmName
-                tvLocationLable.text = location.locationName
+                tvLocationLabel.text = location.locationName
             }
 
             setClickListener(farm.id)
@@ -70,7 +70,7 @@ class FarmsRecyclerAdapter (
         }
 
         private fun setFarmLocationBtnClickListener(location: LocationUi){
-            binding.root.setOnClickListener{
+            binding.btnLocation.setOnClickListener{
                 listener.onLocationButtonClick(location)
             }
         }

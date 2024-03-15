@@ -27,6 +27,13 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+    </queries>
+
     <application
         android:name=".BeekeepersApp"
         android:allowBackup="true"
@@ -38,6 +45,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Beekeeper"
         tools:targetApi="31">
+
         <activity
             android:name=".presenter.screen.main.MainActivity"
             android:exported="true">

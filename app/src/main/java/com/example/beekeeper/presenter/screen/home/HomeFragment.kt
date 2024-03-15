@@ -1,5 +1,7 @@
 package com.example.beekeeper.presenter.screen.home
 
+import android.content.Intent
+import android.net.Uri
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -68,12 +70,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         viewModel.onEvent(HomePageEvent.ResetErrorMessage)
     }
 
+    private fun openLocationInGoogleMaps(location: LocationUi) {
+        val uri = Uri.parse("geo:${location.latitude},${location.longitude}?q=${location.latitude},${location.longitude}(${location.locationName})")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        intent.setPackage("com.google.android.apps.maps")
+        if (intent.resolveActivity(requireContext().packageManager) != null) {  // from Android 11 (API 30) this is privacy issue. need to add <query> in manifest
+            startActivity(intent)
+        }
+    }
     override fun onItemClick(id: Int) {
         binding.root.showSnackBar("Open Details Page")
     }
 
     override fun onLocationButtonClick(location: LocationUi) {
-        binding.root.showSnackBar("Open Location on Map")
+        openLocationInGoogleMaps(location)
     }
 
 }
