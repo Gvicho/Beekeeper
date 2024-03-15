@@ -66,11 +66,5 @@ fun FarmDetails.toBeehiveNumberChart():FarmDetailsBeehiveNumberChartUI{
 }
 
 fun FarmDetails.toOwnerDetailsUi():OwnerDetailsUi{
-    return OwnerDetailsUi(
-        id = ownerDetails.id,
-        name = ownerDetails.name,
-        numberOfFarms = ownerDetails.numberOfFarms,
-        email = ownerDetails.email,
-        phone = ownerDetails.phone
-    )
+    return ownerDetails.toUi()
 }
