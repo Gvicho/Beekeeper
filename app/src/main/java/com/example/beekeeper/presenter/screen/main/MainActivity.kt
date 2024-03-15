@@ -1,8 +1,13 @@
 package com.example.beekeeper.presenter.screen.main
 
+import android.Manifest
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.Log.d
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -20,7 +25,9 @@ import com.example.beekeeper.databinding.ActivityMainBinding
 import com.example.beekeeper.presenter.adapter.options.OptionsRecyclerAdapter
 import com.example.beekeeper.presenter.model.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -33,10 +40,18 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var options: MutableList<Option>
 
+    private val  requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){}
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        readPushToken()
+        requestPermission()
+
+
 
         val navView: BottomNavigationView = binding.appBarMain.contentMain.navView
         // Hide the ActionBar
@@ -114,6 +129,35 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
+
+    private fun readPushToken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                d( "Fetching FCM registration token failed", task.exception.toString())
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            d("firebaseToken", "${token}")
+
+        })
+    }
+
+    private fun requestPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermission.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
+        }
+
+    }
+
+
+
+
 
 
 

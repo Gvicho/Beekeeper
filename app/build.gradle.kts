@@ -71,6 +71,7 @@ dependencies {
 
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
     ksp("androidx.room:room-compiler:2.6.1")// for room
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")// for okHttp logger interceptor
@@ -126,10 +127,13 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
     implementation("com.google.firebase:firebase-analytics")
     implementation ("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
 
     implementation ("androidx.activity:activity-ktx:1.8.2")
 
     implementation("com.google.ai.client.generativeai:generativeai:0.1.2")
+
+
 
 
 }

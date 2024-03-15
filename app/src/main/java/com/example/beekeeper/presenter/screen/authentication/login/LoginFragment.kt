@@ -1,5 +1,6 @@
 package com.example.beekeeper.presenter.screen.authentication.login
 
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.viewModels
@@ -15,6 +16,8 @@ import com.example.beekeeper.presenter.event.LoginEvent
 import com.example.beekeeper.presenter.extension.safeNavigate
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.state.auth.login.LoginUiState
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -181,4 +184,6 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
     private fun navigateToResetPasswordPage(){
         findNavController().safeNavigate(R.id.action_loginFragment_to_resetPasswordFragment)
     }
+
+
 }

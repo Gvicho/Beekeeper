@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
-import com.example.beekeeper.domain.usecase.analyze_damage.GetDamageDescUseCase
+import com.example.beekeeper.domain.usecase.assistant.GetDamageDescUseCase
 import com.example.beekeeper.domain.usecase.damage_report.UploadDamageReportUseCase
 import com.example.beekeeper.presenter.mappers.toDomain
 import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
