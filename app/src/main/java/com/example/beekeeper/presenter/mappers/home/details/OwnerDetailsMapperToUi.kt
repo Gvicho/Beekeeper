@@ -10,6 +10,7 @@ fun OwnerDetails.toUi():OwnerDetailsUi{
         name = name,
         numberOfFarms = numberOfFarms,
         email = email,
-        phone = phone
+        phone = phone,
+        profile = profile
     )
 }

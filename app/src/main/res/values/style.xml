@@ -2,7 +2,12 @@
 <resources>
     <style name="heading">
         <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+    <style name="low_heading">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/grey</item>
     </style>
 
     <style name="story_title">

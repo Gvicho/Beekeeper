@@ -9,6 +9,7 @@ fun OwnerDetailsDto.toDomain(): OwnerDetails {
         name = name,
         numberOfFarms = numberOfFarms,
         email = email,
-        phone = phone
+        phone = phone,
+        profile = profile
     )
 }
