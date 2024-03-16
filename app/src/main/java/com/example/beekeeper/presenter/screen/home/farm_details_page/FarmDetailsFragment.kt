@@ -7,9 +7,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.example.beekeeper.databinding.FragmentFarmDetailsBinding
+import com.example.beekeeper.presenter.adapter.home.details.FarmDetailsRecyclerAdapter
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.home.FarmDetailsEvent
 import com.example.beekeeper.presenter.extension.showSnackBar
+import com.example.beekeeper.presenter.model.home.details.FarmDetailsItemWrapper
 import com.example.beekeeper.presenter.state.home.FarmDetailsStateUi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -19,6 +21,8 @@ class FarmDetailsFragment : BaseFragment<FragmentFarmDetailsBinding>(FragmentFar
 
     private val args: FarmDetailsFragmentArgs by navArgs()
     private val viewModel: FarmDetailsViewModel by viewModels()
+
+    private lateinit var detailsRecyclerAdapter: FarmDetailsRecyclerAdapter
 
     override fun bind() {
         val farmId = args.farmId
@@ -47,8 +51,13 @@ class FarmDetailsFragment : BaseFragment<FragmentFarmDetailsBinding>(FragmentFar
         showOrHideProgressBar(state.isLoading)
 
         state.farmDetails?.let {
-            binding.root.showSnackBar("Got them")
+            bindDetailsRecycler(it)
         }
+    }
+
+    private fun bindDetailsRecycler(list: List<FarmDetailsItemWrapper>){
+        detailsRecyclerAdapter = FarmDetailsRecyclerAdapter(list)
+        binding.detailsRecycler.adapter = detailsRecyclerAdapter
     }
 
     private fun showOrHideProgressBar(isLoading:Boolean){

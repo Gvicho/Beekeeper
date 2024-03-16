@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="10dp">
+    android:paddingBottom="10dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginBottom="10dp">
 
     <TextView
         android:id="@+id/tvName"
@@ -24,10 +26,9 @@
         android:layout_marginTop="15dp"
         android:text="Farm ID:"
         android:textAppearance="@style/low_heading"
-        app:layout_constraintEnd_toStartOf="@+id/tvFarmId"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvName" />
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        android:layout_marginStart="20dp"/>
 
     <TextView
         android:id="@+id/tvFarmId"
@@ -36,11 +37,9 @@
         android:layout_marginTop="15dp"
         android:text="0"
         android:textAppearance="@style/low_heading"
-        app:layout_constraintEnd_toStartOf="@+id/farmLocation"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/farmId"
         app:layout_constraintTop_toBottomOf="@id/tvName"
-        android:layout_marginEnd="20dp"/>
+        android:layout_marginStart="10dp"/>
 
     <TextView
         android:id="@+id/farmLocation"
@@ -49,21 +48,33 @@
         android:layout_marginTop="15dp"
         android:text="Location :"
         android:textAppearance="@style/low_heading"
-        app:layout_constraintEnd_toStartOf="@+id/tvFarmLocation"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/tvFarmId"
-        app:layout_constraintTop_toBottomOf="@id/tvName" />
+        app:layout_constraintStart_toStartOf="@id/farmId"
+        app:layout_constraintTop_toBottomOf="@id/farmId" />
 
     <TextView
         android:id="@+id/tvFarmLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="@style/low_heading"
+        app:layout_constraintStart_toEndOf="@+id/farmLocation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/farmLocation"
+        app:layout_constraintBottom_toBottomOf="@id/farmLocation"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="50dp"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <ImageButton
+        android:id="@+id/locationIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="T"
-        android:textAppearance="@style/low_heading"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/farmLocation"
-        app:layout_constraintTop_toBottomOf="@id/tvName" />
+        android:background="@color/transparent"
+        android:src="@drawable/ic_location_pin_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tvFarmLocation"
+        app:layout_constraintStart_toEndOf="@+id/tvFarmLocation"
+        app:layout_constraintTop_toTopOf="@+id/tvFarmLocation"
+        android:layout_marginStart="5dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,8 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.databinding.FragmentHomeBinding
-import com.example.beekeeper.presenter.adapter.FarmsRecyclerAdapter
-import com.example.beekeeper.presenter.adapter.ItemClickCallBack
+import com.example.beekeeper.presenter.adapter.home.FarmsRecyclerAdapter
+import com.example.beekeeper.presenter.adapter.home.ItemClickCallBack
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.home.HomePageEvent
 import com.example.beekeeper.presenter.extension.safeNavigate

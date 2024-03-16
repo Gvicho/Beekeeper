@@ -1,0 +1,198 @@
+package com.example.beekeeper.presenter.adapter.home.details
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.viewpager2.widget.ViewPager2
+import com.example.beekeeper.databinding.ItemAnalyticsBarChartBinding
+import com.example.beekeeper.databinding.ItemFarmDetailsHeaderBinding
+import com.example.beekeeper.databinding.ItemFarmDetailsImagesBinding
+import com.example.beekeeper.databinding.ItemFarmDetailsOwnerDetailsBinding
+import com.example.beekeeper.presenter.adapter.ImagesPager2Adapter
+import com.example.beekeeper.presenter.extension.loadImage
+import com.example.beekeeper.presenter.model.home.LocationUi
+import com.example.beekeeper.presenter.model.home.details.FarmDetailsItemWrapper
+import com.github.mikephil.charting.charts.HorizontalBarChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import me.relex.circleindicator.CircleIndicator3
+import java.util.Calendar
+
+class FarmDetailsRecyclerAdapter (private val detailsList: List<FarmDetailsItemWrapper>) :RecyclerView.Adapter<ViewHolder>() {
+
+    companion object{
+        const val HEADER = 1
+        const val IMAGE_PAGER = 2
+        const val OWNER_DETAILS = 3
+        const val BEEHIVE_NUMBER_CHART = 4
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return when(viewType){
+            1 -> DetailsHeaderViewHolder(ItemFarmDetailsHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            2 -> ImagesPagerViewHolder(ItemFarmDetailsImagesBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            3 -> OwnerDetailsViewHolder(ItemFarmDetailsOwnerDetailsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            else -> ChartViewHolder(ItemAnalyticsBarChartBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        when (holder) {
+            is DetailsHeaderViewHolder -> holder.bind(position)
+            is ImagesPagerViewHolder -> holder.bind(position)
+            is OwnerDetailsViewHolder -> holder.bind(position)
+            is ChartViewHolder -> holder.bind(position)
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return detailsList.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when(detailsList[position].itemType){
+            FarmDetailsItemWrapper.ItemType.HEADER -> HEADER
+            FarmDetailsItemWrapper.ItemType.IMAGE_PAGER -> IMAGE_PAGER
+            FarmDetailsItemWrapper.ItemType.OWNER_DETAILS -> OWNER_DETAILS
+            FarmDetailsItemWrapper.ItemType.BEEHIVE_NUMBER_CHART -> BEEHIVE_NUMBER_CHART
+        }
+    }
+
+    inner class DetailsHeaderViewHolder(private val binding: ItemFarmDetailsHeaderBinding) :
+        ViewHolder(binding.root) {
+
+        fun bind(pos :Int) {
+            val header = detailsList[pos].header
+
+            header?.let {details->
+                binding.apply {
+                    tvFarmId.text = details.id.toString()
+                    tvName.text = details.name
+                    tvFarmLocation.text = details.locationUi.locationName
+                    bindLocationBtn(details.locationUi)
+                }
+            }
+        }
+
+        private fun bindLocationBtn(location:LocationUi){
+            binding.locationIcon.setOnClickListener{
+                // listener
+            }
+        }
+
+    }
+
+    inner class ImagesPagerViewHolder(private val binding: ItemFarmDetailsImagesBinding) : ViewHolder(binding.root) {
+
+        private lateinit var imagesPager2Adapter: ImagesPager2Adapter
+        private lateinit var viewPager2: ViewPager2
+        private lateinit var indicator: CircleIndicator3
+
+        fun bind(pos :Int) {
+            val images = detailsList[pos].imagesPager
+
+            images?.let {
+                imagesPager2Adapter = ImagesPager2Adapter(images)
+
+                viewPager2 = binding.viewPager2
+                indicator = binding.indicator
+
+                viewPager2.adapter = imagesPager2Adapter
+                indicator.setViewPager(viewPager2)
+                imagesPager2Adapter.registerAdapterDataObserver(indicator.adapterDataObserver)
+
+            }
+
+        }
+
+    }
+
+    inner class OwnerDetailsViewHolder(private val binding: ItemFarmDetailsOwnerDetailsBinding) :
+        ViewHolder(binding.root) {
+
+        fun bind(pos :Int) {
+
+            val ownerDetails = detailsList[pos].ownerDetailsUi
+
+            ownerDetails?.let {owner->
+
+                binding.apply {
+                    tvName.text = owner.name
+                    tvEmail.text = owner.email
+                    tvPhone.text = owner.phone
+                    tvNumberOfFarms.text = owner.numberOfFarms.toString()
+                    tvBeekeeperId.text = owner.id.toString()
+
+                    profileImage.loadImage(owner.profile)
+
+                }
+
+            }
+
+        }
+    }
+
+    inner class ChartViewHolder(private val binding: ItemAnalyticsBarChartBinding) :
+        ViewHolder(binding.root) {
+
+        private lateinit var barChart: HorizontalBarChart
+
+        fun bind(pos :Int) {
+
+            val chartData = detailsList[pos].beehiveNumberChartUI
+
+            chartData?.let {
+
+                barChart = binding.barChart
+                barChart.apply {
+
+                    description.isEnabled = false // Hide the description label
+                    setFitBars(true) // Make the bars fit the available space
+                    setDrawValueAboveBar(true) // Show the bar values on top of the bars
+                    setMaxVisibleValueCount(30) // Show all 30 values
+                    setPinchZoom(false) // Disable pinch-zoom
+                    setDrawBarShadow(false) // Disable bar shadows
+                    setDrawGridBackground(false) // Disable grid background
+
+                    // Set the axis properties
+                    xAxis.apply {
+                        position = XAxis.XAxisPosition.BOTTOM // Set the X-axis position to bottom
+                        granularity = 1f // Show all X-axis labels
+                        setDrawGridLines(false) // Disable X-axis grid lines
+                        valueFormatter = IndexAxisValueFormatter(getPastYears(chartData.lastYearsGrowth)) // Set the custom ValueFormatter
+                    }
+                    axisLeft.apply {
+                        axisMinimum = 0f // Set the minimum Y-axis value to 0
+                        granularity = 1f // Show all Y-axis labels
+                        setDrawGridLines(true) // Enable Y-axis grid lines
+                    }
+                    axisRight.isEnabled = false // Disable the right Y-axis
+                }
+                // Create a list of BarEntry objects from your sensor data
+                val entries = List(chartData.lastYearsGrowth.size) { idx ->
+                    BarEntry((idx + 1).toFloat(), chartData.lastYearsGrowth[idx].toFloat())
+                }
+                // Create a BarDataSet from the entries
+                val dataSet = BarDataSet(entries, "Beehive Weight").apply {
+                    setDrawValues(true) // Show the values on top of the bars
+                }
+                // Create a BarData object and set it to the chart
+                val data = BarData(dataSet)
+                barChart.data = data
+                // Refresh the chart
+                barChart.invalidate()
+
+            }
+
+        }
+        // Function to get the list of past years
+        private fun getPastYears(lastYearsGrowth:List<Int>): List<String> {
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            return (currentYear - lastYearsGrowth.size ..currentYear).map { it.toString() }
+        }
+    }
+}

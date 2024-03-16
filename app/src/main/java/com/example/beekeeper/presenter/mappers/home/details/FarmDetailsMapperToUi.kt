@@ -36,7 +36,7 @@ fun FarmDetails.toUi():List<FarmDetailsItemWrapper>{
         ),
         FarmDetailsItemWrapper(
             id = 3,
-            itemType = FarmDetailsItemWrapper.ItemType.HEADER,
+            itemType = FarmDetailsItemWrapper.ItemType.OWNER_DETAILS,
             ownerDetailsUi = this.toOwnerDetailsUi(),
             header = null,
             imagesPager = null,
