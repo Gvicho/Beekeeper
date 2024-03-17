@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/themesBottomSheetFragment">
 
 
 
@@ -154,4 +154,9 @@
             app:argType="integer"
             android:defaultValue="-1" />
     </fragment>
+    <dialog
+        android:id="@+id/themesBottomSheetFragment"
+        android:name="com.example.beekeeper.presenter.screen.themes.ThemesBottomSheetFragment"
+        android:label="fragment_themes_bottom_sheet"
+        tools:layout="@layout/fragment_themes_bottom_sheet" />
 </navigation>

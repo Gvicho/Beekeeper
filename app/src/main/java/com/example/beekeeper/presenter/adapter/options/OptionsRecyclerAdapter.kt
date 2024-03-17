@@ -13,7 +13,7 @@ import com.example.beekeeper.databinding.ReportRecyclerItemBinding
 import com.example.beekeeper.presenter.model.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
 
-class OptionsRecyclerAdapter(private val onItemClick: (Boolean) -> Unit) :
+class OptionsRecyclerAdapter(private val onItemClick: (Option) -> Unit) :
     ListAdapter<Option, RecyclerView.ViewHolder>(OptionsDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -50,17 +50,13 @@ class OptionsRecyclerAdapter(private val onItemClick: (Boolean) -> Unit) :
         private lateinit var model: Option
         fun bind() {
             model = currentList[adapterPosition]
-            binding.swDarkMode.isChecked = model.status
-            listeners()
+           listeners()
 
         }
 
         private fun listeners() {
             binding.apply {
-                swDarkMode.setOnCheckedChangeListener { _, isChecked ->
-                    d("changeListener", isChecked.toString())
-                    onItemClick.invoke(isChecked)
-                }
+                binding.root.setOnClickListener {  onItemClick.invoke(model)}
             }
         }
     }
@@ -88,6 +84,7 @@ class OptionsRecyclerAdapter(private val onItemClick: (Boolean) -> Unit) :
 
         private fun listeners() {
             binding.root.setOnClickListener {
+
             }
         }
 

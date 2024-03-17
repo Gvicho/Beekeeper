@@ -34,7 +34,6 @@ class AddReportViewModel @Inject constructor(
     val reportUIState: StateFlow<DamageReportState> = _reportUIState
 
     private val _descFlow = MutableSharedFlow<Resource<String>>()
-
     val descFlow: SharedFlow<Resource<String>> = _descFlow.asSharedFlow()
 
 
@@ -67,7 +66,7 @@ class AddReportViewModel @Inject constructor(
         }
     }
 
-    fun getDescription(images: List<Bitmap>) {
+    fun getDescription(images: List<Uri>) {
         Log.d("imagesRepoFail", images.toString())
         viewModelScope.launch {
             getDamageDescUseCase.invoke(images).collect {

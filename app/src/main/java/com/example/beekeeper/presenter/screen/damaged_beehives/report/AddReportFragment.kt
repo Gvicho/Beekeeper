@@ -118,6 +118,8 @@ class AddReportFragment :
         }
         binding.btnGenerateDesc.setOnClickListener {
 
+            viewModel.getDescription(uriList)
+            bindGeneratedDesc()
         }
 
     }

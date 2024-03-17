@@ -25,6 +25,7 @@ import com.example.beekeeper.databinding.ActivityMainBinding
 import com.example.beekeeper.presenter.adapter.options.OptionsRecyclerAdapter
 import com.example.beekeeper.presenter.model.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
+import com.example.beekeeper.presenter.screen.themes.ThemesBottomSheetFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
@@ -48,6 +49,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel.readDarkMode()
+        observeDarkMode()
         readPushToken()
         requestPermission()
 
@@ -90,10 +93,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun initRecycler() {
         optionsAdapter = OptionsRecyclerAdapter{
-            viewModel.writeDarkMode(it)
-            viewModel.readDarkMode()
-            observeDarkMode()
-            applyTheme(it)
+            if(it.type == Options.DARK_MODE){
+                val bottomSheet = ThemesBottomSheetFragment()
+                bottomSheet.show(supportFragmentManager, bottomSheet.tag)
+            }
+
         }
         binding.apply {
             optionsRecyclerView.adapter = optionsAdapter
@@ -111,9 +115,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.darkModeFlow.collect { isDarkModeEnabled ->
-                    options[3].status =  isDarkModeEnabled
-                    d("ObservingDark", options[3].toString())
-                    optionsAdapter.submitList(options)
+                   applyTheme(isDarkModeEnabled)
                 }
             }
         }
@@ -142,11 +144,13 @@ class MainActivity : AppCompatActivity() {
             // Get new FCM registration token
             val token = task.result
 
+
             // Log and toast
             d("firebaseToken", "${token}")
 
         })
     }
+
 
     private fun requestPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

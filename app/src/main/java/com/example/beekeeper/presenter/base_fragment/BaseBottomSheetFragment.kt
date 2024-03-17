@@ -22,6 +22,8 @@ abstract class BaseBottomSheetFragment<VB : ViewBinding>(private val inflate: In
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUp()
+        listeners()
         bind()
         bindViewActionListeners()
         bindObserves()

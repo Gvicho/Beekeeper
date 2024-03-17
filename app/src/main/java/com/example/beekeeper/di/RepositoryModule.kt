@@ -1,7 +1,6 @@
 package com.example.beekeeper.di
 
 
-
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -99,10 +98,14 @@ object RepositoryModule {
 
 
     }
+
     @Provides
     @Singleton
-    fun provideAssistantRepository(generativeModel: GenerativeModel): AssistantRepository {
-        return AssistantRepositoryImpl(generativeModel)
+    fun provideAssistantRepository(
+        generativeModel: GenerativeModel,
+        @ApplicationContext context: Context
+    ): AssistantRepository {
+        return AssistantRepositoryImpl(generativeModel, context)
 
 
     }
