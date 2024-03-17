@@ -2,11 +2,14 @@ package com.example.beekeeper.presenter.screen.home.farm_details_page
 
 import android.content.Intent
 import android.net.Uri
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentFarmDetailsBinding
@@ -17,6 +20,7 @@ import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.model.home.LocationUi
 import com.example.beekeeper.presenter.model.home.details.FarmDetailsItemWrapper
 import com.example.beekeeper.presenter.state.home.FarmDetailsStateUi
+import com.example.beekeeper.presenter.utils.SwipeGestureDetector
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -26,6 +30,7 @@ class FarmDetailsFragment : BaseFragment<FragmentFarmDetailsBinding>(FragmentFar
 
     private val args: FarmDetailsFragmentArgs by navArgs()
     private val viewModel: FarmDetailsViewModel by viewModels()
+    private lateinit var gestureDetector: GestureDetector
 
     private lateinit var detailsRecyclerAdapter: FarmDetailsRecyclerAdapter
 
@@ -105,6 +110,34 @@ class FarmDetailsFragment : BaseFragment<FragmentFarmDetailsBinding>(FragmentFar
         if (intent.resolveActivity(requireContext().packageManager) != null) {  // from Android 11 (API 30) this is privacy issue. need to add <query> in manifest
             startActivity(intent)
         }
+    }
+
+
+    override fun initSwipeGesture(view: View) {
+        val gestureListener = object : SwipeGestureDetector() {
+
+
+            override fun onSwipeRight() {
+                super.onSwipeRight()
+                findNavController().popBackStack()
+            }
+        }
+
+        gestureDetector = GestureDetector(context, gestureListener)
+        view.setOnTouchListener { v, event ->
+            // Process the gesture detector first
+            val gestureDetected = gestureDetector.onTouchEvent(event)
+            when (event.action) {
+                MotionEvent.ACTION_UP -> {
+                    // If no gesture was detected, consider this a click event
+                    if (!gestureDetected) {
+                        v.performClick()
+                    }
+                }
+            }
+            true
+        }
+
     }
 
 }

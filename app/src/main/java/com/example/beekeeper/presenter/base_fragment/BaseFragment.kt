@@ -31,7 +31,9 @@ abstract class BaseFragment<VB: ViewBinding>(private val inflate : Inflater<VB>)
         savedInstanceState: Bundle?
     ): View? {
         _binding = inflate.invoke(inflater,container,false)
-        return binding.root
+        return binding.root.also {
+            initSwipeGesture(it)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,4 +63,5 @@ abstract class BaseFragment<VB: ViewBinding>(private val inflate : Inflater<VB>)
     open fun initData(savedInstanceState: Bundle?){}
     open fun bindViewActionListeners(){}
     open fun bindObservers(){}
+    open fun initSwipeGesture(view: View){}
 }

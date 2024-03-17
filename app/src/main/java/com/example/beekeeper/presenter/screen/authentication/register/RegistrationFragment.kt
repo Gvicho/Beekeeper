@@ -1,6 +1,8 @@
 package com.example.beekeeper.presenter.screen.authentication.register
 
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.setFragmentResult
@@ -15,6 +17,7 @@ import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.RegisterEvent
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.state.auth.register.RegisterState
+import com.example.beekeeper.presenter.utils.SwipeGestureDetector
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -22,7 +25,7 @@ import kotlinx.coroutines.launch
 class RegistrationFragment : BaseFragment<FragmentRegistrationBinding>(FragmentRegistrationBinding::inflate) {
 
     private val viewModel:RegistrationViewModel by viewModels()
-
+    private lateinit var gestureDetector: GestureDetector
     override fun bind() {
         animations()
     }
@@ -131,4 +134,32 @@ class RegistrationFragment : BaseFragment<FragmentRegistrationBinding>(FragmentR
             btnRegister.startAnimation(slideInRight)
         }
     }
+
+    override fun initSwipeGesture(view: View) {
+        val gestureListener = object : SwipeGestureDetector() {
+
+
+            override fun onSwipeRight() {
+                super.onSwipeRight()
+                findNavController().popBackStack()
+            }
+        }
+
+        gestureDetector = GestureDetector(context, gestureListener)
+        view.setOnTouchListener { v, event ->
+            // Process the gesture detector first
+            val gestureDetected = gestureDetector.onTouchEvent(event)
+            when (event.action) {
+                MotionEvent.ACTION_UP -> {
+                    // If no gesture was detected, consider this a click event
+                    if (!gestureDetected) {
+                        v.performClick()
+                    }
+                }
+            }
+            true
+        }
+
+    }
+
 }

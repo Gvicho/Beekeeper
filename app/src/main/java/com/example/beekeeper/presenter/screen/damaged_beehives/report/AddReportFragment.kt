@@ -3,6 +3,8 @@ package com.example.beekeeper.presenter.screen.damaged_beehives.report
 import android.Manifest
 import android.net.Uri
 import android.util.Log.d
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -19,6 +21,7 @@ import com.example.beekeeper.presenter.adapter.damaged_beehives.DamagePicturesRe
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.state.damage_report.DamageReportState
+import com.example.beekeeper.presenter.utils.SwipeGestureDetector
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -27,6 +30,7 @@ class AddReportFragment :
     BaseFragment<FragmentAddReportBinding>(FragmentAddReportBinding::inflate) {
 
     private val viewModel: AddReportViewModel by viewModels()
+    private lateinit var gestureDetector: GestureDetector
     private lateinit var damagePicturesAdapter: DamagePicturesRecyclerAdapter
     private val activityResultLauncher =
         registerForActivityResult(
@@ -157,6 +161,33 @@ class AddReportFragment :
                 }
             }
         }
+    }
+
+    override fun initSwipeGesture(view: View) {
+        val gestureListener = object : SwipeGestureDetector() {
+
+
+            override fun onSwipeRight() {
+                super.onSwipeRight()
+                findNavController().popBackStack()
+            }
+        }
+
+        gestureDetector = GestureDetector(context, gestureListener)
+        view.setOnTouchListener { v, event ->
+            // Process the gesture detector first
+            val gestureDetected = gestureDetector.onTouchEvent(event)
+            when (event.action) {
+                MotionEvent.ACTION_UP -> {
+                    // If no gesture was detected, consider this a click event
+                    if (!gestureDetected) {
+                        v.performClick()
+                    }
+                }
+            }
+            true
+        }
+
     }
 
 
