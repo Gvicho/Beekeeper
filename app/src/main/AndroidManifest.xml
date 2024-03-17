@@ -35,6 +35,10 @@
         </intent>
     </queries>
 
+    <queries>
+        <package android:name="com.google.android.gm" />
+    </queries>
+
     <application
         android:name=".BeekeepersApp"
         android:allowBackup="true"

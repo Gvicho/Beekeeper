@@ -119,4 +119,29 @@
         android:maxLines="1"
         android:ellipsize="end"/>
 
+    <ImageButton
+        android:id="@+id/phoneBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_phone_32"
+        app:layout_constraintStart_toStartOf="@+id/email"
+        app:layout_constraintTop_toBottomOf="@+id/email"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/mailBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_gmail_32"
+        app:layout_constraintBottom_toBottomOf="@+id/phoneBtn"
+        app:layout_constraintStart_toEndOf="@id/phoneBtn"
+        app:layout_constraintTop_toTopOf="@id/phoneBtn"
+        android:layout_marginStart="15dp"
+        android:visibility="gone"/>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,4 +30,6 @@
     <string name="how_would_you_assess_the_damage">How would you assess the damage?</string>
     <string name="saved">Saved!</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="no_dialer_app_found">No dialer app found</string>
+    <string name="no_email_app_found">No email app found</string>
 </resources>

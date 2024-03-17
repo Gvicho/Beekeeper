@@ -1,6 +1,7 @@
 package com.example.beekeeper.presenter.adapter.home.details
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -22,7 +23,10 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import me.relex.circleindicator.CircleIndicator3
 import java.util.Calendar
 
-class FarmDetailsRecyclerAdapter (private val detailsList: List<FarmDetailsItemWrapper>) :RecyclerView.Adapter<ViewHolder>() {
+class FarmDetailsRecyclerAdapter (
+    private val detailsList: List<FarmDetailsItemWrapper>,
+    private val listener:DetailsListener
+) :RecyclerView.Adapter<ViewHolder>() {
 
     companion object{
         const val HEADER = 1
@@ -80,7 +84,7 @@ class FarmDetailsRecyclerAdapter (private val detailsList: List<FarmDetailsItemW
 
         private fun bindLocationBtn(location:LocationUi){
             binding.locationIcon.setOnClickListener{
-                // listener
+                listener.locationClicked(location)
             }
         }
 
@@ -120,20 +124,47 @@ class FarmDetailsRecyclerAdapter (private val detailsList: List<FarmDetailsItemW
 
             ownerDetails?.let {owner->
 
+                val phone = owner.phone
+                val mail = owner.email
+
                 binding.apply {
                     tvName.text = owner.name
-                    tvEmail.text = owner.email
-                    tvPhone.text = owner.phone
+                    tvEmail.text = mail
+                    tvPhone.text = phone
                     tvNumberOfFarms.text = owner.numberOfFarms.toString()
                     tvBeekeeperId.text = owner.id.toString()
 
                     profileImage.loadImage(owner.profile)
-
+                    if (phone.isNotEmpty()){
+                        phoneBtn.visibility = View.VISIBLE
+                        bindPhoneBtnListener(phone)
+                    } else{
+                        phoneBtn.visibility = View.GONE
+                    }
+                    if (mail.isNotEmpty()){
+                        mailBtn.visibility = View.VISIBLE
+                        bindMailBtnListener(mail)
+                    } else{
+                        mailBtn.visibility = View.GONE
+                    }
                 }
 
             }
 
         }
+
+        private fun bindPhoneBtnListener(phone: String){
+            binding.phoneBtn.setOnClickListener{
+                listener.phoneNumberClick(phone)
+            }
+        }
+
+        private fun bindMailBtnListener(mail:String){
+            binding.mailBtn.setOnClickListener{
+                listener.mailAddressClicked(mail)
+            }
+        }
+
     }
 
     inner class ChartViewHolder(private val binding: ItemAnalyticsBarChartBinding) :
@@ -194,5 +225,15 @@ class FarmDetailsRecyclerAdapter (private val detailsList: List<FarmDetailsItemW
             val currentYear = Calendar.getInstance().get(Calendar.YEAR)
             return (currentYear - lastYearsGrowth.size ..currentYear).map { it.toString() }
         }
+    }
+
+    interface DetailsListener{
+
+        fun phoneNumberClick(phone:String)
+
+        fun mailAddressClicked(mail:String)
+
+        fun locationClicked(location: LocationUi)
+
     }
 }
