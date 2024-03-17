@@ -34,5 +34,4 @@ class FarmsRepositoryImpl @Inject constructor(
             it.toDomain()
         }
     }
-
 }

@@ -4,13 +4,17 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
+import com.example.beekeeper.domain.model.analytics.BeehiveAnalytics
 import com.example.beekeeper.domain.usecase.beehive_analytics.DeleteAnalyticsByIdUseCase
 import com.example.beekeeper.domain.usecase.beehive_analytics.GetAllAnalyticsUseCase
+import com.example.beekeeper.domain.usecase.beehive_analytics.GetAnalyticsListByIdUseCase
+import com.example.beekeeper.domain.usecase.beehive_analytics.upload.UploadAnalyticsListUseCase
 import com.example.beekeeper.presenter.event.saved_analytics.SavedAnalyticsEvent
 import com.example.beekeeper.presenter.mappers.beehive_analytics.toUI
 import com.example.beekeeper.presenter.state.analytics.SavedAnalyticsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +27,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SavedAnalyticsViewModel@Inject constructor(
     private val getAllAnalyticsUseCase: GetAllAnalyticsUseCase,
-    private val deleteAnalyticsByIdUseCase: DeleteAnalyticsByIdUseCase
+    private val deleteAnalyticsByIdUseCase: DeleteAnalyticsByIdUseCase,
+    private val uploadAnalyticsListUseCase: UploadAnalyticsListUseCase,
+    private val getAnalyticsListByIdUseCase: GetAnalyticsListByIdUseCase
 ): ViewModel() {
 
     private val _beehiveAnalyticsState =  MutableStateFlow(SavedAnalyticsState())
@@ -39,7 +45,8 @@ class SavedAnalyticsViewModel@Inject constructor(
             SavedAnalyticsEvent.DeleteAnalytics -> deleteAnalytics()
             is SavedAnalyticsEvent.OnItemClick -> onClick(event.id)
             is SavedAnalyticsEvent.OnLongItemClick -> onLongClick(event.id)
-            SavedAnalyticsEvent.UploadAnalyticsOnDataBase -> TODO()
+            SavedAnalyticsEvent.UploadAnalyticsOnDataBase -> uploadAnalytics()
+            SavedAnalyticsEvent.ResetUploadSuccessMessageToNull -> updateErrorUploadSuccessMessageToNull()
         }
     }
 
@@ -77,6 +84,12 @@ class SavedAnalyticsViewModel@Inject constructor(
     private fun updateErrorMessageToNull(){
         _beehiveAnalyticsState.update {
             it.copy(errorMessage = null)
+        }
+    }
+
+    private fun updateErrorUploadSuccessMessageToNull(){
+        _beehiveAnalyticsState.update {
+            it.copy(uploadSuccessful = null)
         }
     }
 
@@ -168,6 +181,50 @@ class SavedAnalyticsViewModel@Inject constructor(
     private fun navigationEventToSavedAnalytic(beehiveId: Int){
         viewModelScope.launch {
             _savedAnalyticsPageNavigationEvent.emit(SavedAnalyticsNavigationEvents.NavigateToAnalyticPreviewPage(beehiveId))
+        }
+    }
+
+    private fun uploadAnalytics(){
+
+        val ids = _beehiveAnalyticsState.value.selectedItemsList
+
+        val analyticsDeferred = viewModelScope.async(Dispatchers.IO) {
+            val resultList = mutableListOf<BeehiveAnalytics>()
+            getAnalyticsListByIdUseCase(ids).collect { resource ->
+                if (resource is Resource.Success) {
+                    resultList.addAll(resource.responseData)
+                }
+            }
+            resultList
+        }
+
+        viewModelScope.launch {
+            uploadAnalyticsListUseCase(analyticsDeferred.await()).collect{result->
+                when(result){
+                    is Resource.Failed -> {
+                        _beehiveAnalyticsState.update {
+                            it.copy(errorMessage = result.message, isLoading = false)
+                        }
+                    }
+                    is Resource.Loading -> {
+                        _beehiveAnalyticsState.update {
+                            it.copy(isLoading = true)
+                        }
+                    }
+                    is Resource.Success -> {
+                        _beehiveAnalyticsState.update {state->
+                            state.copy(uploadSuccessful = Unit,
+                                isLoading = false,
+                                selectedItemsList = emptyList(),
+                                savedBeehiveAnalyticsList = state.savedBeehiveAnalyticsList?.map {
+                                    if(it.isSelected)it.copy(isSelected = false)
+                                    else it
+                                }
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 

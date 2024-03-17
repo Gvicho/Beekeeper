@@ -28,4 +28,7 @@ interface BeehiveAnalyticsDao {
     @Query("SELECT id, saveDateTime FROM BeehiveAnalyticsEntity")
     suspend fun getAllAnalyticsPartial(): List<SavedAnalyticsPartialData>
 
+    @Query("SELECT * FROM BeehiveAnalyticsEntity WHERE id IN (:ids)")
+    suspend fun getAnalyticsListByIds(ids: List<Int>): List<BeehiveAnalyticsEntity>
+
 }

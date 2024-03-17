@@ -14,4 +14,6 @@ sealed class SavedAnalyticsEvent {
 
     data object ResetErrorMessageToNull: SavedAnalyticsEvent()
 
+    data object ResetUploadSuccessMessageToNull: SavedAnalyticsEvent()
+
 }

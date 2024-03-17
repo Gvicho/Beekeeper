@@ -7,8 +7,10 @@ import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.model.analytics.BeehiveAnalytics
 import com.example.beekeeper.domain.model.analytics.SavedAnalyticsPartial
 import com.example.beekeeper.domain.repository.analytics.BeehiveAnalyticsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class BeehiveAnalyticsRepositoryImpl @Inject constructor(private val analyticsDao: BeehiveAnalyticsDao) :
@@ -23,7 +25,7 @@ class BeehiveAnalyticsRepositoryImpl @Inject constructor(private val analyticsDa
             } catch (e: Exception) {
                 emit(Resource.Failed("Error"))
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override fun getAnalyticsByIdFromLocal(id: Int): Flow<Resource<BeehiveAnalytics>> =
         flow {
@@ -38,7 +40,7 @@ class BeehiveAnalyticsRepositoryImpl @Inject constructor(private val analyticsDa
             } catch (e: Exception) {
                 emit(Resource.Failed("Error"))
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override fun deleteAllFromLocal(): Flow<Resource<Unit>> =
         flow {
@@ -49,7 +51,7 @@ class BeehiveAnalyticsRepositoryImpl @Inject constructor(private val analyticsDa
             } catch (e: Exception) {
                 emit(Resource.Failed("Error"))
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override fun insertAnalyticsInLocal(analytics: BeehiveAnalytics): Flow<Resource<Long>> =
         flow {
@@ -60,7 +62,7 @@ class BeehiveAnalyticsRepositoryImpl @Inject constructor(private val analyticsDa
             } catch (e: Exception) {
                 emit(Resource.Failed("Error"))
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override fun deleteAnalyticsByIdFromLocal(id: Int): Flow<Resource<Unit>> =
         flow {
@@ -71,5 +73,16 @@ class BeehiveAnalyticsRepositoryImpl @Inject constructor(private val analyticsDa
             } catch (e: Exception) {
                 emit(Resource.Failed("Error"))
             }
-        }
+        }.flowOn(Dispatchers.IO)
+
+    override fun getAnalyticsListByIdsFromLocal(ids: List<Int>): Flow<Resource<List<BeehiveAnalytics>>> =
+        flow {
+            try {
+                emit(Resource.Loading())
+                val res = analyticsDao.getAnalyticsListByIds(ids)
+                emit(Resource.Success(res.map { it.toDomain() }))
+            } catch (e: Exception) {
+                emit(Resource.Failed("Error"))
+            }
+        }.flowOn(Dispatchers.IO)
 }

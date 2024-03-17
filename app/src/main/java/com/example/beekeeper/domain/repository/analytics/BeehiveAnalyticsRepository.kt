@@ -12,4 +12,6 @@ interface BeehiveAnalyticsRepository {
     fun insertAnalyticsInLocal(analytics: BeehiveAnalytics): Flow<Resource<Long>>
 
     fun deleteAnalyticsByIdFromLocal(id: Int): Flow<Resource<Unit>>
+
+    fun getAnalyticsListByIdsFromLocal(ids: List<Int>): Flow<Resource<List<BeehiveAnalytics>>>
 }

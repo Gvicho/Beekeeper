@@ -6,6 +6,7 @@ data class SavedAnalyticsState(
     val isLoading :Boolean = false,
     val savedBeehiveAnalyticsList : List<SavedAnalyticsPartialUI>? = null,
     val selectedItemsList: List<Int> = emptyList(),
-    val errorMessage :String? = null
+    val errorMessage :String? = null,
+    val uploadSuccessful:Unit? = null
 ) {
 }

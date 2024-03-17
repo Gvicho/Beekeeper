@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentSavedAnalyticsBinding
 import com.example.beekeeper.presenter.adapter.saved_analytics.SavedAnalyticsRecyclerAdapter
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
@@ -34,7 +35,14 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
 
     override fun setListeners() {
         bindDeleteBtnListener()
+        bindUploadBtnListener()
         bindReloadListener()
+    }
+
+    private fun bindUploadBtnListener(){
+        binding.uploadBtn.setOnClickListener{
+            viewModel.onEvent(SavedAnalyticsEvent.UploadAnalyticsOnDataBase)
+        }
     }
 
     private fun bindDeleteBtnListener(){
@@ -91,6 +99,15 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
         }
 
         handleSelectedList(savedAnalyticsState.selectedItemsList)
+
+        savedAnalyticsState.uploadSuccessful?.let {
+            showUploadSuccess()
+        }
+    }
+
+    private fun showUploadSuccess(){
+        binding.root.showSnackBar(getString(R.string.upload_was_successful))
+        viewModel.onEvent(SavedAnalyticsEvent.ResetUploadSuccessMessageToNull)
     }
 
     private fun handleSelectedList(selectedIdList: List<Int>){
