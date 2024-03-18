@@ -1,10 +1,8 @@
 package com.example.beekeeper.presenter.screen.main
 
 import android.Manifest
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.util.Log.d
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,7 +23,6 @@ import com.example.beekeeper.databinding.ActivityMainBinding
 import com.example.beekeeper.presenter.adapter.options.OptionsRecyclerAdapter
 import com.example.beekeeper.presenter.model.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
-import com.example.beekeeper.presenter.screen.themes.ThemesBottomSheetFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
@@ -94,8 +91,8 @@ class MainActivity : AppCompatActivity() {
     private fun initRecycler() {
         optionsAdapter = OptionsRecyclerAdapter{
             if(it.type == Options.DARK_MODE){
-                val bottomSheet = ThemesBottomSheetFragment()
-                bottomSheet.show(supportFragmentManager, bottomSheet.tag)
+                val navController = findNavController(R.id.nav_host_fragment_activity_main)
+                navController.navigate(R.id.themesBottomSheetFragment)
             }
 
         }
@@ -142,11 +139,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             // Get new FCM registration token
-            val token = task.result
-
-
-            // Log and toast
-            d("firebaseToken", "${token}")
+            //val token = task.result
 
         })
     }
@@ -158,12 +151,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-
-
-
-
-
 
 
 }
