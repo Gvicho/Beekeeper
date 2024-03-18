@@ -1,5 +1,6 @@
 package com.example.beekeeper.presenter.screen.themes
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -8,9 +9,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentThemesBottomSheetBinding
 import com.example.beekeeper.presenter.base_fragment.BaseBottomSheetFragment
-import com.google.android.datatransport.runtime.logging.Logging.d
+import com.example.beekeeper.presenter.event.themes.ThemeEvents
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 @AndroidEntryPoint
 class ThemesBottomSheetFragment :
     BaseBottomSheetFragment<FragmentThemesBottomSheetBinding>(FragmentThemesBottomSheetBinding::inflate) {
@@ -20,10 +22,7 @@ class ThemesBottomSheetFragment :
 
 
     override fun setUp() {
-        viewModel.readDarkMode()
-
-
-
+        viewModel.onEvent(ThemeEvents.ReadSavedThemeState)
     }
 
     override fun listeners() {
@@ -33,7 +32,12 @@ class ThemesBottomSheetFragment :
 
             if(isChecked){
                 binding.cbLightMode.isChecked = false
-                applyTheme(true)
+                isDarkThemeEnabled = true
+                setUpPreview()
+            }else{
+                binding.cbLightMode.isChecked = true
+                isDarkThemeEnabled = false
+                setUpPreview()
             }
 
         }
@@ -41,36 +45,44 @@ class ThemesBottomSheetFragment :
         binding.cbLightMode.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
                 binding.cbDarkMode.isChecked = false
-                applyTheme(false)
+                isDarkThemeEnabled = false
+                setUpPreview()
+            }else{
+                binding.cbDarkMode.isChecked = true
+                isDarkThemeEnabled = true
+                setUpPreview()
             }
 
         }
 
         binding.btnSave.setOnClickListener {
-            viewModel.writeDarkMode(isDarkThemeEnabled)
+            viewModel.onEvent(ThemeEvents.SaveThemeState(isDarkThemeEnabled))
             dismiss()
+            applyTheme()
         }
     }
 
 
-    private fun applyTheme(isDarkModeEnabled: Boolean) {
-        if (isDarkModeEnabled) {
+    private fun applyTheme() {
+        if (isDarkThemeEnabled) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-
-
     }
 
-    private fun setUpPreview(isDarkModeEnabled: Boolean){
+    private fun setUpPreview(){
 
-        if (isDarkModeEnabled){
+        if (isDarkThemeEnabled){
             binding.cbDarkMode.isChecked = true
             binding.ivThemePreview.setImageResource(R.drawable.screen_dark_mode)
+            // Set background to black
+            binding.root.setBackgroundColor(Color.GRAY)
         }else{
             binding.cbLightMode.isChecked = true
             binding.ivThemePreview.setImageResource(R.drawable.screen_light_mode)
+            // Set background to white
+            binding.root.setBackgroundColor(Color.WHITE)
         }
 
     }
@@ -79,17 +91,25 @@ class ThemesBottomSheetFragment :
     override fun bindObserves() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.darkModeFlow.collect { isDarkModeEnabled ->
-                        d("observed", "fdsafads")
-                    setUpPreview(isDarkModeEnabled)
-                    isDarkThemeEnabled = isDarkModeEnabled
-                    d("observed", "fdsafads")
+                viewModel.darkModeFlow.collect { isDarkModeEnabledStore ->
+                    isDarkThemeEnabled = isDarkModeEnabledStore
+                    setCurrentState()  // this will be collected only once
                 }
             }
         }
     }
 
 
+    private fun setCurrentState(){
+        if(isDarkThemeEnabled){
+            binding.cbLightMode.isChecked = false
+            binding.cbDarkMode.isChecked = true
+        }else{
+            binding.cbLightMode.isChecked = true
+            binding.cbDarkMode.isChecked = false
+        }
+        setUpPreview()
+    }
 
 
 }

@@ -1,18 +1,16 @@
 package com.example.beekeeper.presenter.screen.themes
 
-import android.util.Log
 import android.util.Log.d
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.usecase.dark_mode.ReadDarkModeUseCase
 import com.example.beekeeper.domain.usecase.dark_mode.SaveDarkModeUseCase
+import com.example.beekeeper.presenter.event.themes.ThemeEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,30 +19,35 @@ import javax.inject.Inject
 class ThemesViewModel @Inject constructor(
     private val saveDarkModeUseCase: SaveDarkModeUseCase,
     private val readDarkModeUseCase: ReadDarkModeUseCase
-) :
-    ViewModel() {
+) : ViewModel() {
 
 
-    private val _darkModeFlow = MutableStateFlow<Boolean>(false)
+    private val _darkModeFlow = MutableStateFlow(false)
     val darkModeFlow: StateFlow<Boolean> = _darkModeFlow.asStateFlow()
 
-
-    fun writeDarkMode(status: Boolean) {
-        viewModelScope.launch {
-            saveDarkModeUseCase.invoke(status)
-            Log.d("statusBoolean", status.toString())
+    fun onEvent(event:ThemeEvents){
+        when(event){
+            ThemeEvents.ReadSavedThemeState -> readDarkMode()
+            is ThemeEvents.SaveThemeState -> writeDarkMode(event.isDarkMode)
         }
     }
 
-    fun readDarkMode() {
+    private fun writeDarkMode(status: Boolean) {
         viewModelScope.launch {
-            readDarkModeUseCase().collect {
-                d("fasdfsad", it.toString())
-                _darkModeFlow.emit(it)
+            saveDarkModeUseCase.invoke(status)
+            d("statusBoolean", status.toString())
+        }
+    }
 
+    private fun readDarkMode() {
+        viewModelScope.launch {
+            readDarkModeUseCase().collect {mode->
+                d("tag1234", "$mode in viewModel ")
+                _darkModeFlow.update {
+                    mode
+                }
             }
         }
-
     }
 
 }
