@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.auth.LogInUseCase
 import com.example.beekeeper.domain.usecase.credentials.SaveTokenUseCase
-import com.example.beekeeper.presenter.event.LoginEvent
+import com.example.beekeeper.presenter.event.auth.LoginEvent
 import com.example.beekeeper.presenter.state.auth.login.LoginUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -38,7 +38,7 @@ class LogInViewModel @Inject constructor(
                 setNavigationEventFlowToRegister()
             }
             LoginEvent.ResetErrorStatus -> {
-                updateErrorMessage(null)
+                updateErrorMessage()
             }
 
             LoginEvent.MoveUserToResetPageEvent -> setNavigationEventFlowToPasswordReset()
@@ -99,9 +99,9 @@ class LogInViewModel @Inject constructor(
         }
     }
 
-    private fun updateErrorMessage(message:String?){
+    private fun updateErrorMessage(){
         _loginUIState.update {
-            it.copy(errorMessage = message)
+            it.copy(errorMessage = null)
         }
     }
 

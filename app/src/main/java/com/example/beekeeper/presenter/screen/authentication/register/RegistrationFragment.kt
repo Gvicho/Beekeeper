@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentRegistrationBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
-import com.example.beekeeper.presenter.event.RegisterEvent
+import com.example.beekeeper.presenter.event.auth.RegisterEvent
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.state.auth.register.RegisterState
 import com.example.beekeeper.presenter.utils.SwipeGestureDetector

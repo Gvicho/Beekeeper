@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentResetPasswordBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
-import com.example.beekeeper.presenter.event.ResetPasswordEvent
+import com.example.beekeeper.presenter.event.auth.ResetPasswordEvent
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.state.auth.reset_password.ResetPasswordState
 import com.example.beekeeper.presenter.utils.SwipeGestureDetector

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.auth.ResetPasswordUseCase
-import com.example.beekeeper.presenter.event.ResetPasswordEvent
+import com.example.beekeeper.presenter.event.auth.ResetPasswordEvent
 import com.example.beekeeper.presenter.state.auth.reset_password.ResetPasswordState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
