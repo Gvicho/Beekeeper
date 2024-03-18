@@ -7,6 +7,7 @@ import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.model.analytics.BeehiveAnalytics
 import com.example.beekeeper.domain.model.analytics.SavedAnalyticsPartial
 import com.example.beekeeper.domain.repository.analytics.BeehiveAnalyticsRepository
+import com.example.beekeeper.domain.utils.Order
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,11 +17,16 @@ import javax.inject.Inject
 class BeehiveAnalyticsRepositoryImpl @Inject constructor(private val analyticsDao: BeehiveAnalyticsDao) :
     BeehiveAnalyticsRepository {
 
-    override fun getPartialAnalyticsFromLocal(): Flow<Resource<List<SavedAnalyticsPartial>>> =
+    override fun getPartialAnalyticsFromLocal(order:Order): Flow<Resource<List<SavedAnalyticsPartial>>> =
         flow {
             try {
                 emit(Resource.Loading())
-                val res = analyticsDao.getAllAnalyticsPartial()
+
+                val res = when(order){
+                    Order.NONE -> analyticsDao.getAllAnalyticsPartial()
+                    Order.ASCENDING -> analyticsDao.getAllAnalyticsPartialSortedOldestToNewest()
+                    Order.DESCENDING -> analyticsDao.getAllAnalyticsPartialSortedNewestToOldest()
+                }
                 emit(Resource.Success(res.map { it.toDomain() }))
             } catch (e: Exception) {
                 emit(Resource.Failed("Error"))

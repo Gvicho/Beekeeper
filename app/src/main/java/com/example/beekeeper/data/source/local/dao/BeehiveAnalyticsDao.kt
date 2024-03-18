@@ -31,4 +31,10 @@ interface BeehiveAnalyticsDao {
     @Query("SELECT * FROM BeehiveAnalyticsEntity WHERE id IN (:ids)")
     suspend fun getAnalyticsListByIds(ids: List<Int>): List<BeehiveAnalyticsEntity>
 
+    @Query("SELECT id, saveDateTime FROM BeehiveAnalyticsEntity ORDER BY saveDateTime ASC")
+    suspend fun getAllAnalyticsPartialSortedOldestToNewest(): List<SavedAnalyticsPartialData>
+
+    @Query("SELECT id, saveDateTime FROM BeehiveAnalyticsEntity ORDER BY saveDateTime DESC")
+    suspend fun getAllAnalyticsPartialSortedNewestToOldest(): List<SavedAnalyticsPartialData>
+
 }

@@ -78,7 +78,8 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="5dp"
             android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="25dp"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -87,6 +88,12 @@
             android:layout_gravity="center"
             android:layout_marginTop="110dp"
             android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/orderSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"/>
 
     </FrameLayout>
 

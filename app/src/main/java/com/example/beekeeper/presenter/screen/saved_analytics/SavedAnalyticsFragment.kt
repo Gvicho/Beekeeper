@@ -2,6 +2,8 @@ package com.example.beekeeper.presenter.screen.saved_analytics
 
 
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -9,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentSavedAnalyticsBinding
+import com.example.beekeeper.domain.utils.Order
 import com.example.beekeeper.presenter.adapter.saved_analytics.SavedAnalyticsRecyclerAdapter
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.saved_analytics.SavedAnalyticsEvent
@@ -26,17 +29,66 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
     private lateinit var analyticsRecyclerAdapter: SavedAnalyticsRecyclerAdapter
 
     override fun loadData() {
-        viewModel.onEvent(SavedAnalyticsEvent.LoadAnalyticsList)
+        loadIfNotBeenLoaded()
+    }
+
+    private fun loadIfNotBeenLoaded(){
+        if(viewModel.beehiveAnalyticsState.value.savedBeehiveAnalyticsList == null)
+            viewModel.onEvent(SavedAnalyticsEvent.LoadAnalyticsOrder(Order.NONE))
     }
 
     override fun bind() {
         bindAnalyticsRecyclerAdapter()
+        bindOrderSpinnerAdapter()
     }
 
     override fun setListeners() {
         bindDeleteBtnListener()
         bindUploadBtnListener()
         bindReloadListener()
+    }
+
+    private fun bindOrderSpinnerAdapter(){
+        binding.orderSpinner.apply {
+            val orderList = listOf(
+                getString(R.string.none),
+                getString(R.string.newer_to_older),
+                getString(R.string.older_to_newer)
+            )
+            val arrayAdapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,orderList)
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter = arrayAdapter
+            setSpinnerSelectListener()
+        }
+    }
+
+    private fun setSpinnerSelectListener(){
+        binding.orderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedItem = parent?.getItemAtPosition(position).toString()
+                val order = when (selectedItem) {
+                    requireContext().getString(R.string.newer_to_older) -> {
+                        Order.DESCENDING
+                    }
+                    getString(R.string.older_to_newer) -> {
+                        Order.ASCENDING
+                    }
+                    else -> {
+                        Order.NONE
+                    }
+                }
+                viewModel.onEvent(SavedAnalyticsEvent.LoadAnalyticsOrder(order))
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                binding.orderSpinner.setSelection(0)
+            }
+        }
     }
 
     private fun bindUploadBtnListener(){
@@ -53,7 +105,8 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
 
     private fun bindReloadListener(){
         binding.reloadBtn.setOnClickListener{
-            viewModel.onEvent(SavedAnalyticsEvent.LoadAnalyticsList)
+            val order = viewModel.beehiveAnalyticsState.value.order
+            viewModel.onEvent(SavedAnalyticsEvent.LoadAnalyticsOrder(order))
         }
     }
 

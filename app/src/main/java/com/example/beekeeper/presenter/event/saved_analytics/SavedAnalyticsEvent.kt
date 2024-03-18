@@ -1,7 +1,9 @@
 package com.example.beekeeper.presenter.event.saved_analytics
 
+import com.example.beekeeper.domain.utils.Order
+
 sealed class SavedAnalyticsEvent {
-    data object LoadAnalyticsList: SavedAnalyticsEvent()
+    data class LoadAnalyticsOrder(val order: Order): SavedAnalyticsEvent()
 
     data object DeleteAnalytics: SavedAnalyticsEvent()
 

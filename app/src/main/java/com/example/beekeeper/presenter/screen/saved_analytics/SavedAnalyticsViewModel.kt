@@ -9,6 +9,7 @@ import com.example.beekeeper.domain.usecase.beehive_analytics.DeleteAnalyticsByI
 import com.example.beekeeper.domain.usecase.beehive_analytics.GetAllAnalyticsUseCase
 import com.example.beekeeper.domain.usecase.beehive_analytics.GetAnalyticsListByIdUseCase
 import com.example.beekeeper.domain.usecase.beehive_analytics.upload.UploadAnalyticsListUseCase
+import com.example.beekeeper.domain.utils.Order
 import com.example.beekeeper.presenter.event.saved_analytics.SavedAnalyticsEvent
 import com.example.beekeeper.presenter.mappers.beehive_analytics.toUI
 import com.example.beekeeper.presenter.state.analytics.SavedAnalyticsState
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,26 +35,26 @@ class SavedAnalyticsViewModel@Inject constructor(
 ): ViewModel() {
 
     private val _beehiveAnalyticsState =  MutableStateFlow(SavedAnalyticsState())
-    val beehiveAnalyticsState : StateFlow<SavedAnalyticsState> = _beehiveAnalyticsState
+    val beehiveAnalyticsState : StateFlow<SavedAnalyticsState> = _beehiveAnalyticsState.asStateFlow()
 
     private val _savedAnalyticsPageNavigationEvent = MutableSharedFlow<SavedAnalyticsNavigationEvents>()
     val savedAnalyticsPageNavigationEvent get() = _savedAnalyticsPageNavigationEvent.asSharedFlow()
 
     fun onEvent(event:SavedAnalyticsEvent){
         when(event){
-            SavedAnalyticsEvent.LoadAnalyticsList -> loadAnalytics()
             SavedAnalyticsEvent.ResetErrorMessageToNull -> updateErrorMessageToNull()
             SavedAnalyticsEvent.DeleteAnalytics -> deleteAnalytics()
             is SavedAnalyticsEvent.OnItemClick -> onClick(event.id)
             is SavedAnalyticsEvent.OnLongItemClick -> onLongClick(event.id)
             SavedAnalyticsEvent.UploadAnalyticsOnDataBase -> uploadAnalytics()
             SavedAnalyticsEvent.ResetUploadSuccessMessageToNull -> updateErrorUploadSuccessMessageToNull()
+            is SavedAnalyticsEvent.LoadAnalyticsOrder -> loadAnalytics(event.order)
         }
     }
 
-    private fun loadAnalytics(){
+    private fun loadAnalytics(order:Order){
         viewModelScope.launch {
-            getAllAnalyticsUseCase().collect {result->
+            getAllAnalyticsUseCase(order).collect {result->
                 when (result) {
                     is Resource.Loading -> {
                         _beehiveAnalyticsState.update {
@@ -67,7 +69,7 @@ class SavedAnalyticsViewModel@Inject constructor(
                         }
 
                         _beehiveAnalyticsState.update {
-                            it.copy(savedBeehiveAnalyticsList = list, isLoading = false)
+                            it.copy(savedBeehiveAnalyticsList = list, isLoading = false, order = order)
                         }
                     }
                     is Resource.Failed -> {

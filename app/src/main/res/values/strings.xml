@@ -35,4 +35,7 @@
     <string name="upload_was_successful">Upload was Successful</string>
     <string name="theme">Theme</string>
     <string name="light_mode">Light Mode</string>
+    <string name="newer_to_older">newer to older</string>
+    <string name="older_to_newer">older to newer</string>
+    <string name="none">none</string>
 </resources>
