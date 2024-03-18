@@ -12,7 +12,7 @@ import com.example.beekeeper.presenter.adapter.ImagesPager2Adapter
 import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
 import me.relex.circleindicator.CircleIndicator3
 
-class ReportsRecyclerAdapter() :
+class ReportsRecyclerAdapter(private val onItemClick: (DamageReportUI) -> Unit) :
     ListAdapter<DamageReportUI, ReportsRecyclerAdapter.ReportsViewHolder>(ReportsDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ReportsViewHolder(
@@ -33,10 +33,10 @@ class ReportsRecyclerAdapter() :
         private lateinit var imagesPager2Adapter: ImagesPager2Adapter
         private lateinit var viewPager2: ViewPager2
         private lateinit var indicator: CircleIndicator3
+        private lateinit var report: DamageReportUI
 
-
-        fun bind(pos:Int) {
-            val report = currentList[pos]
+        fun bind(pos: Int) {
+            report = currentList[pos]
             val picturesList = report.imageUris.map { it.toString() }
             val damage = report.damageLevelIndicator
 
@@ -54,21 +54,21 @@ class ReportsRecyclerAdapter() :
                 tvDate.text = report.dateUploaded
                 tvDesc.text = report.damageDescription
                 tvId.text = report.id.toString()
-                if(damage>2){
+                if (damage > 2) {
                     indicatorLogo.setImageResource(R.drawable.ic_red_cross_28)
-                }else{
+                } else {
                     indicatorLogo.setImageResource(R.drawable.ic_warning_yellow_28)
                 }
             }
 
-           // listeners()
+            listeners()
         }
 
-//        private fun listeners() {
-//            binding.root.setOnClickListener {
-//
-//            }
-//        }
+        private fun listeners() {
+            binding.root.setOnClickListener {
+                onItemClick.invoke(report)
+            }
+        }
 
     }
 

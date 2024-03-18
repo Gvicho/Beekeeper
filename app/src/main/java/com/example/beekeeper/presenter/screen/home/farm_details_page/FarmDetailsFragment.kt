@@ -53,6 +53,12 @@ class FarmDetailsFragment : BaseFragment<FragmentFarmDetailsBinding>(FragmentFar
         }
     }
 
+    override fun setListeners() {
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
     private fun handleResponse(state: FarmDetailsStateUi){
         state.errorMessage?.let {
             showErrorMessage(it)

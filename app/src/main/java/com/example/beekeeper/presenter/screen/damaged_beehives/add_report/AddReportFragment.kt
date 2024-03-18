@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.screen.damaged_beehives.report
+package com.example.beekeeper.presenter.screen.damaged_beehives.add_report
 
 import android.Manifest
 import android.net.Uri
@@ -105,16 +105,12 @@ class AddReportFragment :
         }
 
         binding.btnUpload.setOnClickListener {
-            if (uriList.isNotEmpty()) {
-                viewModel.uploadReport(
-                    desc = binding.etDescription.text.toString(),
-                    damageLevel = binding.sbDamageLevel.progress,
-                    uriList
-                )
-                binding.root.showSnackBar("start of sending")
-            } else {
-                binding.root.showSnackBar("no Images !!")
-            }
+            viewModel.uploadReport(
+                desc = binding.etDescription.text.toString(),
+                damageLevel = binding.sbDamageLevel.progress,
+                uriList
+            )
+
         }
         binding.btnGenerateDesc.setOnClickListener {
 
@@ -191,7 +187,6 @@ class AddReportFragment :
         }
 
     }
-
 
 
 }

@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.screen.damaged_beehives
+package com.example.beekeeper.presenter.screen.damaged_beehives.damage_reports
 
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentDamagedBeehivesBinding
@@ -19,10 +20,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class DamagedBeehivesFragment :
+class DamageReportsFragment :
     BaseFragment<FragmentDamagedBeehivesBinding>(FragmentDamagedBeehivesBinding::inflate) {
 
-    private val viewModel: DamagedBeehivesViewModel by viewModels()
+    private val viewModel: DamageReportsViewModel by viewModels()
     private lateinit var reportsAdapter: ReportsRecyclerAdapter
 
     override fun setUp() {
@@ -45,7 +46,7 @@ class DamagedBeehivesFragment :
     override fun bindObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.currentReportsFlow.collect{
+                viewModel.currentReportsFlow.collect {
                     handleState(it)
                 }
             }
@@ -53,7 +54,7 @@ class DamagedBeehivesFragment :
 
     }
 
-    private fun handleState(state:DamagedBeehivePageState){
+    private fun handleState(state: DamagedBeehivePageState) {
 
         state.errorMessage?.let {
             showErrorMessage(it)
@@ -67,23 +68,33 @@ class DamagedBeehivesFragment :
 
     }
 
-    private fun showOrHideProgressBar(isLoading:Boolean){
+    private fun showOrHideProgressBar(isLoading: Boolean) {
         binding.apply {
-            progressBar.visibility = if(isLoading) View.VISIBLE else View.GONE
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 
-    private fun showErrorMessage(errorMessage:String){
+    private fun showErrorMessage(errorMessage: String) {
         binding.root.showSnackBar(errorMessage)
         viewModel.onEvent(DamagedBeehivePageEvents.ResetErrorMessageToNull)
     }
 
-    private fun bindRecycler(){
-        reportsAdapter = ReportsRecyclerAdapter()
+    private fun bindRecycler() {
+        reportsAdapter = ReportsRecyclerAdapter{
+            openDetails(it.id)
+        }
         binding.apply {
             reportsRecyclerView.adapter = reportsAdapter
-            reportsRecyclerView.layoutManager =   LinearLayoutManager(requireContext())
+            reportsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         }
+    }
+
+    private fun openDetails(id: Int) {
+        findNavController().navigate(
+            DamageReportsFragmentDirections.actionDamagedBeehivesFragmentToDamageReportDetailsFragment(
+                id
+            )
+        )
     }
 
 

@@ -73,12 +73,15 @@
     </fragment>
     <fragment
         android:id="@+id/damagedBeehivesFragment"
-        android:name="com.example.beekeeper.presenter.screen.damaged_beehives.DamagedBeehivesFragment"
+        android:name="com.example.beekeeper.presenter.screen.damaged_beehives.damage_reports.DamageReportsFragment"
         android:label="fragment_damaged_beehives"
         tools:layout="@layout/fragment_damaged_beehives" >
         <action
             android:id="@+id/action_damagedBeehivesFragment_to_addReportFragment"
             app:destination="@id/addReportFragment" />
+        <action
+            android:id="@+id/action_damagedBeehivesFragment_to_damageReportDetailsFragment"
+            app:destination="@id/damageReportDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/shareOrGetFragment"
@@ -112,7 +115,7 @@
         tools:layout="@layout/bottom_sheet_scan_connect"/>
     <fragment
         android:id="@+id/addReportFragment"
-        android:name="com.example.beekeeper.presenter.screen.damaged_beehives.report.AddReportFragment"
+        android:name="com.example.beekeeper.presenter.screen.damaged_beehives.add_report.AddReportFragment"
         android:label="fragment_add_report"
         tools:layout="@layout/fragment_add_report" />
     <dialog
@@ -159,4 +162,13 @@
         android:name="com.example.beekeeper.presenter.screen.themes.ThemesBottomSheetFragment"
         android:label="fragment_themes_bottom_sheet"
         tools:layout="@layout/fragment_themes_bottom_sheet" />
+    <fragment
+        android:id="@+id/damageReportDetailsFragment"
+        android:name="com.example.beekeeper.presenter.screen.damaged_beehives.damage_report_details.DamageReportDetailsFragment"
+        android:label="fragment_damage_report_details"
+        tools:layout="@layout/fragment_damage_report_details" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
 </navigation>

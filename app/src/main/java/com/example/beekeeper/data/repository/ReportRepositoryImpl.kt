@@ -84,4 +84,27 @@ class ReportRepositoryImpl @Inject constructor(
         }
 
     }.flowOn(Dispatchers.IO)
+
+
+    override fun getDamageReportById(reportId: Int): Flow<Resource<DamageReport>> = flow {
+        try {
+            emit(Resource.Loading<DamageReport>())
+
+            // Query the database for a single report by its ID
+            val snapshot = database.reference.child("damageReports").child(reportId.toString()).get().await()
+
+            // Convert the snapshot to DamageReportDto, then to your domain model DamageReport
+            val reportDto = snapshot.getValue(DamageReportDto::class.java)
+            val report = reportDto?.toDomain()
+
+            if (report != null) {
+                emit(Resource.Success(report))
+            } else {
+                emit(Resource.Failed<DamageReport>("Damage report not found"))
+            }
+
+        } catch (e: Exception) {
+            emit(Resource.Failed<DamageReport>(e.message ?: "Failed to fetch damage report"))
+        }
+    }.flowOn(Dispatchers.IO)
 }

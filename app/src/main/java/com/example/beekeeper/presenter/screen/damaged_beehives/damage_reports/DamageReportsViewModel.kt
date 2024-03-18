@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.screen.damaged_beehives
+package com.example.beekeeper.presenter.screen.damaged_beehives.damage_reports
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class DamagedBeehivesViewModel @Inject constructor(
+class DamageReportsViewModel @Inject constructor(
     private val getAllReportsUseCase: GetAllReportsUseCase,
 ) :
     ViewModel() {

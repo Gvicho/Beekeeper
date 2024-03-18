@@ -1,13 +1,12 @@
-package com.example.beekeeper.presenter.screen.damaged_beehives.report
+package com.example.beekeeper.presenter.screen.damaged_beehives.add_report
 
-import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.assistant.GetDamageDescUseCase
-import com.example.beekeeper.domain.usecase.damage_report.UploadDamageReportUseCase
+import com.example.beekeeper.domain.usecase.damage_report.UploadReportUseCase
 import com.example.beekeeper.presenter.mappers.toDomain
 import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
 import com.example.beekeeper.presenter.state.damage_report.DamageReportState
@@ -26,7 +25,7 @@ import kotlin.random.Random
 
 @HiltViewModel
 class AddReportViewModel @Inject constructor(
-    private val uploadDamageReportUseCase: UploadDamageReportUseCase,
+    private val uploadReportUseCase: UploadReportUseCase,
     private val getDamageDescUseCase: GetDamageDescUseCase
 ) : ViewModel() {
 
@@ -39,7 +38,7 @@ class AddReportViewModel @Inject constructor(
 
     fun uploadReport(desc: String, damageLevel: Int, uris: List<Uri>) {
         viewModelScope.launch {
-            uploadDamageReportUseCase(
+            uploadReportUseCase(
                 DamageReportUI(
                     id = 10000 + Random(System.currentTimeMillis()).nextInt(900000),
                     damageDescription = desc,

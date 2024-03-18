@@ -8,4 +8,5 @@ interface ReportRepository {
     fun uploadReport(damageReport: DamageReport): Flow<Resource<Unit>>
 
     fun getAllDamageReports(): Flow<Resource<List<DamageReport>>>
+    fun getDamageReportById(reportId: Int): Flow<Resource<DamageReport>>
 }
