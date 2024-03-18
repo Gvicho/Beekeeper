@@ -8,8 +8,11 @@ import com.example.beekeeper.domain.usecase.dark_mode.ReadDarkModeUseCase
 import com.example.beekeeper.domain.usecase.dark_mode.SaveDarkModeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,8 +25,8 @@ class ThemesViewModel @Inject constructor(
     ViewModel() {
 
 
-    private val _darkModeFlow = MutableSharedFlow<Boolean>()
-    val darkModeFlow: SharedFlow<Boolean> = _darkModeFlow.asSharedFlow()
+    private val _darkModeFlow = MutableStateFlow<Boolean>(false)
+    val darkModeFlow: StateFlow<Boolean> = _darkModeFlow.asStateFlow()
 
 
     fun writeDarkMode(status: Boolean) {
