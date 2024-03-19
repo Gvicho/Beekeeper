@@ -58,7 +58,6 @@ class OptionsRecyclerAdapter(private val onItemClick: (Option) -> Unit) :
         }
     }
 
-
     inner class OptionsViewHolder(private val binding: OptionsRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private lateinit var model: Option

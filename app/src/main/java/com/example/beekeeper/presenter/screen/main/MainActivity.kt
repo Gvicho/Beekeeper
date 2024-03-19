@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.darkModeFlow.collect { isDarkModeEnabled ->
-                   applyTheme(isDarkModeEnabled)
+                   applyTheme(isDarkModeEnabled)//
                 }
             }
         }

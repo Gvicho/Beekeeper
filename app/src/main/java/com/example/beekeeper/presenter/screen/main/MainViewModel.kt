@@ -47,6 +47,4 @@ class MainViewModel @Inject constructor(
             cancelSessionUseCase()
         }
     }
-
-
 }
