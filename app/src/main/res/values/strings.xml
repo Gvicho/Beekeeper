@@ -38,4 +38,5 @@
     <string name="newer_to_older">newer to older</string>
     <string name="older_to_newer">older to newer</string>
     <string name="none">none</string>
+    <string name="_0">0</string>
 </resources>

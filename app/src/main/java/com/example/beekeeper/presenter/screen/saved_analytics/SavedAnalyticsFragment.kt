@@ -82,7 +82,9 @@ class SavedAnalyticsFragment : BaseFragment<FragmentSavedAnalyticsBinding>(Fragm
                         Order.NONE
                     }
                 }
-                viewModel.onEvent(SavedAnalyticsEvent.LoadAnalyticsOrder(order))
+                if(order!=viewModel.beehiveAnalyticsState.value.order){
+                    viewModel.onEvent(SavedAnalyticsEvent.LoadAnalyticsOrder(order)) // for selected items to survive while configuration change
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

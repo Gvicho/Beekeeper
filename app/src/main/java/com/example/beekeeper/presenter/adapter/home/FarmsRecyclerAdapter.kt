@@ -58,6 +58,8 @@ class FarmsRecyclerAdapter (
             binding.apply {
                 tvName.text = farm.farmName
                 tvLocationLabel.text = location.locationName
+                tvBeehiveNumber.text = farm.beeHiveNumber.toString()
+                tvOwnerName.text = owner.name
             }
 
             setClickListener(farm.id)

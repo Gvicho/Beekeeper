@@ -68,8 +68,14 @@ class SavedAnalyticsViewModel@Inject constructor(
                             }
                         }
 
-                        _beehiveAnalyticsState.update {
-                            it.copy(savedBeehiveAnalyticsList = list, isLoading = false, order = order)
+                        _beehiveAnalyticsState.update {state->
+                            state.copy(savedBeehiveAnalyticsList = list.map {
+                                if(it.isSelected)it.copy(isSelected = false)
+                                else it },
+                                isLoading = false, order = order,
+                                selectedItemsList = emptyList()
+                            )
+
                         }
                     }
                     is Resource.Failed -> {
