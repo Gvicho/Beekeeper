@@ -1,21 +1,20 @@
 package com.example.beekeeper.presenter.screen.damaged_beehives.add_report
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.assistant.GetDamageDescUseCase
 import com.example.beekeeper.domain.usecase.damage_report.UploadReportUseCase
+import com.example.beekeeper.presenter.event.damage_beehives.AddReportPageEvents
 import com.example.beekeeper.presenter.mappers.toDomain
 import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
+import com.example.beekeeper.presenter.state.damage_report.DamageDescriptionState
 import com.example.beekeeper.presenter.state.damage_report.DamageReportState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -30,13 +29,21 @@ class AddReportViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _reportUIState = MutableStateFlow(DamageReportState())
-    val reportUIState: StateFlow<DamageReportState> = _reportUIState
+    val reportUIState: StateFlow<DamageReportState> = _reportUIState.asStateFlow()
 
-    private val _descFlow = MutableSharedFlow<Resource<String>>()
-    val descFlow: SharedFlow<Resource<String>> = _descFlow.asSharedFlow()
+    private val _descFlow = MutableStateFlow(DamageDescriptionState())
+    val descFlow: StateFlow<DamageDescriptionState> = _descFlow.asStateFlow()
 
+    fun onEvent(event:AddReportPageEvents){
+        when(event){
+            is AddReportPageEvents.GetDescription -> getDescription(event.images)
+            AddReportPageEvents.ResetErrorMessageOfDescriptionToNull -> resetErrorMessageOfDescriptionStateToNull()
+            AddReportPageEvents.ResetErrorMessageOfUploadToNull -> resetErrorMessageOfReportStateToNull()
+            is AddReportPageEvents.UploadReport -> uploadReport(desc = event.desc , damageLevel = event.damageLevel, uris = event.uris)
+        }
+    }
 
-    fun uploadReport(desc: String, damageLevel: Int, uris: List<Uri>) {
+    private fun uploadReport(desc: String, damageLevel: Int, uris: List<Uri>) {
         viewModelScope.launch {
             uploadReportUseCase(
                 DamageReportUI(
@@ -50,7 +57,7 @@ class AddReportViewModel @Inject constructor(
             ).collect { result ->
                 when (result) {
                     is Resource.Failed -> {
-
+                        _reportUIState.update { it.copy(isLoading = false, errorMessage = result.message) }
                     }
 
                     is Resource.Loading -> {
@@ -65,23 +72,36 @@ class AddReportViewModel @Inject constructor(
         }
     }
 
-    fun getDescription(images: List<Uri>) {
-        Log.d("imagesRepoFail", images.toString())
+    private fun getDescription(images: List<Uri>) {
         viewModelScope.launch {
-            getDamageDescUseCase.invoke(images).collect {
-                when (it) {
-                    is Resource.Loading -> _descFlow.emit(Resource.Loading())
+            getDamageDescUseCase.invoke(images).collect {result->
+                when (result) {
+                    is Resource.Loading -> _descFlow.update { it.copy(isLoading = true) }
                     is Resource.Success -> {
-
-                        _descFlow.emit(Resource.Success(it.responseData))
+                        _descFlow.update {
+                            it.copy(isLoading = false,description = result.responseData)
+                        }
                     }
                     is Resource.Failed -> {
-                        _descFlow.emit(Resource.Failed(it.message))
-                        Log.d("diagnosis failed", it.message)
+                        _descFlow.update {
+                            it.copy(isLoading = false,errorMessage = result.message)
+                        }
                     }
 
                 }
             }
+        }
+    }
+
+    private fun resetErrorMessageOfReportStateToNull(){
+        _reportUIState.update {
+            it.copy(errorMessage = null)
+        }
+    }
+
+    private fun resetErrorMessageOfDescriptionStateToNull(){
+        _descFlow.update {
+            it.copy(errorMessage = null)
         }
     }
 }

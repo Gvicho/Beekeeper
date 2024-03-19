@@ -2,11 +2,9 @@ package com.example.beekeeper.presenter.screen.damaged_beehives.add_report
 
 import android.Manifest
 import android.net.Uri
-import android.util.Log.d
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
@@ -16,10 +14,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.beekeeper.databinding.FragmentAddReportBinding
-import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.presenter.adapter.damaged_beehives.DamagePicturesRecyclerAdapter
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
+import com.example.beekeeper.presenter.event.damage_beehives.AddReportPageEvents
 import com.example.beekeeper.presenter.extension.showSnackBar
+import com.example.beekeeper.presenter.state.damage_report.DamageDescriptionState
 import com.example.beekeeper.presenter.state.damage_report.DamageReportState
 import com.example.beekeeper.presenter.utils.SwipeGestureDetector
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,11 +43,7 @@ class AddReportFragment :
                     permissionGranted = false
             }
             if (!permissionGranted) {
-                Toast.makeText(
-                    requireContext(),
-                    "Permission request denied",
-                    Toast.LENGTH_SHORT
-                ).show()
+                binding.root.showSnackBar("Permission Denied")
             } else {
                 pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
@@ -78,13 +73,15 @@ class AddReportFragment :
     }
 
     private fun handleReportState(state: DamageReportState) {
-
         showOrHideProgressBar(state.isLoading)
 
         state.uploadSuccess?.let {
             findNavController().popBackStack()
         }
 
+        state.errorMessage?.let{
+            showErrorMessage(it)
+        }
     }
 
     private fun showOrHideProgressBar(isLoading: Boolean) {
@@ -93,10 +90,13 @@ class AddReportFragment :
         }
     }
 
+    private fun showErrorMessage(errorMessage: String) {
+        binding.root.showSnackBar(errorMessage)
+        viewModel.onEvent(AddReportPageEvents.ResetErrorMessageOfUploadToNull)
+    }
+
     override fun setUp() {
-
         initRecycler()
-
     }
 
     override fun setListeners() {
@@ -105,16 +105,15 @@ class AddReportFragment :
         }
 
         binding.btnUpload.setOnClickListener {
-            viewModel.uploadReport(
+            viewModel.onEvent(AddReportPageEvents.UploadReport(
                 desc = binding.etDescription.text.toString(),
                 damageLevel = binding.sbDamageLevel.progress,
                 uriList
-            )
+            ))
 
         }
         binding.btnGenerateDesc.setOnClickListener {
-
-            viewModel.getDescription(uriList)
+            viewModel.onEvent(AddReportPageEvents.GetDescription(uriList))
             bindGeneratedDesc()
         }
 
@@ -137,27 +136,21 @@ class AddReportFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.descFlow.collect {
-                    when (it) {
-                        is Resource.Loading -> {
-
-                        }
-
-                        is Resource.Success -> {
-                            val res = it.responseData
-                            d("ResultDescription", res)
-                            binding.etDescription.setText(res)
-
-
-                        }
-
-                        is Resource.Failed -> {
-                            val errorMessage = it.message
-                            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    }
+                    handleGeneratedDescState(it)
                 }
             }
+        }
+    }
+
+    private fun handleGeneratedDescState(state:DamageDescriptionState){
+        showOrHideProgressBar(state.isLoading)
+
+        state.description?.let {
+            binding.etDescription.setText(it)
+        }
+
+        state.errorMessage?.let{
+            showErrorMessage(it)
         }
     }
 

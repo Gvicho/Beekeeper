@@ -1,17 +1,17 @@
 package com.example.beekeeper.presenter.screen.damaged_beehives.damage_report_details
 
-import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.damage_report.GetReportByIdUseCase
+import com.example.beekeeper.presenter.event.damage_beehives.DamageReportDetailsPageEvent
 import com.example.beekeeper.presenter.mappers.toPresentation
-import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
+import com.example.beekeeper.presenter.state.damage_report.details.DamageReportDetailsPageState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,23 +19,35 @@ import javax.inject.Inject
 class DamageReportDetailsViewModel @Inject constructor(private val getReportByIdUseCase: GetReportByIdUseCase) :
     ViewModel() {
 
-    private val _reportFlow = MutableSharedFlow<Resource<DamageReportUI>>()
-    val reportFlow: SharedFlow<Resource<DamageReportUI>> = _reportFlow.asSharedFlow()
+    private val _reportFlow = MutableStateFlow(DamageReportDetailsPageState())
+    val reportFlow: StateFlow<DamageReportDetailsPageState> = _reportFlow.asStateFlow()
 
 
-    fun getReportById(id: Int) {
+    fun onEvent(event:DamageReportDetailsPageEvent){
+        when(event){
+            is DamageReportDetailsPageEvent.GetReportDetailsEvent -> getReportById(event.id)
+            DamageReportDetailsPageEvent.ResetErrorMessage -> resetErrorMessageOfReportStateToNull()
+        }
+    }
+
+
+    private fun getReportById(id: Int) {
         viewModelScope.launch {
-            getReportByIdUseCase.invoke(id).collect {
-                when (it) {
-                    is Resource.Loading -> _reportFlow.emit(Resource.Loading())
+            getReportByIdUseCase.invoke(id).collect {result->
+                when (result) {
+                    is Resource.Loading -> _reportFlow.update {
+                        it.copy( isLoading = true)
+                    }
                     is Resource.Success -> {
-
-                        _reportFlow.emit(Resource.Success(it.responseData.toPresentation()))
+                        _reportFlow.update {
+                            it.copy(reportDetails = result.responseData.toPresentation() ,isLoading = false)
+                        }
                     }
 
                     is Resource.Failed -> {
-                        _reportFlow.emit(Resource.Failed(it.message))
-                        Log.d("diagnosis failed", it.message)
+                        _reportFlow.update {
+                            it.copy(errorMessage = result.message, isLoading = false)
+                        }
                     }
 
                 }
@@ -43,5 +55,10 @@ class DamageReportDetailsViewModel @Inject constructor(private val getReportById
         }
     }
 
+    private fun resetErrorMessageOfReportStateToNull(){
+        _reportFlow.update {
+            it.copy(errorMessage = null)
+        }
+    }
 
 }
