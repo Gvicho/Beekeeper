@@ -35,7 +35,6 @@ class FarmDetailsFragment : BaseFragment<FragmentFarmDetailsBinding>(FragmentFar
     private lateinit var detailsRecyclerAdapter: FarmDetailsRecyclerAdapter
 
     override fun bind() {
-        viewModel.getReportById(5)
         val farmId = args.farmId
         viewModel.onEvent(FarmDetailsEvent.LoadFarmDetailsById(farmId))
     }

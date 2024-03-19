@@ -24,32 +24,11 @@ import javax.inject.Inject
 @HiltViewModel
 class FarmDetailsViewModel@Inject constructor(
     private val getFarmDetailsByIdUseCase: GetFarmDetailsByIdUseCase,
-    private val getWeatherUseCase: GetWeatherUseCase
 ):ViewModel() {
 
     private val _farmDetailsState =  MutableStateFlow(FarmDetailsStateUi())
     val farmDetailsState : StateFlow<FarmDetailsStateUi> = _farmDetailsState
 
-
-     fun getReportById(id: Int) {
-        viewModelScope.launch {
-            getWeatherUseCase.invoke(lon = 10.99, lat = 44.34).collect {result->
-                when (result) {
-                    is Resource.Loading -> {
-                    }
-                    is Resource.Success -> {
-                        val res = result.responseData.toPresentation()
-                        d("weatherIs",res.toString())
-                    }
-
-                    is Resource.Failed -> {
-                        d("WeatherError", result.message)
-                    }
-
-                }
-            }
-        }
-    }
 
 
 
