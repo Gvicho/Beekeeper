@@ -2,6 +2,8 @@ package com.example.beekeeper.presenter.screen.home
 
 import android.content.Intent
 import android.net.Uri
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -25,7 +27,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     ItemClickCallBack {
 
     private lateinit var farmsRecyclerAdapter: FarmsRecyclerAdapter
-    private val viewModel:HomeScreenViewModel by viewModels()
+    private val viewModel:HomeViewModel by viewModels()
     override fun bind() {
         bindFarmsRecycler()
     }
@@ -84,6 +86,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun navigateToDetails(farmId: Int) {
         val action = HomeFragmentDirections.actionNavigationHomeToFarmDetailsFragment(farmId)
         findNavController().safeNavigate(action)
+    }
+
+    override fun setListeners() {
+        setSearchTextViewListener()
+    }
+
+    private fun setSearchTextViewListener(){
+        binding.searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // No need to implement
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // No need to implement
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.onEvent(HomePageEvent.LoadFarmsList(s.toString()))
+            }
+        })
     }
 
     override fun onItemClick(id: Int) {
