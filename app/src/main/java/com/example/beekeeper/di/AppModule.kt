@@ -5,6 +5,7 @@ import android.content.Context
 import com.example.beekeeper.BuildConfig
 import com.example.beekeeper.data.source.remote.bluetooth.conroller.BluetoothControllerImpl
 import com.example.beekeeper.data.source.remote.internet.service.FarmsService
+import com.example.beekeeper.data.source.remote.weather.service.WeatherService
 import com.example.beekeeper.domain.controller.bluetooth.BluetoothController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -20,6 +21,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -31,7 +33,8 @@ object AppModule { //stuff that are here should be singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
             // Set the log level to NONE when it's not a debug build
-            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+            level =
+                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         }
     }
 
@@ -47,9 +50,25 @@ object AppModule { //stuff that are here should be singleton
 
     @Singleton
     @Provides
-    fun provideRetrofitClient(okHttpClient: OkHttpClient) : Retrofit {
+    @Named("FarmsService")
+    fun provideRetrofitClient(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+                )
+            )
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    @Named("WeatherService")
+    fun provideRetrofitClientForWeather(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api.openweathermap.org/data/2.5/")
             .addConverterFactory(
                 MoshiConverterFactory.create(
                     Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
@@ -71,9 +90,14 @@ object AppModule { //stuff that are here should be singleton
 
     @Singleton
     @Provides
-    fun provideFarmsService(retrofit: Retrofit): FarmsService {
+    fun provideFarmsService(@Named("FarmsService") retrofit: Retrofit): FarmsService {
         return retrofit.create(FarmsService::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideWeatherService(@Named("WeatherService") retrofit: Retrofit): WeatherService =
+        retrofit.create(WeatherService::class.java)
 
     @Provides
     @Singleton
