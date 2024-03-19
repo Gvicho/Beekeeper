@@ -3,16 +3,12 @@ package com.example.beekeeper.presenter.screen.main
 import android.util.Log.d
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.beekeeper.domain.common.Resource
-import com.example.beekeeper.domain.usecase.damage_report.GetAllReportsUseCase
+import com.example.beekeeper.domain.usecase.credentials.CancelSessionUseCase
 import com.example.beekeeper.domain.usecase.dark_mode.ReadDarkModeUseCase
 import com.example.beekeeper.domain.usecase.dark_mode.SaveDarkModeUseCase
-import com.example.beekeeper.presenter.mappers.toPresentation
-import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val saveDarkModeUseCase: SaveDarkModeUseCase,
-    private val readDarkModeUseCase: ReadDarkModeUseCase
+    private val readDarkModeUseCase: ReadDarkModeUseCase,
+    private val cancelSessionUseCase: CancelSessionUseCase
 ) :
     ViewModel() {
 
@@ -43,6 +40,12 @@ class MainViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun logOut(){
+        viewModelScope.launch {
+            cancelSessionUseCase()
+        }
     }
 
 

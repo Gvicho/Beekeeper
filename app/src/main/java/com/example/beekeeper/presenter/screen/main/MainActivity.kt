@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.ActivityMainBinding
 import com.example.beekeeper.presenter.adapter.options.OptionsRecyclerAdapter
+import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.model.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
 import com.google.android.gms.tasks.OnCompleteListener
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener { controller, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.damagedBeehivesFragment, R.id.navigation_home, R.id.shareOrGetFragment, R.id.savedAnalyticsFragment -> {
                     binding.appBarMain.contentMain.navView.visibility = View.VISIBLE
@@ -93,6 +94,10 @@ class MainActivity : AppCompatActivity() {
             if(it.type == Options.DARK_MODE){
                 val navController = findNavController(R.id.nav_host_fragment_activity_main)
                 navController.navigate(R.id.themesBottomSheetFragment)
+            }else if(it.type == Options.LOG_OUT){
+                viewModel.logOut()
+                binding.root.showSnackBar("LogOut")
+                navigateToLoginFragmentClearingBackStack()
             }
 
         }
@@ -107,6 +112,14 @@ class MainActivity : AppCompatActivity() {
             )
             optionsAdapter.submitList(options)
         }
+    }
+
+    private fun navigateToLoginFragmentClearingBackStack() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val navControllerId = navController.graph.id
+        navController.popBackStack(navControllerId, true)
+        navController.navigate(R.id.loginFragment)
+
     }
     private fun observeDarkMode() {
         lifecycleScope.launch {

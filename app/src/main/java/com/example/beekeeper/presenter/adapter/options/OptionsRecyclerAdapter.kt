@@ -1,15 +1,12 @@
 package com.example.beekeeper.presenter.adapter.options
 
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.example.beekeeper.databinding.OptionsDarkModeRecyclerItemBinding
 import com.example.beekeeper.databinding.OptionsRecyclerItemBinding
-import com.example.beekeeper.databinding.ReportRecyclerItemBinding
 import com.example.beekeeper.presenter.model.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
 
@@ -84,7 +81,9 @@ class OptionsRecyclerAdapter(private val onItemClick: (Option) -> Unit) :
 
         private fun listeners() {
             binding.root.setOnClickListener {
-
+                binding.apply {
+                    binding.root.setOnClickListener {  onItemClick.invoke(model)}
+                }
             }
         }
 
