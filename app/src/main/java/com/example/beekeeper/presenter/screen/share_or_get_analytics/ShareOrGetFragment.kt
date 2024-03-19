@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
@@ -32,7 +33,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
     private val viewModel: ShareOrGetViewModel by viewModels()
 
     private val bluetoothManager by lazy {
-        requireContext().applicationContext.getSystemService(BluetoothManager::class.java) // if in activity requireContext() is not nececery
+        requireContext().applicationContext.getSystemService(BluetoothManager::class.java) // if in activity requireContext() is not needed
     }
 
 
@@ -97,6 +98,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
                 connectedDevice = BluetoothDeviceUIModel(name = it, address = address) // if name isn't null then mac address is for sure not null
             }
             viewModel.onEvent(GetAnalyticsEvent.HandleInput)
+            Log.d("tag123456","received device from scan")
         }
     }
 
@@ -170,7 +172,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
 
     private fun handleResponse(receivedAnalyticsState: ReceivedBeehiveAnalyticsState){
         receivedAnalyticsState.errorMessage?.let {
-            errorWhileRegistration(it)
+            showError(it)
         }
 
         showOrHideProgressBar(receivedAnalyticsState.isLoading)
@@ -186,7 +188,7 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
         }
     }
 
-    private fun errorWhileRegistration(errorMessage:String){
+    private fun showError(errorMessage:String){
         binding.root.showSnackBar(errorMessage)
         viewModel.onEvent(GetAnalyticsEvent.ResetErrorMessageToNull)
     }

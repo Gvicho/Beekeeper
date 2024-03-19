@@ -111,10 +111,10 @@ class BluetoothControllerImpl(
     override fun startDiscovery() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !hasPermissions(Manifest.permission.BLUETOOTH_SCAN)) {
-            Log.d("tag1234","starting scann Failed No permission")
+            Log.d("tag1234","starting scan Failed No permission")
             return
         }
-        Log.d("tag1234","starting scann")
+        Log.d("tag1234","starting scan")
 
         context.registerReceiver(
             foundDevicesReceiver,
@@ -126,7 +126,7 @@ class BluetoothControllerImpl(
         updatePairedDevices()
 
         if(bluetoothAdapter == null)  Log.d("tag123","in controller failed, bluetoothAdapter was null")
-        bluetoothAdapter?.startDiscovery()  // this will start discovery process. we will be listenning broadcasts for that
+        bluetoothAdapter?.startDiscovery()  // this will start discovery process. we will be listening broadcasts for that
     }
 
     override fun stopDiscovery() {
@@ -190,7 +190,7 @@ class BluetoothControllerImpl(
                     currentClientSocket = socket
                     emit(SocketConnectionResult.ConnectionEstablished)
                 } catch (e: IOException) {
-                    Log.e("BluetoothController", "Connection failed: ${e.message}")
+                    //Log.e("BluetoothController", "Connection failed: ${e.message}")
                     emit(SocketConnectionResult.Error("Connection was interrupted"))
                 } finally {
                     if (!socket.isConnected) {
@@ -228,6 +228,7 @@ class BluetoothControllerImpl(
                             // Remove the newline character
                             message = message.trim()
 
+
                             // Split the message into id, weightData, and temperatureData
                             val parts = message.split(";")
                             val id = parts[0].toInt()
@@ -238,7 +239,6 @@ class BluetoothControllerImpl(
 
                             // Create a BeehiveData object
                             val beehiveData = BeehiveAnalytics(id, weightData, temperatureData, currentDateTime)
-                            Log.d("BluetoothController", "Incoming BeehiveData: $beehiveData")
                             emit(Resource.Success(beehiveData))
 
                             // Close and reset the socket
@@ -249,18 +249,23 @@ class BluetoothControllerImpl(
 
                     } catch (e: IOException) {
                         emit(Resource.Failed(e.message ?: "Empty IO Exception"))
+                        //Log.d("BluetoothController", "1 Incoming BeehiveData: ${e.message}")
                         break
                     } catch (e: EOFException) {
                         emit(Resource.Failed(e.message ?: "End of stream reached unexpectedly"))
+                        //Log.d("BluetoothController", "2 Incoming BeehiveData: ${e.message}")
                         break
                     } catch (e: SecurityException) {
                         emit(Resource.Failed(e.message ?: "Security Exception occurred"))
+                        //Log.d("BluetoothController", "3 Incoming BeehiveData: ${e.message}")
                         break
                     } catch (e: IllegalArgumentException) {
                         emit(Resource.Failed(e.message ?: "Invalid argument passed"))
+                        //Log.d("BluetoothController", "4 Incoming BeehiveData: ${e}")
                         break
                     } catch (e: NullPointerException) {
                         emit(Resource.Failed(e.message ?: "Null Pointer Exception occurred"))
+                        //Log.d("BluetoothController", "5 Incoming BeehiveData: ${e.message}")
                         break
                     }
                 }
@@ -279,10 +284,9 @@ class BluetoothControllerImpl(
                 val outputStream = socket.outputStream
                 outputStream.write("start\n".toByteArray())
                 outputStream.flush()
-                Log.d("BluetoothController", "Sent start message to Arduino")
             }
         } catch (e: IOException) {
-            Log.e("BluetoothController", "Error sending start message: ${e.message}")
+            //Log.e("BluetoothController", "Error sending start message: ${e.message}")
             // Handle the error or close the socket if necessary
         }
     }

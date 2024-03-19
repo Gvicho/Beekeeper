@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
@@ -44,6 +43,8 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
 
     private val isBluetoothEnabled:Boolean
         get() = bluetoothAdapter?.isEnabled == true
+
+    private var navigationFlag = true
 
 
     override fun bind() {
@@ -123,7 +124,7 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
         showLoader(state.isConnecting)
 
         if(state.isConnected){
-            returnPickedDevice()
+            if(navigationFlag)returnPickedDevice()
         }
 
         if(state.pairedDevices.isNotEmpty()){
@@ -136,6 +137,7 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
     }
 
     private fun returnPickedDevice(){
+        navigationFlag = false
         val result = bundleOf(
             "name" to (resultDevice?.name?:""),
             "address" to (resultDevice?.address?:"")
@@ -146,7 +148,6 @@ class ScanBottomSheet :BaseBottomSheetFragment<BottomSheetScanConnectBinding>(Bo
 
     private fun showErrorMessage(errorMessage:String){
         binding.errorViewHolder.showSnackBar(errorMessage)
-        Log.d("tag12345","error!!")
     }
 
     private fun showLoader(loading:Boolean){
