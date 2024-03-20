@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.auth.LogInUseCase
+import com.example.beekeeper.domain.usecase.credentials.SaveMailUseCase
 import com.example.beekeeper.domain.usecase.credentials.SaveTokenUseCase
 import com.example.beekeeper.presenter.event.auth.LoginEvent
 import com.example.beekeeper.presenter.state.auth.login.LoginUiState
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LogInViewModel @Inject constructor(
     private val loginUseCase: LogInUseCase,
-    private val saveTokenUseCase: SaveTokenUseCase
+    private val saveTokenUseCase: SaveTokenUseCase,
+    private val saveMailUseCase: SaveMailUseCase
 ) : ViewModel() {
 
     private val _loginUIState =  MutableStateFlow(LoginUiState())
@@ -62,6 +64,7 @@ class LogInViewModel @Inject constructor(
                             it.copy(accessToken =token)
                         }
                         if(rememberMe)saveTokenInDataStoreIfSelectedSettings(token)
+                        saveMailInDataStoreIfSelectedSettings(email)
                         setNavigationEventFlowToHome()
                     }
                     is Resource.Failed -> {
@@ -78,6 +81,12 @@ class LogInViewModel @Inject constructor(
     private fun saveTokenInDataStoreIfSelectedSettings(token:String){
         viewModelScope.launch {
             saveTokenUseCase(token)
+        }
+    }
+
+    private fun saveMailInDataStoreIfSelectedSettings(mail:String){
+        viewModelScope.launch {
+            saveMailUseCase(mail)
         }
     }
 
