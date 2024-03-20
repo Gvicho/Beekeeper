@@ -1,7 +1,8 @@
 package com.example.beekeeper.data.source.remote.internet.model.user
 
 data class UserDataDto(
-    val email: String,
-    val userName: String,
-    val imageUrl: String? = null
+    var email: String,
+    var name: String,
+    val lastName: String,
+    val image: String? = null
 )

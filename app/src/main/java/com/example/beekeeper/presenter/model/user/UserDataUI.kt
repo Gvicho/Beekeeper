@@ -1,6 +1,6 @@
-package com.example.beekeeper.domain.model.user
+package com.example.beekeeper.presenter.model.user
 
-data class UserData(
+data class UserDataUI(
     var email: String,
     var name: String,
     val lastName: String,

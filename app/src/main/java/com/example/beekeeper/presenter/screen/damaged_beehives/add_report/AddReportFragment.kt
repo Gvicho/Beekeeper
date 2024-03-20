@@ -2,11 +2,15 @@ package com.example.beekeeper.presenter.screen.damaged_beehives.add_report
 
 import android.Manifest
 import android.net.Uri
+import android.util.Log
+import android.util.Log.d
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -31,36 +35,9 @@ class AddReportFragment :
     private val viewModel: AddReportViewModel by viewModels()
     private lateinit var gestureDetector: GestureDetector
     private lateinit var damagePicturesAdapter: DamagePicturesRecyclerAdapter
-    private val activityResultLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        )
-        { permissions ->
-            // Handle Permission granted/rejected
-            var permissionGranted = true
-            permissions.entries.forEach {
-                if (it.key in arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE) && !it.value)
-                    permissionGranted = false
-            }
-            if (!permissionGranted) {
-                binding.root.showSnackBar("Permission Denied")
-            } else {
-                pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
-        }
-    private var uriList = listOf<Uri>()
 
-    private val pickMultipleMedia = registerForActivityResult(
-        ActivityResultContracts.PickMultipleVisualMedia(
-            10
-        )
-    ) { uris ->
-        uris?.let {
-            uriList = it
-            binding.root.showSnackBar("added ${it.size}")
-            damagePicturesAdapter.submitList(uris)
-        }
-    }
+    private var uriList = mutableListOf<Uri>()
+
 
     override fun bindObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -97,11 +74,12 @@ class AddReportFragment :
 
     override fun setUp() {
         initRecycler()
+        getChoice()
     }
 
     override fun setListeners() {
         binding.btnPick.setOnClickListener {
-            requestPermissions()
+            openChooseMedia()
         }
 
         binding.btnUpload.setOnClickListener {
@@ -119,9 +97,7 @@ class AddReportFragment :
 
     }
 
-    private fun requestPermissions() {
-        activityResultLauncher.launch(arrayOf(Manifest.permission.CAMERA))
-    }
+
 
     private fun initRecycler() {
         damagePicturesAdapter = DamagePicturesRecyclerAdapter()
@@ -177,6 +153,32 @@ class AddReportFragment :
                 }
             }
             true
+        }
+
+    }
+
+    private  fun openChooseMedia(){
+        findNavController().navigate(AddReportFragmentDirections.actionAddReportFragmentToChooseMediaBottomSheetFragment(true))
+    }
+
+
+    private fun getChoice() {
+
+        setFragmentResultListener("media") { _, bundle ->
+            val images = bundle.getStringArray("images")
+            images?.let {
+                for (each in images){
+                    d("fsadfafas", each.toString())
+                    uriList.add(each.toUri())
+                }
+
+                damagePicturesAdapter.submitList(uriList)
+//                damagePicturesAdapter.notifyDataSetChanged()
+            }
+
+
+
+
         }
 
     }

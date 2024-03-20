@@ -5,6 +5,7 @@ enum class Options {
     DARK_MODE,
     LANGUAGE,
     CHANGE_PASSWORD,
-    LOG_OUT
+    LOG_OUT,
+    PROFILE,
 
 }

@@ -99,6 +99,9 @@ class MainActivity : AppCompatActivity() {
                 viewModel.onEvent(MainActivityEvents.LogOutEvent)
                 binding.root.showSnackBar("LogOut")
                 navigateToLoginFragmentClearingBackStack()
+            }else if(it.type == Options.PROFILE){
+                val navController = findNavController(R.id.nav_host_fragment_activity_main)
+                navController.navigate(R.id.profileFragment)
             }
 
         }
@@ -110,6 +113,8 @@ class MainActivity : AppCompatActivity() {
                 Option(Options.LOG_OUT),
                 Option(Options.CHANGE_PASSWORD),
                 Option(Options.DARK_MODE),
+                Option(Options.PROFILE),
+
             )
             optionsAdapter.submitList(options)
         }

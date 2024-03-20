@@ -20,9 +20,9 @@ class UserRepositoryImpl @Inject constructor(private val database: FirebaseDatab
     override fun saveUserData(userData: UserData): Flow<Resource<Unit>> = flow {
         try {
             emit(Resource.Loading())
-            val id = userData.userName
+            val email = userData.email
             val data = userData.toData()
-            database.reference.child("users").child(id).setValue(data).await()
+            database.reference.child("users").child(email).setValue(data).await()
 
             emit(Resource.Success(Unit))
 

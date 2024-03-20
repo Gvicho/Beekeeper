@@ -39,4 +39,8 @@
     <string name="older_to_newer">older to newer</string>
     <string name="none">none</string>
     <string name="_0">0</string>
+    <string name="username">Username</string>
+    <string name="last_name">Last name</string>
+    <string name="choose_from_gallery">Choose from gallery</string>
+    <string name="take_a_picture">Take a picture</string>
 </resources>

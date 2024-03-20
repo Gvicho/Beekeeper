@@ -117,7 +117,14 @@
         android:id="@+id/addReportFragment"
         android:name="com.example.beekeeper.presenter.screen.damaged_beehives.add_report.AddReportFragment"
         android:label="fragment_add_report"
-        tools:layout="@layout/fragment_add_report" />
+        tools:layout="@layout/fragment_add_report" >
+        <action
+            android:id="@+id/action_addReportFragment_to_chooseMediaBottomSheetFragment"
+            app:destination="@id/chooseMediaBottomSheetFragment" />
+        <action
+            android:id="@+id/action_addReportFragment_to_cameraBottomSheetFragment"
+            app:destination="@id/cameraBottomSheetFragment" />
+    </fragment>
     <dialog
         android:id="@+id/receivedAnalyticsBottomSheet"
         android:name="com.example.beekeeper.presenter.screen.get_analytics.view_received_analytics.ReceivedAnalyticsBottomSheet"
@@ -171,4 +178,33 @@
             android:name="id"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.beekeeper.presenter.screen.user.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_chooseMediaBottomSheetFragment"
+            app:destination="@id/chooseMediaBottomSheetFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_cameraBottomSheetFragment"
+            app:destination="@id/cameraBottomSheetFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/chooseMediaBottomSheetFragment"
+        android:name="com.example.beekeeper.presenter.screen.media.ChooseMediaBottomSheetFragment"
+        android:label="fragment_choose_media_bottom_sheet"
+        tools:layout="@layout/fragment_choose_media_bottom_sheet" >
+        <action
+            android:id="@+id/action_chooseMediaBottomSheetFragment_to_cameraBottomSheetFragment"
+            app:destination="@id/cameraBottomSheetFragment" />
+        <argument
+            android:name="isMulti"
+            app:argType="boolean" />
+    </dialog>
+    <dialog
+        android:id="@+id/cameraBottomSheetFragment"
+        android:name="com.example.beekeeper.presenter.screen.media.CameraBottomSheetFragment"
+        android:label="fragment_camera_bottom_sheet"
+        tools:layout="@layout/fragment_camera_bottom_sheet" />
 </navigation>

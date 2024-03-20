@@ -73,6 +73,7 @@ class OptionsRecyclerAdapter(private val onItemClick: (Option) -> Unit) :
                     Options.CHANGE_PASSWORD -> tvTitle.text = "Change password"
                     Options.LOG_OUT -> tvTitle.text = "Log out"
                     Options.LANGUAGE -> tvTitle.text = "Language"
+                    Options.PROFILE -> tvTitle.text = "Profile"
                 }
             }
             listeners()

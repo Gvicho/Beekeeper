@@ -4,6 +4,16 @@ import com.example.beekeeper.data.source.remote.internet.model.user.UserDataDto
 import com.example.beekeeper.domain.model.user.UserData
 
 
-fun UserData.toData() = UserDataDto(email = email, userName = userName, imageUrl = imageUrl)
+fun UserData.toData() = UserDataDto(
+    email = email,
+    name = name,
+    lastName = lastName,
+    image = image
+)
 
-fun UserDataDto.toDomain() = UserData(email = email, userName = userName, imageUrl = imageUrl)
+fun UserDataDto.toDomain() = UserData(
+    email = email,
+    name = name,
+    lastName = lastName,
+    image = image
+)
