@@ -4,7 +4,7 @@ import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.model.weather.WeatherInfo
 import kotlinx.coroutines.flow.Flow
 
-interface GetWeatherRepository {
+interface WeatherRepository {
 
     fun getWeather(lat: Double, lon: Double): Flow<Resource<WeatherInfo>>
 }

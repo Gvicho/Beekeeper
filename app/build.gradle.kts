@@ -33,10 +33,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String","BASE_URL","\"https://rameRealuri\"")
+            buildConfigField("String","POSTMAN_BASE_URL","\"https://rameRealuri\"")
+            buildConfigField("String","WEATHER_API_BASE_URL","\"https://rameRealuri\"")
         }
         debug {
-            buildConfigField("String","BASE_URL","\"https://6ebae387-dddf-4cec-9159-fdf3e93dc6dd.mock.pstmn.io/\"")
+            buildConfigField("String","POSTMAN_BASE_URL","\"https://6ebae387-dddf-4cec-9159-fdf3e93dc6dd.mock.pstmn.io/\"")
+            buildConfigField("String","WEATHER_API_BASE_URL","\"https://api.openweathermap.org/data/2.5/\"")
         }
     }
     compileOptions {

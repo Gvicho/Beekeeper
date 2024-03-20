@@ -11,7 +11,7 @@ import com.example.beekeeper.data.repository.BeehiveAnalyticsRepositoryImpl
 import com.example.beekeeper.data.repository.BeehiveAnalyticsUploadRepositoryImpl
 import com.example.beekeeper.data.repository.DataStoreRepositoryImpl
 import com.example.beekeeper.data.repository.FarmsRepositoryImpl
-import com.example.beekeeper.data.repository.GetWeatherRepositoryImpl
+import com.example.beekeeper.data.repository.WeatherRepositoryImpl
 import com.example.beekeeper.data.repository.ReportRepositoryImpl
 import com.example.beekeeper.data.repository.UserRepositoryImpl
 import com.example.beekeeper.data.source.local.dao.BeehiveAnalyticsDao
@@ -25,7 +25,7 @@ import com.example.beekeeper.domain.repository.farms.FarmsRepository
 import com.example.beekeeper.domain.repository.data_store.DataStoreRepository
 import com.example.beekeeper.domain.repository.farmer_assistant.AssistantRepository
 import com.example.beekeeper.domain.repository.user.UserRepository
-import com.example.beekeeper.domain.repository.weather.GetWeatherRepository
+import com.example.beekeeper.domain.repository.weather.WeatherRepository
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -120,8 +120,8 @@ object RepositoryModule {
     fun provideGetWeatherRepository(
         weatherService: WeatherService,
         handleResponse: HandleResponse
-    ): GetWeatherRepository {
-        return GetWeatherRepositoryImpl(weatherService, handleResponse)
+    ): WeatherRepository {
+        return WeatherRepositoryImpl(weatherService, handleResponse)
 
 
     }
