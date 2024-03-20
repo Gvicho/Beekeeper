@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.beekeeper.data.source.remote.internet.model.DamageReportDto
+import com.example.beekeeper.data.source.remote.internet.model.damaged_beehives.DamageReportDto
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import dagger.assisted.Assisted

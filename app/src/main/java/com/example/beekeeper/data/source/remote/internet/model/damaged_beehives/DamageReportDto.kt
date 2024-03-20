@@ -1,4 +1,4 @@
-package com.example.beekeeper.data.source.remote.internet.model
+package com.example.beekeeper.data.source.remote.internet.model.damaged_beehives
 
 data class DamageReportDto(
     val id: Int = 0,

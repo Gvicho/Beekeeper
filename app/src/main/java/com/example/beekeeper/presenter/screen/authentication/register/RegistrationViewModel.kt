@@ -61,6 +61,7 @@ class RegistrationViewModel @Inject constructor(private val registerUseCase: Reg
                         }
                     }
                     is Resource.Success -> {
+
                         _registrationState.update {
                             it.copy(userAuthenticator = UserAuthenticator(email,password), isLoading = false)
                         }

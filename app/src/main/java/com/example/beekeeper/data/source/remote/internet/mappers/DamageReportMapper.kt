@@ -1,7 +1,7 @@
 package com.example.beekeeper.data.source.remote.internet.mappers
 
 import androidx.core.net.toUri
-import com.example.beekeeper.data.source.remote.internet.model.DamageReportDto
+import com.example.beekeeper.data.source.remote.internet.model.damaged_beehives.DamageReportDto
 import com.example.beekeeper.domain.model.damaged_beehives.DamageReport
 
 

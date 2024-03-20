@@ -87,6 +87,7 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
         showOrHideProgressBar(loginState.isLoading)
 
         loginState.accessToken?.let {
+
             successRegistration()
         }
     }
