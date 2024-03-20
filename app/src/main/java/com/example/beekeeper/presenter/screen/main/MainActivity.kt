@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.ActivityMainBinding
 import com.example.beekeeper.presenter.adapter.options.OptionsRecyclerAdapter
+import com.example.beekeeper.presenter.event.main.MainActivityEvents
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.model.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel.readDarkMode()
+        viewModel.onEvent(MainActivityEvents.ReadDarkMode)
         observeDarkMode()
         readPushToken()
         requestPermission()
@@ -95,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 val navController = findNavController(R.id.nav_host_fragment_activity_main)
                 navController.navigate(R.id.themesBottomSheetFragment)
             }else if(it.type == Options.LOG_OUT){
-                viewModel.logOut()
+                viewModel.onEvent(MainActivityEvents.LogOutEvent)
                 binding.root.showSnackBar("LogOut")
                 navigateToLoginFragmentClearingBackStack()
             }
