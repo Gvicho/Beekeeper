@@ -34,7 +34,7 @@ class ScanViewModel @Inject constructor(
     private val stopBluetoothScanUseCase: StopBluetoothScanUseCase,
     private val connectToBluetoothDeviceUseCase: ConnectToBluetoothDeviceUseCase,
     private val closeBluetoothConnectionUseCase: CloseBluetoothConnectionUseCase,
-    private val bluetoothController: BluetoothController
+    bluetoothController: BluetoothController
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ScanPageUIState())
@@ -47,7 +47,7 @@ class ScanViewModel @Inject constructor(
             scannedDevices = withContext(Dispatchers.Default){scannedDevices.map { it.toUI() }} ,
             pairedDevices = withContext(Dispatchers.Default){pairedDevices.map { it.toUI() }}
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),_state.value)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),_state.value)  // having use case instead of this was hard. then We had to use Scope in domain in order to have it inside stateIn()
 
     private var deviceConnectionJob : Job? = null
     init {
