@@ -10,16 +10,21 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="3dp"
-        android:layout_marginHorizontal="20dp"/>
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/shape_edit_text"
+        android:hint="Search Farm"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/farmsRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:layout_marginTop="15dp"/>
 
     <ProgressBar
         android:id="@+id/pbLogIn"
