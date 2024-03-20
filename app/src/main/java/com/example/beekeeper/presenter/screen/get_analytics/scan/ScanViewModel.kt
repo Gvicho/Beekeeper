@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.SocketConnectionResult
 import com.example.beekeeper.domain.controller.bluetooth.BluetoothController
+import com.example.beekeeper.domain.usecase.bluetooth.CloseBluetoothConnectionUseCase
+import com.example.beekeeper.domain.usecase.bluetooth.ConnectToBluetoothDeviceUseCase
+import com.example.beekeeper.domain.usecase.bluetooth.StartBluetoothScanUseCase
+import com.example.beekeeper.domain.usecase.bluetooth.StopBluetoothScanUseCase
 import com.example.beekeeper.presenter.event.get_analytics.ScanEvent
 import com.example.beekeeper.presenter.mappers.bluetooth.toDomain
 import com.example.beekeeper.presenter.mappers.bluetooth.toUI
@@ -26,6 +30,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ScanViewModel @Inject constructor(
+    private val startBluetoothScanUseCase: StartBluetoothScanUseCase,
+    private val stopBluetoothScanUseCase: StopBluetoothScanUseCase,
+    private val connectToBluetoothDeviceUseCase: ConnectToBluetoothDeviceUseCase,
+    private val closeBluetoothConnectionUseCase: CloseBluetoothConnectionUseCase,
     private val bluetoothController: BluetoothController
 ) : ViewModel() {
 
@@ -62,17 +70,17 @@ class ScanViewModel @Inject constructor(
     }
 
     private fun startScan(){
-        bluetoothController.startDiscovery()
+        startBluetoothScanUseCase()
     }
 
     private fun stopScan(){
-        bluetoothController.stopDiscovery()
+        stopBluetoothScanUseCase()
     }
 
 
     private fun connectToDevice(device:BluetoothDeviceUIModel){
         _state.update { it.copy(isConnecting = true) }
-        deviceConnectionJob = bluetoothController.connectToDevice(device.toDomain()).listen() //  this can be changed with handler
+        deviceConnectionJob = connectToBluetoothDeviceUseCase(device.toDomain()).listen() //  this can be changed with handler
         // we save it here so that we can cancel it when we want it
     }
 
@@ -97,7 +105,7 @@ class ScanViewModel @Inject constructor(
             }
         }.catch {throwable ->
             // everything we catch in flow will be trowed here
-            bluetoothController.closeConnection()
+            closeBluetoothConnectionUseCase()
             _state.update { it.copy(
                 isConnected = false,
                 isConnecting = false,
