@@ -60,6 +60,8 @@ kapt {
 }
 
 dependencies {
+    implementation("com.github.Gruzer:simple-gauge-android:0.3.1")// for damage indicator
+
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")// for charts
 
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")

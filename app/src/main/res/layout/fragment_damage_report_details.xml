@@ -8,39 +8,48 @@
     android:padding="16dp"
     tools:context=".presenter.screen.damaged_beehives.damage_report_details.DamageReportDetailsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/damagedBeehiveImagesRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvId"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:layout_gravity="center_horizontal"
+        android:text="Report Details"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvDesc"
+    <TextView
+        android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:layout_gravity="center_horizontal"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvDamageLvl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+    <FrameLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="16dp" />
+
+    </FrameLayout>
+
+    <com.ekn.gruzer.gaugelibrary.HalfGauge
+        android:id="@+id/halfGauge"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
 
     <ProgressBar
     android:id="@+id/progressBar"
