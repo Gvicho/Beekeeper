@@ -1,9 +1,10 @@
-package com.example.beekeeper.presenter.screen.share_or_get_analytics
+package com.example.beekeeper.presenter.screen.get_analytics
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
-import com.example.beekeeper.domain.controller.bluetooth.BluetoothController
+import com.example.beekeeper.domain.usecase.bluetooth.HandleBluetoothInputUseCase
+import com.example.beekeeper.domain.usecase.bluetooth.ReleaseBluetoothControllerUseCase
 import com.example.beekeeper.presenter.event.get_analytics.GetAnalyticsEvent
 import com.example.beekeeper.presenter.mappers.beehive_analytics.toUI
 import com.example.beekeeper.presenter.model.beehive_analytics.BeehiveAnalyticsUI
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShareOrGetViewModel @Inject constructor(
-    private val bluetoothController: BluetoothController
+    private val releaseBluetoothControllerUseCase: ReleaseBluetoothControllerUseCase,
+    private val handleBluetoothInputUseCase: HandleBluetoothInputUseCase
 ):ViewModel() {
 
     private val _receivedBeehiveAnalyticsState =  MutableStateFlow(ReceivedBeehiveAnalyticsState())
@@ -40,7 +42,7 @@ class ShareOrGetViewModel @Inject constructor(
 
     private fun handleInput(){
         viewModelScope.launch {
-            bluetoothController.handleInputStream().collect{result->
+            handleBluetoothInputUseCase().collect{result->
                 when(result){
                     is Resource.Failed -> {
                         _receivedBeehiveAnalyticsState.update {
@@ -74,7 +76,7 @@ class ShareOrGetViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        bluetoothController.release()
+        releaseBluetoothControllerUseCase()
     }
 
     private fun navigationEventToSavedAnalytic(){

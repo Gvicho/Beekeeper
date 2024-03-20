@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.screen.share_or_get_analytics.view_received_analytics
+package com.example.beekeeper.presenter.screen.get_analytics.view_received_analytics
 
 import android.os.Bundle
 import android.view.View

@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.screen.share_or_get_analytics
+package com.example.beekeeper.presenter.screen.get_analytics
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter

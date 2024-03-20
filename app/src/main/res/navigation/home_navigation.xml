@@ -85,7 +85,7 @@
     </fragment>
     <fragment
         android:id="@+id/shareOrGetFragment"
-        android:name="com.example.beekeeper.presenter.screen.share_or_get_analytics.ShareOrGetFragment"
+        android:name="com.example.beekeeper.presenter.screen.get_analytics.ShareOrGetFragment"
         android:label="fragment_share_or_get"
         tools:layout="@layout/fragment_share_or_get" >
         <action
@@ -110,7 +110,7 @@
     </fragment>
     <dialog
         android:id="@+id/scanBottomSheet"
-        android:name="com.example.beekeeper.presenter.screen.share_or_get_analytics.scan.ScanBottomSheet"
+        android:name="com.example.beekeeper.presenter.screen.get_analytics.scan.ScanBottomSheet"
         android:label="ScanBottomSheet"
         tools:layout="@layout/bottom_sheet_scan_connect"/>
     <fragment
@@ -120,7 +120,7 @@
         tools:layout="@layout/fragment_add_report" />
     <dialog
         android:id="@+id/receivedAnalyticsBottomSheet"
-        android:name="com.example.beekeeper.presenter.screen.share_or_get_analytics.view_received_analytics.ReceivedAnalyticsBottomSheet"
+        android:name="com.example.beekeeper.presenter.screen.get_analytics.view_received_analytics.ReceivedAnalyticsBottomSheet"
         android:label="ReceivedAnalyticsBottomSheet"
         tools:layout="@layout/bottom_sheet_received_analytics">
         <argument

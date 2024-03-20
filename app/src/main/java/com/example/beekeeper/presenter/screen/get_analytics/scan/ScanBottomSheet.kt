@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.screen.share_or_get_analytics.scan
+package com.example.beekeeper.presenter.screen.get_analytics.scan
 
 import android.Manifest
 import android.annotation.SuppressLint
