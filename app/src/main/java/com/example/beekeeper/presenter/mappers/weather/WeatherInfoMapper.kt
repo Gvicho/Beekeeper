@@ -31,9 +31,9 @@ fun Weather.toPresentation() = WeatherUI(
 )
 fun MainInfo.toPresentation() = MainInfoUI(
     temp = getWholePart(temp.toCelsius()), // convert from kelvin to Celsius
-    feelsLike = getWholePart(feelsLike),
-    tempMin = getWholePart(tempMin),
-    tempMax = getWholePart(tempMax),
+    feelsLike = getWholePart(feelsLike.toCelsius()),
+    tempMin = getWholePart(tempMin.toCelsius()),
+    tempMax = getWholePart(tempMax.toCelsius()),
     pressure = pressure,
     humidity = humidity,
     seaLevel = seaLevel,

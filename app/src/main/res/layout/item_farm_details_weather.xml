@@ -5,17 +5,31 @@
     android:layout_height="wrap_content"
     android:background="@color/blue_light"
     android:layout_marginHorizontal="10dp"
-    android:layout_marginVertical="5dp">
+    android:layout_marginVertical="5dp"
+    android:paddingBottom="15dp">
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="5dp"
+        android:text="Today's Weather"
+        android:textAppearance="@style/title_white"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tvWeather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:text="@string/none"
         app:layout_constraintEnd_toEndOf="@+id/weatherIcon"
         app:layout_constraintStart_toStartOf="@+id/weatherIcon"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAppearance="@style/desc_white"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/weatherIcon"
@@ -23,10 +37,8 @@
         android:layout_height="60dp"
         android:layout_marginStart="10dp"
         android:background="@color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvWeather"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="5dp"/>
 
 
@@ -51,7 +63,8 @@
         android:text="@string/_0"
         app:layout_constraintEnd_toEndOf="@id/humidityIcon"
         app:layout_constraintStart_toStartOf="@id/humidityIcon"
-        app:layout_constraintTop_toBottomOf="@id/humidityIcon" />
+        app:layout_constraintTop_toBottomOf="@id/humidityIcon"
+        android:textAppearance="@style/desc_white"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/tempIcon"
@@ -72,7 +85,8 @@
         android:text="@string/_0"
         app:layout_constraintEnd_toEndOf="@id/tempIcon"
         app:layout_constraintStart_toStartOf="@id/tempIcon"
-        app:layout_constraintTop_toBottomOf="@id/tempIcon" />
+        app:layout_constraintTop_toBottomOf="@id/tempIcon"
+        android:textAppearance="@style/desc_white"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/feelsIcon"
@@ -93,7 +107,84 @@
         android:text="@string/_0"
         app:layout_constraintEnd_toEndOf="@id/feelsIcon"
         app:layout_constraintStart_toStartOf="@id/feelsIcon"
-        app:layout_constraintTop_toBottomOf="@id/feelsIcon" />
+        app:layout_constraintTop_toBottomOf="@id/feelsIcon"
+        android:textAppearance="@style/desc_white"/>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        app:layout_constraintTop_toBottomOf="@id/weatherIcon"
+        android:layout_marginTop="20dp"
+        android:background="@color/grey_transparent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginHorizontal="10dp"/>
+
+    <TextView
+        android:id="@+id/minTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/line"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="min Temperature: "
+        android:textAppearance="@style/text_white"/>
+
+    <TextView
+        android:id="@+id/maxTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/minTemp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="max Temperature: "
+        android:textAppearance="@style/text_white"/>
+
+    <TextView
+        android:id="@+id/pressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/maxTemp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="Pressure: "
+        android:textAppearance="@style/text_white"/>
+
+    <TextView
+        android:id="@+id/tvMinTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toEndOf="@id/minTemp"
+        app:layout_constraintTop_toTopOf="@id/minTemp"
+        app:layout_constraintBottom_toBottomOf="@id/minTemp"
+        android:text="@string/_0"
+        android:textAppearance="@style/text_white"/>
+
+    <TextView
+        android:id="@+id/tvMaxTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toEndOf="@id/maxTemp"
+        app:layout_constraintTop_toTopOf="@id/maxTemp"
+        app:layout_constraintBottom_toBottomOf="@id/maxTemp"
+        android:text="@string/_0"
+        android:textAppearance="@style/text_white"/>
+
+    <TextView
+        android:id="@+id/tvPressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toEndOf="@id/pressure"
+        app:layout_constraintTop_toTopOf="@id/pressure"
+        app:layout_constraintBottom_toBottomOf="@id/pressure"
+        android:text="@string/_0"
+        android:textAppearance="@style/text_white"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

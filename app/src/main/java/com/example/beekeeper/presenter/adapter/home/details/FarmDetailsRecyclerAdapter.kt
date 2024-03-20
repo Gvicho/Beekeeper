@@ -148,6 +148,9 @@ class FarmDetailsRecyclerAdapter (
                     tVHumidity.text = "${weather.main.humidity}%"
                     tVFeelsTemp.text = "${weather.main.feelsLike}C"
                     tvWeather.text = weather.weather[0].main
+                    tvMaxTemp.text = "${weather.main.tempMax}C"
+                    tvMinTemp.text = "${weather.main.tempMin}C"
+                    tvPressure.text = "${weather.main.pressure}hPa"
                 }
             }
         }
