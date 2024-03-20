@@ -20,6 +20,15 @@ fun FarmDetails.toUi():List<FarmDetailsItemWrapper>{
         ),
         FarmDetailsItemWrapper(
             id = 1,
+            itemType = FarmDetailsItemWrapper.ItemType.WEATHER_INFO,
+            ownerDetailsUi = null,
+            header = null,
+            imagesPager = null,
+            beehiveNumberChartUI = null,
+            weatherInfoUI = null
+        ),
+        FarmDetailsItemWrapper(
+            id = 2,
             itemType = FarmDetailsItemWrapper.ItemType.IMAGE_PAGER,
             ownerDetailsUi = null,
             header = null,
@@ -27,7 +36,7 @@ fun FarmDetails.toUi():List<FarmDetailsItemWrapper>{
             beehiveNumberChartUI = null
         ),
         FarmDetailsItemWrapper(
-            id = 2,
+            id = 3,
             itemType = FarmDetailsItemWrapper.ItemType.BEEHIVE_NUMBER_CHART,
             ownerDetailsUi = null,
             header = null,
@@ -35,7 +44,7 @@ fun FarmDetails.toUi():List<FarmDetailsItemWrapper>{
             beehiveNumberChartUI = this.toBeehiveNumberChart()
         ),
         FarmDetailsItemWrapper(
-            id = 3,
+            id = 4,
             itemType = FarmDetailsItemWrapper.ItemType.OWNER_DETAILS,
             ownerDetailsUi = this.toOwnerDetailsUi(),
             header = null,

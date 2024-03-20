@@ -1,15 +1,20 @@
 package com.example.beekeeper.presenter.adapter.home.details
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import android.view.animation.AnimationUtils
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.viewpager2.widget.ViewPager2
+import com.example.beekeeper.R
 import com.example.beekeeper.databinding.ItemAnalyticsBarChartBinding
 import com.example.beekeeper.databinding.ItemFarmDetailsHeaderBinding
 import com.example.beekeeper.databinding.ItemFarmDetailsImagesBinding
 import com.example.beekeeper.databinding.ItemFarmDetailsOwnerDetailsBinding
+import com.example.beekeeper.databinding.ItemFarmDetailsWeatherBinding
 import com.example.beekeeper.presenter.adapter.ImagesPager2Adapter
 import com.example.beekeeper.presenter.extension.loadImage
 import com.example.beekeeper.presenter.model.home.LocationUi
@@ -24,28 +29,42 @@ import me.relex.circleindicator.CircleIndicator3
 import java.util.Calendar
 
 class FarmDetailsRecyclerAdapter (
-    private val detailsList: List<FarmDetailsItemWrapper>,
     private val listener:DetailsListener
-) :RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<FarmDetailsItemWrapper, ViewHolder>(
+    FarmDetailsDiffUtil()
+) {
 
     companion object{
         const val HEADER = 1
         const val IMAGE_PAGER = 2
-        const val OWNER_DETAILS = 3
-        const val BEEHIVE_NUMBER_CHART = 4
+        const val WEATHER = 3
+        const val OWNER_DETAILS = 4
+        const val BEEHIVE_NUMBER_CHART = 5
+    }
+
+    class FarmDetailsDiffUtil : DiffUtil.ItemCallback<FarmDetailsItemWrapper>() {
+        override fun areItemsTheSame(oldItem: FarmDetailsItemWrapper, newItem: FarmDetailsItemWrapper): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: FarmDetailsItemWrapper, newItem: FarmDetailsItemWrapper): Boolean {
+            return oldItem == newItem
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when(viewType){
             1 -> DetailsHeaderViewHolder(ItemFarmDetailsHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             2 -> ImagesPagerViewHolder(ItemFarmDetailsImagesBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            3 -> OwnerDetailsViewHolder(ItemFarmDetailsOwnerDetailsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            3-> DetailsWeatherViewHolder(ItemFarmDetailsWeatherBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+            4 -> OwnerDetailsViewHolder(ItemFarmDetailsOwnerDetailsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             else -> ChartViewHolder(ItemAnalyticsBarChartBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
+            is DetailsWeatherViewHolder -> holder.bind(position)
             is DetailsHeaderViewHolder -> holder.bind(position)
             is ImagesPagerViewHolder -> holder.bind(position)
             is OwnerDetailsViewHolder -> holder.bind(position)
@@ -53,16 +72,14 @@ class FarmDetailsRecyclerAdapter (
         }
     }
 
-    override fun getItemCount(): Int {
-        return detailsList.size
-    }
 
     override fun getItemViewType(position: Int): Int {
-        return when(detailsList[position].itemType){
+        return when(currentList[position].itemType){
             FarmDetailsItemWrapper.ItemType.HEADER -> HEADER
             FarmDetailsItemWrapper.ItemType.IMAGE_PAGER -> IMAGE_PAGER
             FarmDetailsItemWrapper.ItemType.OWNER_DETAILS -> OWNER_DETAILS
             FarmDetailsItemWrapper.ItemType.BEEHIVE_NUMBER_CHART -> BEEHIVE_NUMBER_CHART
+            FarmDetailsItemWrapper.ItemType.WEATHER_INFO -> WEATHER
         }
     }
 
@@ -70,7 +87,7 @@ class FarmDetailsRecyclerAdapter (
         ViewHolder(binding.root) {
 
         fun bind(pos :Int) {
-            val header = detailsList[pos].header
+            val header = currentList[pos].header
 
             header?.let {details->
                 binding.apply {
@@ -97,7 +114,7 @@ class FarmDetailsRecyclerAdapter (
         private lateinit var indicator: CircleIndicator3
 
         fun bind(pos :Int) {
-            val images = detailsList[pos].imagesPager
+            val images = currentList[pos].imagesPager
 
             images?.let {
                 imagesPager2Adapter = ImagesPager2Adapter(images)
@@ -114,13 +131,35 @@ class FarmDetailsRecyclerAdapter (
         }
 
     }
+    inner class DetailsWeatherViewHolder(private val binding: ItemFarmDetailsWeatherBinding) :
+        ViewHolder(binding.root) {
+
+        @SuppressLint("SetTextI18n")
+        fun bind(pos :Int) {
+
+            val weatherIconAnim = binding.weatherIcon
+            val rotateAnimation = AnimationUtils.loadAnimation(itemView.context, R.anim.rotation_360)
+            val weatherInfo = currentList[pos].weatherInfoUI
+            weatherInfo?.let { weather->
+                binding.apply {
+                    weatherIconAnim.startAnimation(rotateAnimation)
+                    weatherIcon.loadImage(weather.weather[0].image)
+                    tVTemp.text = "${weather.main.temp}C"
+                    tVHumidity.text = "${weather.main.humidity}%"
+                    tVFeelsTemp.text = "${weather.main.feelsLike}C"
+                    tvWeather.text = weather.weather[0].main
+                }
+            }
+        }
+
+    }
 
     inner class OwnerDetailsViewHolder(private val binding: ItemFarmDetailsOwnerDetailsBinding) :
         ViewHolder(binding.root) {
 
         fun bind(pos :Int) {
 
-            val ownerDetails = detailsList[pos].ownerDetailsUi
+            val ownerDetails = currentList[pos].ownerDetailsUi
 
             ownerDetails?.let {owner->
 
@@ -174,7 +213,7 @@ class FarmDetailsRecyclerAdapter (
 
         fun bind(pos :Int) {
 
-            val chartData = detailsList[pos].beehiveNumberChartUI
+            val chartData = currentList[pos].beehiveNumberChartUI
 
             chartData?.let {
 

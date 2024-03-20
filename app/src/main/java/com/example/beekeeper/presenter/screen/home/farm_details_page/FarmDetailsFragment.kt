@@ -2,6 +2,7 @@ package com.example.beekeeper.presenter.screen.home.farm_details_page
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -18,7 +19,6 @@ import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.home.FarmDetailsEvent
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.model.home.LocationUi
-import com.example.beekeeper.presenter.model.home.details.FarmDetailsItemWrapper
 import com.example.beekeeper.presenter.state.home.FarmDetailsStateUi
 import com.example.beekeeper.presenter.utils.SwipeGestureDetector
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +37,7 @@ class FarmDetailsFragment : BaseFragment<FragmentFarmDetailsBinding>(FragmentFar
     override fun bind() {
         val farmId = args.farmId
         viewModel.onEvent(FarmDetailsEvent.LoadFarmDetailsById(farmId))
+        bindDetailsRecycler()
     }
 
     override fun bindObservers() {
@@ -67,12 +68,13 @@ class FarmDetailsFragment : BaseFragment<FragmentFarmDetailsBinding>(FragmentFar
         showOrHideProgressBar(state.isLoading)
 
         state.farmDetails?.let {
-            bindDetailsRecycler(it)
+            Log.d("tag12345"," list -> $it")
+            detailsRecyclerAdapter.submitList(it)
         }
     }
 
-    private fun bindDetailsRecycler(list: List<FarmDetailsItemWrapper>){
-        detailsRecyclerAdapter = FarmDetailsRecyclerAdapter(detailsList = list, listener = this)
+    private fun bindDetailsRecycler(){
+        detailsRecyclerAdapter = FarmDetailsRecyclerAdapter(listener = this)
         binding.detailsRecycler.adapter = detailsRecyclerAdapter
     }
 
