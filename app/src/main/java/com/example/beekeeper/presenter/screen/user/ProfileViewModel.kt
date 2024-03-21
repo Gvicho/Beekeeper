@@ -1,28 +1,27 @@
 package com.example.beekeeper.presenter.screen.user
 
-import android.util.Log.d
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.beekeeper.data.repository.UserRepositoryImpl
 import com.example.beekeeper.domain.common.Resource
-import com.example.beekeeper.domain.model.user.UserData
-import com.example.beekeeper.domain.repository.user.UserRepository
 import com.example.beekeeper.domain.usecase.credentials.ReadEmailUseCase
 import com.example.beekeeper.domain.usecase.credentials.ReadSessionTokenUseCase
 import com.example.beekeeper.domain.usecase.user.ReadUserDataUseCase
+import com.example.beekeeper.domain.usecase.user.ValidateNameAndLastNameUseCase
 import com.example.beekeeper.domain.usecase.user.WriteUserDataUseCase
 import com.example.beekeeper.presenter.event.user.ProfilePageEvents
+import com.example.beekeeper.presenter.mappers.user.toDomain
 import com.example.beekeeper.presenter.mappers.user.toPresentation
+import com.example.beekeeper.presenter.model.user.UserCredentials
 import com.example.beekeeper.presenter.model.user.UserDataUI
 import com.example.beekeeper.presenter.state.user.ProfilePageState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,83 +30,126 @@ class ProfileViewModel @Inject constructor(
     private val readEmailUseCase: ReadEmailUseCase,
     private val writeUserDataUseCase: WriteUserDataUseCase,
     private val readUserDataUseCase: ReadUserDataUseCase,
-    private val readTokenUseCase: ReadSessionTokenUseCase
+    private val readTokenUseCase: ReadSessionTokenUseCase,
+    private val validateNameAndLastNameUseCase: ValidateNameAndLastNameUseCase
 ) : ViewModel() {
 
-    private val _emailFlow = MutableStateFlow("")
-    val emailFlow: StateFlow<String> = _emailFlow.asStateFlow()
-
-    private val _tokenFlow = MutableStateFlow("")
-    val tokenFlow: StateFlow<String> = _tokenFlow.asStateFlow()
+    private val _userCredentialsFlow = MutableStateFlow(UserCredentials())
+    val userCredentialsFlow: StateFlow<UserCredentials> = _userCredentialsFlow.asStateFlow()
 
 
-    private val _userDataFlow = MutableSharedFlow<Resource<UserDataUI>>()
-    val userDataFlow: SharedFlow<Resource<UserDataUI>> = _userDataFlow.asSharedFlow()
+    private val _userDataFlow = MutableStateFlow(ProfilePageState())
+    val userDataFlow  = _userDataFlow.asStateFlow()
 
 
     fun onEvent(event: ProfilePageEvents) {
         when (event) {
-            ProfilePageEvents.ReadUserEmailFromDataStore -> readEmail()
-            is ProfilePageEvents.RequestCurrentProfileInfo -> TODO()
-            ProfilePageEvents.ResetErrorMessageToNull -> TODO()
-            is ProfilePageEvents.SaveNewProfileInfo -> TODO()
-        }
-    }
-
-    private fun readEmail() {
-        viewModelScope.launch {
-            readEmailUseCase.invoke().collect {
-                d("viewmodelEmail", it)
-                _emailFlow.emit(it)
+            is ProfilePageEvents.RequestCurrentProfileInfo -> getUserData(event.token)
+            ProfilePageEvents.ResetErrorMessageToNull -> updateErrorMessageToNull()
+            is ProfilePageEvents.SaveNewProfileInfo -> ifValidThenUpload(event.name,event.lastName)
+            ProfilePageEvents.ReadUserCredentials -> readCredentials()
+            ProfilePageEvents.UpdateUploadProfileInfoToNull -> updateUploadProfileInfoToNull()
+            is ProfilePageEvents.ImageSelected -> _userDataFlow.update {
+                Log.d("tag1234", "viewModel imageSelected tryieng to update state")
+                it.copy(userDataUI = it.userDataUI?.copy(image = event.image)?:UserDataUI(image = event.image))
             }
         }
     }
 
-    private fun readToken() {
+    private fun readCredentials() {
         viewModelScope.launch {
-            readTokenUseCase.invoke().collect {
-                _tokenFlow.emit(it)
+            val token = async {
+                readTokenUseCase().first() // Wait for the first emission of the flow
+            }
+            val email = async {
+                readEmailUseCase().first()  // Wait for the first emission of the flow
+            }
+
+            _userCredentialsFlow.update {
+                it.copy(token = token.await(), mail = email.await())
             }
         }
     }
 
-    fun writeUserData(image: String) {
-        viewModelScope.launch {
-            d("FunctionCalled", "ASDFASDF")
-            writeUserDataUseCase.invoke(
-                userData = UserData(
-                    email = "clarence.riddle@example.com",
-                    name = "Gonzalo",
-                    lastName = "Jordan",
-                    image = image,
-                    token = "fdas312fasd211fdsa"
-                )
-            ).collect {
-
-            }
-
-        }
-
-
-
-
-    }
-    //tokeni unda gadaecemodes readUserData funqcias./
-     fun getUserData() {
-        viewModelScope.launch {
-            readUserDataUseCase.invoke("fdas312fasd211fdsa").collect() {
-                when (it) {
-                    is Resource.Loading -> _userDataFlow.emit(Resource.Loading())
-                    is Resource.Success -> {
-                        _userDataFlow.emit(
-                            Resource.Success(it.responseData.toPresentation())
-                        )
-                    }
-                    is Resource.Failed -> _userDataFlow.emit(
-                        Resource.Failed(it.message)
+    private fun ifValidThenUpload(name:String, lastName:String){
+        if (validateNameAndLastNameUseCase(name,lastName)){
+            _userCredentialsFlow.value.token?.let {token->
+                writeUserData(
+                    userDataUI = UserDataUI(
+                        token = token,
+                        email = _userCredentialsFlow.value.mail?:"",
+                        name = name,
+                        lastName = lastName,
+                        image = _userDataFlow.value.userDataUI?.image
                     )
+                )
+            }
+
+        }
+    }
+
+    private fun writeUserData(userDataUI: UserDataUI) {
+        viewModelScope.launch {
+            writeUserDataUseCase.invoke(
+                userData = userDataUI.toDomain()
+            ).collect { result->
+                when (result) {
+                    is Resource.Loading -> {
+                        _userDataFlow.update {
+                            it.copy(isLoading = true)
+                        }
+                    }
+                    is Resource.Success -> {
+                        _userDataFlow.update {
+                            it.copy(isLoading = false, profileInfoSaved = Unit)
+                        }
+                    }
+                    is Resource.Failed -> {
+                        _userDataFlow.update {
+                            it.copy(isLoading = false, errorMessage = result.message)
+                        }
+                    }
                 }
             }
+        }
+
+
+
+
+    }
+     private fun getUserData(token:String) {
+        viewModelScope.launch {
+            readUserDataUseCase(token).collect {result->
+                when (result) {
+                    is Resource.Loading -> {
+                        _userDataFlow.update {
+                            it.copy(isLoading = true)
+                        }
+                    }
+                    is Resource.Success -> {
+                        _userDataFlow.update {
+                            it.copy(isLoading = false, userDataUI = result.responseData.toPresentation())
+                        }
+                    }
+                    is Resource.Failed -> {
+                        _userDataFlow.update {
+                            it.copy(isLoading = false, errorMessage = result.message)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateErrorMessageToNull(){
+        _userDataFlow.update {
+            it.copy(errorMessage = null)
+        }
+    }
+
+    private fun updateUploadProfileInfoToNull(){
+        _userDataFlow.update {
+            it.copy(profileInfoSaved = null)
         }
     }
 }

@@ -1,10 +1,10 @@
 package com.example.beekeeper.presenter.event.user
 
-import com.example.beekeeper.presenter.model.user.UserDataUI
-
 sealed class ProfilePageEvents {
     data object ResetErrorMessageToNull:ProfilePageEvents()
-    data class RequestCurrentProfileInfo(val email:String): ProfilePageEvents()
-    data class SaveNewProfileInfo(val userData: UserDataUI):ProfilePageEvents()
-    data object ReadUserEmailFromDataStore:ProfilePageEvents()
+    data object UpdateUploadProfileInfoToNull:ProfilePageEvents()
+    data class RequestCurrentProfileInfo(val token:String): ProfilePageEvents()
+    data class ImageSelected(val image:String): ProfilePageEvents()
+    data class SaveNewProfileInfo(val name:String,val lastName:String):ProfilePageEvents()
+    data object ReadUserCredentials:ProfilePageEvents()
 }

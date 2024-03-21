@@ -16,10 +16,11 @@
         android:layout_marginBottom="10dp">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:id="@+id/ivProfile"
-            android:background="@color/grey_transparent"/>
+            android:background="@color/grey_transparent"
+            android:scaleType="centerCrop"/>
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/changeProfileImageButton"
@@ -41,14 +42,6 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:layout_marginBottom="10dp"/>
-
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/etUsername"
-        android:textColor="@color/black"
-        android:hint="@string/username"/>
 
     <androidx.appcompat.widget.AppCompatEditText
         android:layout_width="match_parent"
@@ -72,6 +65,14 @@
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="20dp"
         android:text="Save"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:visibility="gone" />
 
 
 
