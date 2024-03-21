@@ -6,11 +6,14 @@ sealed class AddReportPageEvents {
 
     data class UploadReport(
         val desc: String,
-        val damageLevel: Int,
-        val uris: List<Uri>
+        val damageLevel: Int
     ):AddReportPageEvents()
 
-    data class GetDescription(val images: List<Uri>):AddReportPageEvents()
+    data class AddImagesToList(val images:List<Uri>):AddReportPageEvents()
+
+    data class RemoveImageFromList(val uri:Uri):AddReportPageEvents()
+
+    data object GetDescription:AddReportPageEvents()
     data object ResetErrorMessageOfUploadToNull:AddReportPageEvents()
     data object ResetErrorMessageOfDescriptionToNull:AddReportPageEvents()
 }

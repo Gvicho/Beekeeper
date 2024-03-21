@@ -1,14 +1,9 @@
 package com.example.beekeeper.presenter.screen.damaged_beehives.add_report
 
-import android.Manifest
 import android.net.Uri
-import android.util.Log
-import android.util.Log.d
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -30,16 +25,30 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AddReportFragment :
-    BaseFragment<FragmentAddReportBinding>(FragmentAddReportBinding::inflate) {
+    BaseFragment<FragmentAddReportBinding>(FragmentAddReportBinding::inflate) ,
+    DamagePicturesRecyclerAdapter.ImagesRemoveListener {
 
     private val viewModel: AddReportViewModel by viewModels()
     private lateinit var gestureDetector: GestureDetector
     private lateinit var damagePicturesAdapter: DamagePicturesRecyclerAdapter
 
-    private var uriList = mutableListOf<Uri>()
-
 
     override fun bindObservers() {
+        bindReportStateObserver()
+        bindImagesListObserver()
+    }
+
+    private fun bindImagesListObserver(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.imagesList.collect {
+                    damagePicturesAdapter.submitList(it.images)
+                }
+            }
+        }
+    }
+
+    private fun bindReportStateObserver(){
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.reportUIState.collect {
@@ -85,13 +94,12 @@ class AddReportFragment :
         binding.btnUpload.setOnClickListener {
             viewModel.onEvent(AddReportPageEvents.UploadReport(
                 desc = binding.etDescription.text.toString(),
-                damageLevel = binding.sbDamageLevel.progress,
-                uriList
+                damageLevel = binding.sbDamageLevel.progress
             ))
 
         }
         binding.btnGenerateDesc.setOnClickListener {
-            viewModel.onEvent(AddReportPageEvents.GetDescription(uriList))
+            viewModel.onEvent(AddReportPageEvents.GetDescription)
             bindGeneratedDesc()
         }
 
@@ -100,7 +108,7 @@ class AddReportFragment :
 
 
     private fun initRecycler() {
-        damagePicturesAdapter = DamagePicturesRecyclerAdapter()
+        damagePicturesAdapter = DamagePicturesRecyclerAdapter(this)
         binding.apply {
             uploadedPicturesRecycler.adapter = damagePicturesAdapter
             uploadedPicturesRecycler.layoutManager =
@@ -167,20 +175,18 @@ class AddReportFragment :
         setFragmentResultListener("media") { _, bundle ->
             val images = bundle.getStringArray("images")
             images?.let {
+                val newImages = mutableListOf<Uri>()
                 for (each in images){
-                    d("fsadfafas", each.toString())
-                    uriList.add(each.toUri())
+                    newImages.add(each.toUri())
                 }
-
-                damagePicturesAdapter.submitList(uriList)
-//                damagePicturesAdapter.notifyDataSetChanged()
+                viewModel.onEvent(AddReportPageEvents.AddImagesToList(newImages))
             }
-
-
-
-
         }
 
+    }
+
+    override fun onRemoveImage(uri: Uri) {
+        viewModel.onEvent(AddReportPageEvents.RemoveImageFromList(uri))
     }
 
 

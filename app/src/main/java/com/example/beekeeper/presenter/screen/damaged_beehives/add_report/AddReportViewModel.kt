@@ -11,6 +11,7 @@ import com.example.beekeeper.presenter.mappers.toDomain
 import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
 import com.example.beekeeper.presenter.state.damage_report.DamageDescriptionState
 import com.example.beekeeper.presenter.state.damage_report.DamageReportState
+import com.example.beekeeper.presenter.state.damage_report.imagesList.ImagesListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,16 +35,33 @@ class AddReportViewModel @Inject constructor(
     private val _descFlow = MutableStateFlow(DamageDescriptionState())
     val descFlow: StateFlow<DamageDescriptionState> = _descFlow.asStateFlow()
 
+    private val _imagesList = MutableStateFlow(ImagesListState())
+    val imagesList = _imagesList.asStateFlow()
+
     fun onEvent(event:AddReportPageEvents){
         when(event){
-            is AddReportPageEvents.GetDescription -> getDescription(event.images)
+            AddReportPageEvents.GetDescription -> getDescription()
             AddReportPageEvents.ResetErrorMessageOfDescriptionToNull -> resetErrorMessageOfDescriptionStateToNull()
             AddReportPageEvents.ResetErrorMessageOfUploadToNull -> resetErrorMessageOfReportStateToNull()
-            is AddReportPageEvents.UploadReport -> uploadReport(desc = event.desc , damageLevel = event.damageLevel, uris = event.uris)
+            is AddReportPageEvents.UploadReport -> uploadReport(desc = event.desc , damageLevel = event.damageLevel)
+            is AddReportPageEvents.AddImagesToList -> addImagesToList(event.images)
+            is AddReportPageEvents.RemoveImageFromList -> removeImageFromList(event.uri)
         }
     }
 
-    private fun uploadReport(desc: String, damageLevel: Int, uris: List<Uri>) {
+    private fun addImagesToList(newImages: List<Uri>) {
+        _imagesList.update {
+            it.copy(images = it.images.plus(newImages))
+        }
+    }
+
+    private fun removeImageFromList(uri: Uri) {
+        _imagesList.update {imagesList->
+            imagesList.copy(images = imagesList.images.filter { it != uri })
+        }
+    }
+
+    private fun uploadReport(desc: String, damageLevel: Int) {
         viewModelScope.launch {
             uploadReportUseCase(
                 DamageReportUI(
@@ -52,7 +70,7 @@ class AddReportViewModel @Inject constructor(
                     damageLevelIndicator = damageLevel,
                     dateUploaded = LocalDateTime.now()
                         .format(DateTimeFormatter.ofPattern("dd MMMM, yyyy")),
-                    imageUris = uris
+                    imageUris = _imagesList.value.images
                 ).toDomain()
             ).collect { result ->
                 when (result) {
@@ -72,9 +90,9 @@ class AddReportViewModel @Inject constructor(
         }
     }
 
-    private fun getDescription(images: List<Uri>) {
+    private fun getDescription() {
         viewModelScope.launch {
-            getDamageDescUseCase.invoke(images).collect {result->
+            getDamageDescUseCase.invoke(_imagesList.value.images).collect {result->
                 when (result) {
                     is Resource.Loading -> _descFlow.update { it.copy(isLoading = true) }
                     is Resource.Success -> {

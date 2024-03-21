@@ -7,10 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.beekeeper.databinding.DamagePicturesRecyclerItemBinding
-import com.example.beekeeper.databinding.ReportRecyclerItemBinding
 import com.example.beekeeper.presenter.extension.loadImage
 
-class DamagePicturesRecyclerAdapter :
+class DamagePicturesRecyclerAdapter( private val listener:ImagesRemoveListener) :
     ListAdapter<Uri, DamagePicturesRecyclerAdapter.DamagePicturesViewHolder>(DamagePicturesDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = DamagePicturesViewHolder(
@@ -35,12 +34,12 @@ class DamagePicturesRecyclerAdapter :
             binding.apply {
                 ivDamage.loadImage(model.toString())
             }
-            listeners()
+            listeners(model)
         }
 
-        private fun listeners() {
-            binding.root.setOnClickListener {
-
+        private fun listeners(uri:Uri) {
+            binding.removeBtn.setOnClickListener {
+                listener.onRemoveImage(uri)
             }
         }
 
@@ -54,5 +53,10 @@ class DamagePicturesRecyclerAdapter :
         override fun areContentsTheSame(oldItem: Uri, newItem: Uri): Boolean {
             return oldItem == newItem
         }
+    }
+
+
+    interface ImagesRemoveListener{
+        fun onRemoveImage(uri:Uri)
     }
 }
