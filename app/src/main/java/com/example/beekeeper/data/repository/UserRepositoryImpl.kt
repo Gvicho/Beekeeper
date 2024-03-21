@@ -15,8 +15,9 @@ import kotlinx.coroutines.tasks.await
 
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(private val database: FirebaseDatabase) :
-    UserRepository {
+class UserRepositoryImpl @Inject constructor(
+    private val database: FirebaseDatabase
+) : UserRepository {
     override fun saveUserData(userData: UserData): Flow<Resource<Unit>> = flow {
         try {
             emit(Resource.Loading())
