@@ -1,7 +1,9 @@
 package com.example.beekeeper.data.repository
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
+import android.util.Log.d
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
@@ -15,6 +17,7 @@ import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.model.damaged_beehives.DamageReport
 import com.example.beekeeper.domain.repository.damage_report.ReportRepository
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -25,49 +28,31 @@ import javax.inject.Inject
 
 class ReportRepositoryImpl @Inject constructor(
     private val context: Context,
-    private val database: FirebaseDatabase
+    private val database: FirebaseDatabase,
+    private val storage: FirebaseStorage
 ) : ReportRepository {
 
-    override fun uploadReport(damageReport: DamageReport): Flow<Resource<Unit>> {
-        return flow {
+    override fun uploadReport(damageReport: DamageReport): Flow<Resource<Unit>> = flow {
+
+        try {
+
             emit(Resource.Loading())
-
-
-            val damageReportData = withContext(Dispatchers.Default) {
-                damageReport.toData()
+            val reportDto = damageReport.toData()
+            val id = reportDto.id
+            val imageUrls = damageReport.imageUris.map {uri->
+                uploadImageAndGetUrl(uri)
             }
-
-            val stringArray: Array<String> = withContext(Dispatchers.Default) {
-                damageReportData.imageUris.toTypedArray()
-            }
-
-            val inputData = workDataOf(
-                "ReportImages" to stringArray,
-                "ReportDamageDescription" to damageReportData.damageDescription,
-                "ReportId" to damageReportData.id,
-                "ReportDateUploaded" to damageReportData.dateUploaded,
-                "ReportDamageLevelIndicator" to damageReportData.damageLevelIndicator
-            )
-
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.UNMETERED) // This ensures the device is on an unmetered network, typically Wi-Fi
-                .build()
-
-            Log.d("tag123", "middle of upload")
-
-            val uploadWorkRequest = OneTimeWorkRequestBuilder<ReportUploaderWorker>()
-                .setInputData(inputData)
-                .setConstraints(constraints)
-                .addTag("Report")
-                .build()
-
-            WorkManager.getInstance(context).enqueue(uploadWorkRequest)
-
+           reportDto.imageUris = imageUrls
+            database.reference.child("reports").child(id.toString()).setValue(reportDto).await()
             emit(Resource.Success(Unit))
-            Log.d("tag123", "finish of upload")
 
+        }catch (e: Exception){
+            d("errorUploadingReportsToDatabase", e.toString())
+            emit(Resource.Failed("Failed to upload"))
         }
+
     }
+
 
     override fun getAllDamageReports(): Flow<Resource<List<DamageReport>>> = flow {
         try {
@@ -75,9 +60,10 @@ class ReportRepositoryImpl @Inject constructor(
 
             val snapshot = database.reference.child("damageReports").get().await()
             val reports = snapshot.children.mapNotNull { it.getValue(DamageReportDto::class.java) }
-            Log.d("DamageReports","repository- $reports")
+            Log.d("DamageReports", "repository- $reports")
             emit(Resource.Success(reports.map {
-                it.toDomain() }))
+                it.toDomain()
+            }))
 
         } catch (e: Exception) {
             emit(Resource.Failed(e.message ?: "Failed to fetch damage reports"))
@@ -90,7 +76,8 @@ class ReportRepositoryImpl @Inject constructor(
         try {
             emit(Resource.Loading())
 
-            val snapshot = database.reference.child("damageReports").child(reportId.toString()).get().await()
+            val snapshot =
+                database.reference.child("damageReports").child(reportId.toString()).get().await()
 
             val reportDto = snapshot.getValue(DamageReportDto::class.java)
             val report = reportDto?.toDomain()
@@ -105,4 +92,12 @@ class ReportRepositoryImpl @Inject constructor(
             emit(Resource.Failed(e.message ?: "Failed to fetch damage report"))
         }
     }.flowOn(Dispatchers.IO)
+
+
+    private suspend fun uploadImageAndGetUrl(imageUri: Uri): String = withContext(Dispatchers.IO) {
+        val storageRef = storage.reference.child("images/${imageUri.lastPathSegment}")
+        val uploadTask = storageRef.putFile(imageUri).await()
+        val downloadUrl = uploadTask.storage.downloadUrl.await()
+        downloadUrl.toString()
+    }
 }

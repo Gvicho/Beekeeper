@@ -7,6 +7,8 @@ import com.example.beekeeper.data.source.remote.bluetooth.conroller.BluetoothCon
 import com.example.beekeeper.data.source.remote.internet.service.FarmsService
 import com.example.beekeeper.data.source.remote.weather.service.WeatherService
 import com.example.beekeeper.domain.controller.bluetooth.BluetoothController
+import com.example.beekeeper.domain.repository.user.UserRepository
+import com.example.beekeeper.domain.usecase.user.WriteUserDataUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -114,5 +116,13 @@ object AppModule { //stuff that are here should be singleton
     fun provideFirebaseDatabase(): FirebaseDatabase {
         return FirebaseDatabase.getInstance()
     }
+
+
+    @Singleton
+    @Provides
+    fun provideUseCase(repository: UserRepository): WriteUserDataUseCase {
+        return WriteUserDataUseCase(userRepository = repository)
+    }
+
 
 }

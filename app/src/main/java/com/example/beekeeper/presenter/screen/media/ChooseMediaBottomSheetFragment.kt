@@ -117,6 +117,7 @@ class ChooseMediaBottomSheetFragment :
         val result = bundleOf(
             "option" to option
         )
+//        d("IMAGERURL", option)
         setFragmentResult("media", result)
         dismiss()
     }

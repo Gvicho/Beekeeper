@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/damagedBeehivesFragment">
+    app:startDestination="@id/profileFragment">
 
 
 
@@ -207,4 +207,9 @@
         android:name="com.example.beekeeper.presenter.screen.media.CameraBottomSheetFragment"
         android:label="fragment_camera_bottom_sheet"
         tools:layout="@layout/fragment_camera_bottom_sheet" />
+    <fragment
+        android:id="@+id/suggestionsFragment"
+        android:name="com.example.beekeeper.presenter.screen.suggestions.SuggestionsFragment"
+        android:label="fragment_suggestions"
+        tools:layout="@layout/fragment_suggestions" />
 </navigation>

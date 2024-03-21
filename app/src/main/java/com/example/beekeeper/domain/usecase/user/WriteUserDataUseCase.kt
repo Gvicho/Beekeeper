@@ -11,6 +11,6 @@ class WriteUserDataUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
 
-    operator fun invoke(userData: UserData): Flow<Resource<Unit>>  =
+    operator suspend fun invoke(userData: UserData): Flow<Resource<Unit>>  =
          userRepository.saveUserData(userData)
 }

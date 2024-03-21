@@ -8,8 +8,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.example.beekeeper.R
+import com.example.beekeeper.UploadDataWorkManager
 import com.example.beekeeper.databinding.FragmentProfileBinding
+import com.example.beekeeper.domain.model.user.UserData
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.user.ProfilePageEvents
 import com.example.beekeeper.presenter.extension.loadImage
@@ -19,12 +26,14 @@ import com.example.beekeeper.presenter.model.user.UserDataUI
 import com.example.beekeeper.presenter.state.user.ProfilePageState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
 
     private val viewModel: ProfileViewModel by viewModels()
+
 
     override fun setUp() {
         viewModel.onEvent(ProfilePageEvents.ReadUserCredentials)
@@ -152,6 +161,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         binding.root.showSnackBar(getString(R.string.upload_was_successful))
         viewModel.onEvent(ProfilePageEvents.UpdateUploadProfileInfoToNull)
     }
+
+
 
 }
 

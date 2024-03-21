@@ -5,5 +5,5 @@ data class DamageReportDto(
     val damageDescription: String = "",
     val damageLevelIndicator: Int = 0,
     val dateUploaded: String = "",
-    val imageUris: List<String> = listOf()
+    var imageUris: List<String> = listOf()
 )
