@@ -37,7 +37,7 @@ android {
             buildConfigField("String","WEATHER_API_BASE_URL","\"https://rameRealuri\"")
         }
         debug {
-            buildConfigField("String","POSTMAN_BASE_URL","\"https://6ebae387-dddf-4cec-9159-fdf3e93dc6dd.mock.pstmn.io/\"")
+            buildConfigField("String","POSTMAN_BASE_URL","\"https://c27a415e-6699-4638-bcd2-af255e01a888.mock.pstmn.io\"")
             buildConfigField("String","WEATHER_API_BASE_URL","\"https://api.openweathermap.org/data/2.5/\"")
         }
     }
@@ -137,13 +137,13 @@ dependencies {
 
     implementation("com.google.ai.client.generativeai:generativeai:0.2.1")
 
-    implementation ("androidx.camera:camera-core:1.2.2")
-    implementation ("androidx.camera:camera-camera2:1.2.2")
-    implementation ("androidx.camera:camera-lifecycle:1.2.2")
-    implementation ("androidx.camera:camera-video:1.2.2")
+    implementation ("androidx.camera:camera-core:1.3.2")
+    implementation ("androidx.camera:camera-camera2:1.3.2")
+    implementation ("androidx.camera:camera-lifecycle:1.3.2")
+    implementation ("androidx.camera:camera-video:1.3.2")
 
-    implementation ("androidx.camera:camera-view:1.2.2")
-    implementation ("androidx.camera:camera-extensions:1.2.2")
+    implementation ("androidx.camera:camera-view:1.3.2")
+    implementation ("androidx.camera:camera-extensions:1.3.2")
     implementation ("androidx.activity:activity-ktx:1.8.2")
 
 
