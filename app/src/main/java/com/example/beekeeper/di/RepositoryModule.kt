@@ -29,6 +29,7 @@ import com.example.beekeeper.domain.repository.weather.WeatherRepository
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -129,9 +130,10 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideUserRepository(
-        database: FirebaseDatabase
+        database: FirebaseDatabase,
+        storage: FirebaseStorage
     ): UserRepository {
-        return UserRepositoryImpl(database)
+        return UserRepositoryImpl(database,storage)
 
 
     }

@@ -7,7 +7,8 @@ fun UserDataUI.toDomain() = UserData(
     email = email,
     name = name,
     lastName = lastName,
-    image = image
+    image = image,
+    token =  token
 )
 
 
@@ -15,5 +16,6 @@ fun UserData.toPresentation() = UserDataUI(
     email = email,
     name = name,
     lastName = lastName,
-    image = image
+    image = image,
+    token = token
 )
