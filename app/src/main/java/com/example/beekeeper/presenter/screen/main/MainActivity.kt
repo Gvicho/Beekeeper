@@ -103,6 +103,10 @@ class MainActivity : AppCompatActivity() {
                 val navController = findNavController(R.id.nav_host_fragment_activity_main)
                 navController.navigate(R.id.profileFragment)
             }
+            else if(it.type == Options.CHANGE_PASSWORD){
+                val navController = findNavController(R.id.nav_host_fragment_activity_main)
+                navController.navigate(R.id.changePasswordFragment)
+            }
 
         }
         binding.apply {
