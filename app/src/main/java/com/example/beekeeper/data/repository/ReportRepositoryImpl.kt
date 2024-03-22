@@ -48,7 +48,7 @@ class ReportRepositoryImpl @Inject constructor(
         try {
             emit(Resource.Loading())
 
-            val snapshot = database.reference.child("damageReports").get().await()
+            val snapshot = database.reference.child("reports").get().await()
             val reports = snapshot.children.mapNotNull { it.getValue(DamageReportDto::class.java) }
             emit(Resource.Success(reports.map {
                 it.toDomain()
@@ -66,7 +66,7 @@ class ReportRepositoryImpl @Inject constructor(
             emit(Resource.Loading())
 
             val snapshot =
-                database.reference.child("damageReports").child(reportId.toString()).get().await()
+                database.reference.child("reports").child(reportId.toString()).get().await()
 
             val reportDto = snapshot.getValue(DamageReportDto::class.java)
             val report = reportDto?.toDomain()
