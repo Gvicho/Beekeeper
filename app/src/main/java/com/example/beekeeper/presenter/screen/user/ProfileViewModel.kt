@@ -1,16 +1,20 @@
 package com.example.beekeeper.presenter.screen.user
 
-import android.util.Log
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
+import com.example.beekeeper.presenter.workers.user_profile.UploadUserDataWorker
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.credentials.ReadEmailUseCase
 import com.example.beekeeper.domain.usecase.credentials.ReadSessionTokenUseCase
 import com.example.beekeeper.domain.usecase.user.ReadUserDataUseCase
 import com.example.beekeeper.domain.usecase.user.ValidateNameAndLastNameUseCase
-import com.example.beekeeper.domain.usecase.user.WriteUserDataUseCase
 import com.example.beekeeper.presenter.event.user.ProfilePageEvents
-import com.example.beekeeper.presenter.mappers.user.toDomain
 import com.example.beekeeper.presenter.mappers.user.toPresentation
 import com.example.beekeeper.presenter.model.user.UserCredentials
 import com.example.beekeeper.presenter.model.user.UserDataUI
@@ -23,15 +27,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val readEmailUseCase: ReadEmailUseCase,
-    private val writeUserDataUseCase: WriteUserDataUseCase,
     private val readUserDataUseCase: ReadUserDataUseCase,
     private val readTokenUseCase: ReadSessionTokenUseCase,
-    private val validateNameAndLastNameUseCase: ValidateNameAndLastNameUseCase
+    private val validateNameAndLastNameUseCase: ValidateNameAndLastNameUseCase,
+    private val application: Application
 ) : ViewModel() {
 
     private val _userCredentialsFlow = MutableStateFlow(UserCredentials())
@@ -50,8 +55,7 @@ class ProfileViewModel @Inject constructor(
             ProfilePageEvents.ReadUserCredentials -> readCredentials()
             ProfilePageEvents.UpdateUploadProfileInfoToNull -> updateUploadProfileInfoToNull()
             is ProfilePageEvents.ImageSelected -> _userDataFlow.update {
-                Log.d("tag1234", "viewModel imageSelected tryieng to update state")
-                it.copy(userDataUI = it.userDataUI?.copy(image = event.image)?:UserDataUI(image = event.image))
+                it.copy(userDataUI = it.userDataUI?.copy(image = event.image)?: UserDataUI(image = event.image))
             }
         }
     }
@@ -89,32 +93,22 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun writeUserData(userDataUI: UserDataUI) {
-        viewModelScope.launch {
-            writeUserDataUseCase.invoke(
-                userData = userDataUI.toDomain()
-            ).collect { result->
-                when (result) {
-                    is Resource.Loading -> {
-                        _userDataFlow.update {
-                            it.copy(isLoading = true)
-                        }
-                    }
-                    is Resource.Success -> {
-                        _userDataFlow.update {
-                            it.copy(isLoading = false, profileInfoSaved = Unit)
-                        }
-                    }
-                    is Resource.Failed -> {
-                        _userDataFlow.update {
-                            it.copy(isLoading = false, errorMessage = result.message)
-                        }
-                    }
-                }
-            }
-        }
+        val data =
+            workDataOf(
+                "email" to userDataUI.email,
+                "name" to userDataUI.name,
+                "lastName" to userDataUI.lastName,
+                "image" to userDataUI.image,
+                "token" to userDataUI.token
+            )
 
+        val worker = OneTimeWorkRequestBuilder<UploadUserDataWorker>()
+            .setInputData(data)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
+            .build()
 
-
+        WorkManager.getInstance(application)
+            .enqueueUniqueWork("writeUser", ExistingWorkPolicy.KEEP, worker)
 
     }
      private fun getUserData(token:String) {
@@ -127,8 +121,9 @@ class ProfileViewModel @Inject constructor(
                         }
                     }
                     is Resource.Success -> {
+                        val profile = result.responseData.toPresentation()
                         _userDataFlow.update {
-                            it.copy(isLoading = false, userDataUI = result.responseData.toPresentation())
+                            it.copy(isLoading = false, userDataUI = profile)
                         }
                     }
                     is Resource.Failed -> {

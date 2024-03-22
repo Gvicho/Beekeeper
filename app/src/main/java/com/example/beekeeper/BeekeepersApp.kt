@@ -4,13 +4,14 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import androidx.work.Configuration
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.example.beekeeper.domain.usecase.damage_report.UploadReportUseCase
 import com.example.beekeeper.domain.usecase.user.WriteUserDataUseCase
+import com.example.beekeeper.presenter.workers.reports.UploadReportWorker
+import com.example.beekeeper.presenter.workers.user_profile.UploadUserDataWorker
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -28,18 +29,26 @@ class BeekeepersApp : Application(), Configuration.Provider {
     class CustomWorkerFactory @Inject constructor(
         private val writeUserDataUseCase: WriteUserDataUseCase,
         private val uploadReportUseCase: UploadReportUseCase
-    ) :
-        WorkerFactory() {
+    ) : WorkerFactory() {
         override fun createWorker(
             appContext: Context,
             workerClassName: String,
             workerParameters: WorkerParameters
-        ): ListenableWorker = UploadDataWorkManager(
-            appContext,
-            workerParameters,
-            writeUserDataUseCase,
-            uploadReportUseCase
-        )
+        ): ListenableWorker {
+            return when (workerClassName) {
+                UploadUserDataWorker::class.java.name -> UploadUserDataWorker(
+                    appContext,
+                    workerParameters,
+                    writeUserDataUseCase
+                )
+                UploadReportWorker::class.java.name -> UploadReportWorker(
+                    appContext,
+                    workerParameters,
+                    uploadReportUseCase
+                )
+                else -> throw IllegalArgumentException("Unknown worker class name: $workerClassName")
+            }
+        }
     }
 
 
@@ -49,17 +58,15 @@ class BeekeepersApp : Application(), Configuration.Provider {
     }
 
     private fun createChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "channel_analytics",
-                "analytics",
-                NotificationManager.IMPORTANCE_HIGH
-            )
+        val channel = NotificationChannel(
+            "channel_analytics",
+            "analytics",
+            NotificationManager.IMPORTANCE_HIGH
+        )
 
-            val manager =
-                applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(channel)
-        }
+        val manager =
+            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
     }
 }
 

@@ -30,7 +30,6 @@ import com.google.ai.client.generativeai.GenerativeModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.storageMetadata
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -71,11 +70,9 @@ object RepositoryModule {
     @Provides
     fun provideReportRepository(
         database: FirebaseDatabase,
-        storage: FirebaseStorage,
-        @ApplicationContext context: Context
+        storage: FirebaseStorage
     ): ReportRepository {
         return ReportRepositoryImpl(
-            context = context,
             database = database,
             storage = storage
         )

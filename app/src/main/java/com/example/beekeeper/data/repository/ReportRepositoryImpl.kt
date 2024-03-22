@@ -1,18 +1,10 @@
 package com.example.beekeeper.data.repository
 
-import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.util.Log.d
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.example.beekeeper.data.source.remote.internet.mappers.toData
 import com.example.beekeeper.data.source.remote.internet.mappers.toDomain
 import com.example.beekeeper.data.source.remote.internet.model.damaged_beehives.DamageReportDto
-import com.example.beekeeper.data.workers.ReportUploaderWorker
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.model.damaged_beehives.DamageReport
 import com.example.beekeeper.domain.repository.damage_report.ReportRepository
@@ -27,7 +19,6 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ReportRepositoryImpl @Inject constructor(
-    private val context: Context,
     private val database: FirebaseDatabase,
     private val storage: FirebaseStorage
 ) : ReportRepository {
@@ -35,7 +26,6 @@ class ReportRepositoryImpl @Inject constructor(
     override fun uploadReport(damageReport: DamageReport): Flow<Resource<Unit>> = flow {
 
         try {
-
             emit(Resource.Loading())
             val reportDto = damageReport.toData()
             val id = reportDto.id
@@ -60,7 +50,6 @@ class ReportRepositoryImpl @Inject constructor(
 
             val snapshot = database.reference.child("damageReports").get().await()
             val reports = snapshot.children.mapNotNull { it.getValue(DamageReportDto::class.java) }
-            Log.d("DamageReports", "repository- $reports")
             emit(Resource.Success(reports.map {
                 it.toDomain()
             }))

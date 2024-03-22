@@ -1,6 +1,7 @@
 package com.example.beekeeper.presenter.screen.damaged_beehives.add_report
 
 import android.net.Uri
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -12,6 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.example.beekeeper.databinding.FragmentAddReportBinding
 import com.example.beekeeper.presenter.adapter.damaged_beehives.DamagePicturesRecyclerAdapter
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
@@ -36,6 +39,40 @@ class AddReportFragment :
     override fun bindObservers() {
         bindReportStateObserver()
         bindImagesListObserver()
+        bindReportUploadWorkObserver()
+    }
+
+    private fun bindReportUploadWorkObserver(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                WorkManager.getInstance(requireContext()).getWorkInfosForUniqueWorkFlow("uploadReport")
+                    .collect { workInfoList ->
+                        workInfoList.forEach { workInfo ->
+                            when (workInfo.state) {
+                                WorkInfo.State.SUCCEEDED -> {
+                                    Log.d("UploadUserStatus", "Work succeeded")
+                                    binding.root.showSnackBar("Info Uploaded")
+                                    showOrHideProgressBar(false)
+                                }
+                                WorkInfo.State.FAILED -> {
+                                    Log.d("UploadUserStatus", "Work failed")
+                                    // Handle failure
+                                    val outputData = workInfo.outputData
+                                    val errorMessage = outputData.getString("error_message")?:"failed empty error"
+                                    binding.root.showSnackBar(errorMessage)
+                                    showOrHideProgressBar(false)
+                                }
+                                WorkInfo.State.RUNNING -> {
+                                    showOrHideProgressBar(true)
+                                }
+                                else -> {
+                                    // Handle other states if needed
+                                }
+                            }
+                        }
+                    }
+            }
+        }
     }
 
     private fun bindImagesListObserver(){

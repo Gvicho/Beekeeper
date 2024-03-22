@@ -1,14 +1,18 @@
 package com.example.beekeeper.presenter.screen.damaged_beehives.add_report
 
+import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
+import com.example.beekeeper.presenter.workers.reports.UploadReportWorker
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.assistant.GetDamageDescUseCase
-import com.example.beekeeper.domain.usecase.damage_report.UploadReportUseCase
 import com.example.beekeeper.presenter.event.damage_beehives.AddReportPageEvents
-import com.example.beekeeper.presenter.mappers.toDomain
-import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
 import com.example.beekeeper.presenter.state.damage_report.DamageDescriptionState
 import com.example.beekeeper.presenter.state.damage_report.DamageReportState
 import com.example.beekeeper.presenter.state.damage_report.imagesList.ImagesListState
@@ -20,13 +24,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
 class AddReportViewModel @Inject constructor(
-    private val uploadReportUseCase: UploadReportUseCase,
-    private val getDamageDescUseCase: GetDamageDescUseCase
+    private val getDamageDescUseCase: GetDamageDescUseCase,
+    private val application: Application
 ) : ViewModel() {
 
     private val _reportUIState = MutableStateFlow(DamageReportState())
@@ -61,33 +66,27 @@ class AddReportViewModel @Inject constructor(
         }
     }
 
-    private fun uploadReport(desc: String, damageLevel: Int) {
-        viewModelScope.launch {
-            uploadReportUseCase(
-                DamageReportUI(
-                    id = 10000 + Random(System.currentTimeMillis()).nextInt(900000),
-                    damageDescription = desc,
-                    damageLevelIndicator = damageLevel,
-                    dateUploaded = LocalDateTime.now()
-                        .format(DateTimeFormatter.ofPattern("dd MMMM, yyyy")),
-                    imageUris = _imagesList.value.images
-                ).toDomain()
-            ).collect { result ->
-                when (result) {
-                    is Resource.Failed -> {
-                        _reportUIState.update { it.copy(isLoading = false, errorMessage = result.message) }
-                    }
+    private fun uploadReport(desc: String, damageLevel: Int){
 
-                    is Resource.Loading -> {
-                        _reportUIState.update { it.copy(isLoading = true) }
-                    }
+        val urisStringArray = _imagesList.value.images.map { it.toString() }.toTypedArray()
+        val data =
+            workDataOf(
+                "id" to 10000 + Random(System.currentTimeMillis()).nextInt(900000),
+                "damageDescription" to desc,
+                "damageLevelIndicator" to damageLevel,
+                "dateUploaded" to LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("dd MMMM, yyyy")),
+                "uris" to urisStringArray
+            )
 
-                    is Resource.Success -> {
-                        _reportUIState.update { it.copy(isLoading = false, uploadSuccess = Unit) }
-                    }
-                }
-            }
-        }
+        val worker = OneTimeWorkRequestBuilder<UploadReportWorker>()
+            .setInputData(data)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
+            .build()
+
+        WorkManager.getInstance(application)
+            .enqueueUniqueWork("uploadReport", ExistingWorkPolicy.KEEP, worker)
+
     }
 
     private fun getDescription() {

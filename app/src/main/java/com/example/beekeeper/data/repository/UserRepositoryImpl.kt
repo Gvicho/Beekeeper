@@ -24,12 +24,13 @@ class UserRepositoryImpl @Inject constructor(
     private val storage: FirebaseStorage
 ) : UserRepository {
     override fun saveUserData(userData: UserData): Flow<Resource<Unit>> = flow {
+        d("RepoError", "in repository")
         try {
             emit(Resource.Loading())
             val token = userData.token
             val data = userData.toData()
             data.image?.let {
-                data.image = uploadImageAndGetUrl(it.toUri(), data.token)
+                data.image = if(it.isNotEmpty())uploadImageAndGetUrl(it.toUri(), data.token) else ""
             }
             database.reference.child("users").child(token).setValue(data).await()
             emit(Resource.Success(Unit))
@@ -55,7 +56,7 @@ class UserRepositoryImpl @Inject constructor(
             }
 
         } catch (e: Exception) {
-            d("RepoError", e.toString())
+            d("RepoError", "catch error ${e.toString()}")
             emit(Resource.Failed(e.message ?: "Failed to fetch user data"))
         }
     }.flowOn(Dispatchers.IO)

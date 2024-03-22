@@ -8,15 +8,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.work.BackoffPolicy
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.example.beekeeper.R
-import com.example.beekeeper.UploadDataWorkManager
 import com.example.beekeeper.databinding.FragmentProfileBinding
-import com.example.beekeeper.domain.model.user.UserData
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.user.ProfilePageEvents
 import com.example.beekeeper.presenter.extension.loadImage
@@ -26,7 +21,6 @@ import com.example.beekeeper.presenter.model.user.UserDataUI
 import com.example.beekeeper.presenter.state.user.ProfilePageState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -68,6 +62,41 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
     }
 
     override fun bindObservers() {
+        bindUserCredentialsObserver()
+        bindWorkerObservers()
+    }
+
+    private fun bindWorkerObservers(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                WorkManager.getInstance(requireContext()).getWorkInfosForUniqueWorkFlow("writeUser")
+                    .collect { workInfoList ->
+                        workInfoList.forEach { workInfo ->
+                            when (workInfo.state) {
+                                WorkInfo.State.SUCCEEDED -> {
+                                    binding.root.showSnackBar("Info Uploaded")
+                                    showOrHideProgressBar(false)
+                                }
+                                WorkInfo.State.FAILED -> {
+                                    val outputData = workInfo.outputData
+                                    val errorMessage = outputData.getString("error_message")?:"failed empty error"
+                                    binding.root.showSnackBar(errorMessage)
+                                    showOrHideProgressBar(false)
+                                }
+                                WorkInfo.State.RUNNING -> {
+                                    showOrHideProgressBar(true)
+                                }
+                                else -> {
+                                    // Handle other states if needed
+                                }
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun bindUserCredentialsObserver(){
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userCredentialsFlow.collect {
