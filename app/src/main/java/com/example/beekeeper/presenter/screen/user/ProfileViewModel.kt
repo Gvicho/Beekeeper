@@ -92,7 +92,7 @@ class ProfileViewModel @Inject constructor(
                         email = _userCredentialsFlow.value.mail?:"",
                         name = name,
                         lastName = lastName,
-                        image = _userDataFlow.value.userDataUI?.image
+                        image = _userDataFlow.value.userDataUI?.image?: ""
                     )
                 )
             }

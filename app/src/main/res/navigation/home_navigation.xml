@@ -207,4 +207,9 @@
         android:name="com.example.beekeeper.presenter.screen.media.CameraBottomSheetFragment"
         android:label="fragment_camera_bottom_sheet"
         tools:layout="@layout/fragment_camera_bottom_sheet" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.beekeeper.presenter.screen.authentication.change_password.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" />
 </navigation>

@@ -31,12 +31,13 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun recoverPassword(email: String): Flow<Resource<Boolean>> =
-        flow{
+        flow {
             try {
                 emit(Resource.Loading())
-                firebaseAuth.sendPasswordResetEmail(email).await()  // if there is error it will throw exception
+                firebaseAuth.sendPasswordResetEmail(email)
+                    .await()  // if there is error it will throw exception
                 emit(Resource.Success(true))
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 emit(Resource.Failed(e.message ?: "Failed with Exception!"))
                 d("exceptionInRepo", e.toString())
             }
@@ -44,6 +45,27 @@ class AuthRepositoryImpl @Inject constructor(
         }  // this doesn't validate if email is valid and there is any account by that email (FireBase Security issues)
 
 
+    override suspend fun updatePassword(
+        email: String,
+        currentPassword: String,
+        newPassword: String
+    ): Flow<Resource<Unit>> = flow {
+        try {
+            emit(Resource.Loading())
+
+            val signInResult =
+                firebaseAuth.signInWithEmailAndPassword(email, currentPassword).await()
+            if (signInResult.user != null) {
+
+                signInResult.user!!.updatePassword(newPassword).await()
+                emit(Resource.Success(Unit))
+            } else {
+                emit(Resource.Failed("Failed to sign in."))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Failed(e.message ?: "Failed with Exception!"))
+        }
+    }
 
 
 }
