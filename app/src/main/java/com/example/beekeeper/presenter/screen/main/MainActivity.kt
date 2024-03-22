@@ -1,6 +1,7 @@
 package com.example.beekeeper.presenter.screen.main
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log.d
@@ -25,10 +26,10 @@ import com.example.beekeeper.presenter.event.main.MainActivityEvents
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.model.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 
@@ -50,9 +51,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel.onEvent(MainActivityEvents.ReadDarkMode)
         observeDarkMode()
-        readPushToken()
+        observeNavigationEvents()
         requestPermission()
 
+        handleIntent(intent)
+        intent.extras?.clear()
+        intent = Intent()
 
 
         val navView: BottomNavigationView = binding.appBarMain.contentMain.navView
@@ -71,6 +75,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.shareOrGetFragment
             )
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
@@ -90,22 +95,35 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+        intent.extras?.clear()
+        setIntent(Intent())
+    }
+
     private fun initRecycler() {
         optionsAdapter = OptionsRecyclerAdapter{
-            if(it.type == Options.DARK_MODE){
-                val navController = findNavController(R.id.nav_host_fragment_activity_main)
-                navController.navigate(R.id.themesBottomSheetFragment)
-            }else if(it.type == Options.LOG_OUT){
-                viewModel.onEvent(MainActivityEvents.LogOutEvent)
-                binding.root.showSnackBar("LogOut")
-                navigateToLoginFragmentClearingBackStack()
-            }else if(it.type == Options.PROFILE){
-                val navController = findNavController(R.id.nav_host_fragment_activity_main)
-                navController.navigate(R.id.profileFragment)
-            }
-            else if(it.type == Options.CHANGE_PASSWORD){
-                val navController = findNavController(R.id.nav_host_fragment_activity_main)
-                navController.navigate(R.id.changePasswordFragment)
+            when (it.type) {
+                Options.DARK_MODE -> {
+                    val navController = findNavController(R.id.nav_host_fragment_activity_main)
+                    navController.navigate(R.id.themesBottomSheetFragment)
+                }
+                Options.LOG_OUT -> {
+                    viewModel.onEvent(MainActivityEvents.LogOutEvent)
+                    binding.root.showSnackBar("LogOut")
+                    navigateToLoginFragmentClearingBackStack()
+                }
+                Options.PROFILE -> {
+                    val navController = findNavController(R.id.nav_host_fragment_activity_main)
+                    navController.navigate(R.id.profileFragment)
+                }
+                Options.CHANGE_PASSWORD -> {
+                    val navController = findNavController(R.id.nav_host_fragment_activity_main)
+                    navController.navigate(R.id.changePasswordFragment)
+                }
+
+                Options.LANGUAGE -> TODO()
             }
 
         }
@@ -141,6 +159,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(FlowPreview::class)
+    private fun observeNavigationEvents(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.pageNavigationEvent
+                    .debounce(500) // Debounce for 1 second (1000 milliseconds)
+                    .collect { event ->
+                        handleNavigation(event)
+                    }
+            }
+        }
+    }
+
+    private fun handleNavigation(event: MainViewModel.MessagePageNavigationEvents){
+        when(event){
+            is MainViewModel.MessagePageNavigationEvents.NavigateToReportDetailsPage -> openReportDetailsFragment(reportId = event.reportId)
+        }
+    }
+
 
     private fun applyTheme(isDarkModeEnabled: Boolean) {
         if (isDarkModeEnabled) {
@@ -153,25 +190,30 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-    private fun readPushToken(){
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                d( "Fetching FCM registration token failed", task.exception.toString())
-                return@OnCompleteListener
-            }
-            // Get new FCM registration token
-            //val token = task.result
-
-        })
-    }
-
-
     private fun requestPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermission.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
         }
 
+    }
+
+    private fun handleIntent(intent: Intent) {
+        d("tag123","handling intent")
+        intent.extras?.let { bundle ->
+            if (bundle.containsKey("reportId")) {
+                val reportId = bundle.getInt("reportId", -1)
+                d("tag123","bundle contained key, it was  $reportId")
+                viewModel.onEvent(MainActivityEvents.IntentReceivedWithReportId(reportId))
+            }
+        }
+    }
+
+    private fun openReportDetailsFragment(reportId:Int){
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val bundle = Bundle().apply {
+            putInt("id", reportId) // Make sure the key matches the argument name in your nav graph
+        }
+        navController.navigate(R.id.damageReportDetailsFragment, bundle)
     }
 
 

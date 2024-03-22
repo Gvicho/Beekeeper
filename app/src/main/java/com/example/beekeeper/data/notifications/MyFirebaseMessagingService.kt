@@ -1,56 +1,46 @@
 package com.example.beekeeper.data.notifications
 
-import android.Manifest
+import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.util.Log.d
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.example.beekeeper.R
 import com.example.beekeeper.presenter.screen.main.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-class MyFirebaseMessagingService: FirebaseMessagingService() {
 
-    override fun onMessageReceived(message: RemoteMessage) {
-        super.onMessageReceived(message)
-        d("onMessageReceived", message.data.toString())
-        showNotification()
-    }
+class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-
+        // Handle token update
     }
 
-    private fun showNotification(){
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
+        val reportId = remoteMessage.data["reportId"]?.toInt() ?: -1  // Assuming the reportId is sent in the data payload
 
-        val intent = Intent(applicationContext, MainActivity::class.java).apply {
-            putExtra("openFragment", "SuggestionsFragment")
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        // Wrap the Intent in a PendingIntent
-        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        d("tag123","service ->  $reportId")
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.putExtra("reportId", reportId)
 
-        val notification = NotificationCompat.Builder(applicationContext, "channel_analytics")
-            .setContentTitle("Suggestions")
-            .setContentText("Check out daily recommendations and suggestions!")
-            .setContentIntent(pendingIntent)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
+
+        val notificationBuilder = NotificationCompat.Builder(this, "channel_analytics")
             .setColor(ContextCompat.getColor(applicationContext, R.color.honey))
             .setSmallIcon(R.drawable.ic_beekeper_65)
-            .build()
+            .setContentTitle(remoteMessage.notification?.title)
+            .setContentText(remoteMessage.notification?.body)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
 
-        if(ContextCompat.checkSelfPermission(
-                applicationContext,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED )
-            NotificationManagerCompat.from(applicationContext)
-                .notify(1, notification)
-
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(0, notificationBuilder.build())
     }
-
-
 }

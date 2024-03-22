@@ -50,6 +50,5 @@ class SplashViewModel@Inject constructor(
                 _darkModeFlow.emit(it)
             }
         }
-
     }
 }
