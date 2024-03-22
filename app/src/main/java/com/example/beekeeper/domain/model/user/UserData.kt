@@ -5,5 +5,5 @@ data class UserData(
     var email: String,
     var name: String,
     val lastName: String,
-    val image: String? = null
+    val image: String = ""
 )

@@ -5,5 +5,5 @@ data class UserDataUI(
     var email: String = "",
     var name: String = "",
     var lastName: String = "",
-    var image: String? = null
+    var image: String = ""
 )

@@ -24,13 +24,12 @@ class UserRepositoryImpl @Inject constructor(
     private val storage: FirebaseStorage
 ) : UserRepository {
     override fun saveUserData(userData: UserData): Flow<Resource<Unit>> = flow {
-        d("RepoError", "in repository")
+
         try {
             emit(Resource.Loading())
             val token = userData.token
             val data = userData.toData()
-            d("RepoError", "$data")
-            data.image?.let {
+            data.image.let {
                 data.image = if(it.isNotEmpty()){
                     val image = try {
                         uploadImageAndGetUrl(it.toUri(), data.token)
@@ -45,14 +44,12 @@ class UserRepositoryImpl @Inject constructor(
             emit(Resource.Success(Unit))
 
         } catch (e: Exception) {
-            d("RepoError", e.toString())
             emit(Resource.Failed(e.message ?: "Failed to save user data"))
         }
     }
 
 
     override fun getUserData(token: String): Flow<Resource<UserData>> = flow {
-        d("FunctifdsafonCalled", "ASDFASDF")
         try {
             emit(Resource.Loading())
 
@@ -65,14 +62,13 @@ class UserRepositoryImpl @Inject constructor(
             }
 
         } catch (e: Exception) {
-            d("RepoError", "catch error ${e.toString()}")
             emit(Resource.Failed(e.message ?: "Failed to fetch user data"))
         }
     }.flowOn(Dispatchers.IO)
 
     private suspend fun uploadImageAndGetUrl(imageUri: Uri, token: String): String {
         val imageRef = storage.reference.child("user_images/${token}")
-        imageRef.putFile(imageUri).await()
+        val uploadTask = imageRef.putFile(imageUri).await()
         return imageRef.downloadUrl.await().toString()
     }
 
