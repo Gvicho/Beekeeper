@@ -29,8 +29,17 @@ class UserRepositoryImpl @Inject constructor(
             emit(Resource.Loading())
             val token = userData.token
             val data = userData.toData()
+            d("RepoError", "$data")
             data.image?.let {
-                data.image = if(it.isNotEmpty())uploadImageAndGetUrl(it.toUri(), data.token) else ""
+                data.image = if(it.isNotEmpty()){
+                    val image = try {
+                        uploadImageAndGetUrl(it.toUri(), data.token)
+                    }catch (e:Exception){
+                        it
+                    }
+                    image
+                }
+                else ""
             }
             database.reference.child("users").child(token).setValue(data).await()
             emit(Resource.Success(Unit))
@@ -63,7 +72,7 @@ class UserRepositoryImpl @Inject constructor(
 
     private suspend fun uploadImageAndGetUrl(imageUri: Uri, token: String): String {
         val imageRef = storage.reference.child("user_images/${token}")
-        val uploadTask = imageRef.putFile(imageUri).await()
+        imageRef.putFile(imageUri).await()
         return imageRef.downloadUrl.await().toString()
     }
 
