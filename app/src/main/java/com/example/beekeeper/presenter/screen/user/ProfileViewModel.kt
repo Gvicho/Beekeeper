@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.example.beekeeper.presenter.workers.user_profile.UploadUserDataWorker
@@ -19,6 +20,7 @@ import com.example.beekeeper.presenter.mappers.user.toPresentation
 import com.example.beekeeper.presenter.model.user.UserCredentials
 import com.example.beekeeper.presenter.model.user.UserDataUI
 import com.example.beekeeper.presenter.state.user.ProfilePageState
+import com.example.beekeeper.presenter.state.worker_states.WorkerStatusState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,6 +48,9 @@ class ProfileViewModel @Inject constructor(
     private val _userDataFlow = MutableStateFlow(ProfilePageState())
     val userDataFlow  = _userDataFlow.asStateFlow()
 
+    private val _workStatus = MutableStateFlow(WorkerStatusState())
+    val workStatus = _workStatus.asStateFlow()
+
 
     fun onEvent(event: ProfilePageEvents) {
         when (event) {
@@ -53,10 +58,13 @@ class ProfileViewModel @Inject constructor(
             ProfilePageEvents.ResetErrorMessageToNull -> updateErrorMessageToNull()
             is ProfilePageEvents.SaveNewProfileInfo -> ifValidThenUpload(event.name,event.lastName)
             ProfilePageEvents.ReadUserCredentials -> readCredentials()
-            ProfilePageEvents.UpdateUploadProfileInfoToNull -> updateUploadProfileInfoToNull()
             is ProfilePageEvents.ImageSelected -> _userDataFlow.update {
                 it.copy(userDataUI = it.userDataUI?.copy(image = event.image)?: UserDataUI(image = event.image))
             }
+            ProfilePageEvents.ResetBlockToNull -> resetBlocked()
+            ProfilePageEvents.ResetCancelToNull -> resetCancelled()
+            ProfilePageEvents.ResetFailToNull -> resetFailed()
+            ProfilePageEvents.ResetSuccessToNull -> resetUploadedSuccessfully()
         }
     }
 
@@ -110,7 +118,50 @@ class ProfileViewModel @Inject constructor(
         WorkManager.getInstance(application)
             .enqueueUniqueWork("writeUser", ExistingWorkPolicy.KEEP, worker)
 
+        bindReportUploadWorkObserver()
+
     }
+
+    private fun bindReportUploadWorkObserver() {
+        viewModelScope.launch {
+            WorkManager.getInstance(application).getWorkInfosForUniqueWorkFlow("writeUser")
+                .collect { workInfoList ->
+                    workInfoList.forEach { workInfo ->
+                        when(workInfo.state){
+                            WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING -> {
+                                _workStatus.value = WorkerStatusState(isLoading = true)
+                            }
+                            WorkInfo.State.SUCCEEDED -> {
+                                _workStatus.value = WorkerStatusState(
+                                    isLoading = false,
+                                    uploadedSuccessfully = Unit
+                                )
+                            }
+                            WorkInfo.State.FAILED -> {
+                                val errorMessage = workInfo.outputData.getString("error_message") ?: "Unknown error"
+                                _workStatus.value = WorkerStatusState(
+                                    isLoading = false,
+                                    failedMessage = errorMessage
+                                )
+                            }
+                            WorkInfo.State.BLOCKED -> {
+                                _workStatus.value = WorkerStatusState(
+                                    isLoading = false,
+                                    blocked = Unit
+                                )
+                            }
+                            WorkInfo.State.CANCELLED -> {
+                                _workStatus.value = WorkerStatusState(
+                                    isLoading = false,
+                                    wasCanceled = Unit
+                                )
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
      private fun getUserData(token:String) {
         viewModelScope.launch {
             readUserDataUseCase(token).collect {result->
@@ -142,9 +193,28 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun updateUploadProfileInfoToNull(){
-        _userDataFlow.update {
-            it.copy(profileInfoSaved = null)
+    private fun resetUploadedSuccessfully() {
+        _workStatus.update { currentState ->
+            currentState.copy(uploadedSuccessfully = null)
         }
     }
+
+    private fun resetFailed() {
+        _workStatus.update { currentState ->
+            currentState.copy(failedMessage = null)
+        }
+    }
+
+    private fun resetCancelled() {
+        _workStatus.update { currentState ->
+            currentState.copy(wasCanceled = null)
+        }
+    }
+
+    private fun resetBlocked() {
+        _workStatus.update { currentState ->
+            currentState.copy(blocked = null)
+        }
+    }
+
 }

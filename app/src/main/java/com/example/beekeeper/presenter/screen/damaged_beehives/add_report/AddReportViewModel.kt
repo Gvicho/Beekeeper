@@ -162,23 +162,27 @@ class AddReportViewModel @Inject constructor(
     }
 
     private fun resetUploadedSuccessfully() {
-        val currentState = _workStatus.value
-        _workStatus.value = currentState.copy(uploadedSuccessfully = null)
+        _workStatus.update { currentState ->
+            currentState.copy(uploadedSuccessfully = null)
+        }
     }
 
     private fun resetFailed() {
-        val currentState = _workStatus.value
-        _workStatus.value = currentState.copy(failedMessage = null)
+        _workStatus.update { currentState ->
+            currentState.copy(failedMessage = null)
+        }
     }
 
     private fun resetCancelled() {
-        val currentState = _workStatus.value
-        _workStatus.value = currentState.copy(wasCanceled = null)
+        _workStatus.update { currentState ->
+            currentState.copy(wasCanceled = null)
+        }
     }
 
     private fun resetBlocked() {
-        val currentState = _workStatus.value
-        _workStatus.value = currentState.copy(blocked = null)
+        _workStatus.update { currentState ->
+            currentState.copy(blocked = null)
+        }
     }
 
     private fun generateRandomIdForReport():Int{

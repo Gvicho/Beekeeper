@@ -8,9 +8,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
-import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentProfileBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.user.ProfilePageEvents
@@ -19,6 +16,7 @@ import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.model.user.UserCredentials
 import com.example.beekeeper.presenter.model.user.UserDataUI
 import com.example.beekeeper.presenter.state.user.ProfilePageState
+import com.example.beekeeper.presenter.state.worker_states.WorkerStatusState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -63,38 +61,46 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
     override fun bindObservers() {
         bindUserCredentialsObserver()
-        bindWorkerObservers()
+        bindWorkerResultObserver()
     }
 
-    private fun bindWorkerObservers(){
+    private fun bindWorkerResultObserver(){
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                WorkManager.getInstance(requireContext()).getWorkInfosForUniqueWorkFlow("writeUser")
-                    .collect { workInfoList ->
-                        workInfoList.forEach { workInfo ->
-                            when (workInfo.state) {
-                                WorkInfo.State.SUCCEEDED -> {
-                                    binding.root.showSnackBar("Info Uploaded")
-                                    showOrHideProgressBar(false)
-                                }
-                                WorkInfo.State.FAILED -> {
-                                    val outputData = workInfo.outputData
-                                    val errorMessage = outputData.getString("error_message")?:"failed empty error"
-                                    binding.root.showSnackBar(errorMessage)
-                                    showOrHideProgressBar(false)
-                                }
-                                WorkInfo.State.RUNNING -> {
-                                    showOrHideProgressBar(true)
-                                }
-                                else -> {
-                                    // Handle other states if needed
-                                }
-                            }
-                        }
-                    }
+                viewModel.workStatus.collect {
+                    handleWorkerStatusState(it)
+                }
             }
         }
     }
+
+    private fun handleWorkerStatusState(state: WorkerStatusState){
+
+        showOrHideProgressBar(state.isLoading)
+        enableDisableUploadBtn(!state.isLoading) //upload button will be disabled
+
+        state.failedMessage?.let {
+            showErrorMessage(it)
+            viewModel.onEvent(ProfilePageEvents.ResetFailToNull)
+        }
+
+        state.blocked?.let {
+
+            viewModel.onEvent(ProfilePageEvents.ResetBlockToNull)
+        }
+
+        state.wasCanceled?.let {
+
+            viewModel.onEvent(ProfilePageEvents.ResetCancelToNull)
+        }
+
+        state.uploadedSuccessfully?.let {
+            binding.root.showSnackBar("success upload")
+            viewModel.onEvent(ProfilePageEvents.ResetSuccessToNull)
+        }
+
+    }
+
 
     private fun bindUserCredentialsObserver(){
         viewLifecycleOwner.lifecycleScope.launch {
@@ -157,9 +163,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
             showErrorMessage(it)
         }
 
-        state.profileInfoSaved?.let {
-            showUploadSuccessMessage()
-        }
         d("tag1234","fragment new State")
 
         state.userDataUI?.let {
@@ -186,9 +189,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         viewModel.onEvent(ProfilePageEvents.ResetErrorMessageToNull)
     }
 
-    private fun showUploadSuccessMessage(){
-        binding.root.showSnackBar(getString(R.string.upload_was_successful))
-        viewModel.onEvent(ProfilePageEvents.UpdateUploadProfileInfoToNull)
+    private fun enableDisableUploadBtn(enable:Boolean){
+        binding.saveBtn.isEnabled = enable
     }
 
 
