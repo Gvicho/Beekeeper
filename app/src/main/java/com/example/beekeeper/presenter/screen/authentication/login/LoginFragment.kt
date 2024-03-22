@@ -25,7 +25,7 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
 
     companion object {
         private const val TEST_EMAIL = "admin@mail.com"
-        private const val TEST_PASSWORD = "TBC_2024"
+        private const val TEST_PASSWORD = "123456"
     }
 
     override fun setUp() {

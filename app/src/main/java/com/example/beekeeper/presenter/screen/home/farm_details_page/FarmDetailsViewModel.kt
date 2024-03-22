@@ -106,6 +106,6 @@ class FarmDetailsViewModel@Inject constructor(
         _farmDetailsState.update {
             it.copy(errorMessage = null)
         }
-    } // header: name id location, images pager:, owner: , beehive analytics: current beehives beehive chart
+    }
 
 }
