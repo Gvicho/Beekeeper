@@ -14,6 +14,9 @@ sealed class AddReportPageEvents {
     data class RemoveImageFromList(val uri:Uri):AddReportPageEvents()
 
     data object GetDescription:AddReportPageEvents()
-    data object ResetErrorMessageOfUploadToNull:AddReportPageEvents()
     data object ResetErrorMessageOfDescriptionToNull:AddReportPageEvents()
+    data object ResetBlockToNull: AddReportPageEvents()
+    data object ResetFailToNull: AddReportPageEvents()
+    data object ResetSuccessToNull: AddReportPageEvents()
+    data object ResetCancelToNull: AddReportPageEvents()
 }

@@ -1,7 +1,6 @@
 package com.example.beekeeper.presenter.screen.damaged_beehives.add_report
 
 import android.net.Uri
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -13,15 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import com.example.beekeeper.databinding.FragmentAddReportBinding
 import com.example.beekeeper.presenter.adapter.damaged_beehives.DamagePicturesRecyclerAdapter
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.damage_beehives.AddReportPageEvents
 import com.example.beekeeper.presenter.extension.showSnackBar
 import com.example.beekeeper.presenter.state.damage_report.DamageDescriptionState
-import com.example.beekeeper.presenter.state.damage_report.DamageReportState
+import com.example.beekeeper.presenter.state.worker_states.WorkerStatusState
 import com.example.beekeeper.presenter.utils.SwipeGestureDetector
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -37,43 +34,48 @@ class AddReportFragment :
 
 
     override fun bindObservers() {
-        bindReportStateObserver()
         bindImagesListObserver()
-        bindReportUploadWorkObserver()
+        bindWorkerResultObserver()
+
     }
 
-    private fun bindReportUploadWorkObserver(){
+    private fun bindWorkerResultObserver(){
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                WorkManager.getInstance(requireContext()).getWorkInfosForUniqueWorkFlow("uploadReport")
-                    .collect { workInfoList ->
-                        workInfoList.forEach { workInfo ->
-                            when (workInfo.state) {
-                                WorkInfo.State.SUCCEEDED -> {
-                                    Log.d("UploadUserStatus", "Work succeeded")
-                                    binding.root.showSnackBar("Info Uploaded")
-                                    showOrHideProgressBar(false)
-                                }
-                                WorkInfo.State.FAILED -> {
-                                    Log.d("UploadUserStatus", "Work failed")
-                                    // Handle failure
-                                    val outputData = workInfo.outputData
-                                    val errorMessage = outputData.getString("error_message")?:"failed empty error"
-                                    binding.root.showSnackBar(errorMessage)
-                                    showOrHideProgressBar(false)
-                                }
-                                WorkInfo.State.RUNNING -> {
-                                    showOrHideProgressBar(true)
-                                }
-                                else -> {
-                                    // Handle other states if needed
-                                }
-                            }
-                        }
-                    }
+                viewModel.workStatus.collect {
+                    handleWorkerStatusState(it)
+                }
             }
         }
     }
+
+    private fun handleWorkerStatusState(state: WorkerStatusState){
+
+        showOrHideProgressBar(state.isLoading)
+        enableDisableUploadBtn(!state.isLoading) //upload button will be disabled
+
+        state.failedMessage?.let {
+            showErrorMessage(it)
+            viewModel.onEvent(AddReportPageEvents.ResetFailToNull)
+        }
+
+        state.blocked?.let {
+
+            viewModel.onEvent(AddReportPageEvents.ResetBlockToNull)
+        }
+
+        state.wasCanceled?.let {
+
+            viewModel.onEvent(AddReportPageEvents.ResetCancelToNull)
+        }
+
+        state.uploadedSuccessfully?.let {
+            binding.root.showSnackBar("success upload")
+            viewModel.onEvent(AddReportPageEvents.ResetSuccessToNull)
+        }
+
+    }
+
 
     private fun bindImagesListObserver(){
         viewLifecycleOwner.lifecycleScope.launch {
@@ -85,27 +87,7 @@ class AddReportFragment :
         }
     }
 
-    private fun bindReportStateObserver(){
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.reportUIState.collect {
-                    handleReportState(it)
-                }
-            }
-        }
-    }
 
-    private fun handleReportState(state: DamageReportState) {
-        showOrHideProgressBar(state.isLoading)
-
-        state.uploadSuccess?.let {
-            findNavController().popBackStack()
-        }
-
-        state.errorMessage?.let{
-            showErrorMessage(it)
-        }
-    }
 
     private fun showOrHideProgressBar(isLoading: Boolean) {
         binding.apply {
@@ -113,9 +95,12 @@ class AddReportFragment :
         }
     }
 
+    private fun enableDisableUploadBtn(enable:Boolean){
+        binding.btnUpload.isEnabled = enable
+    }
+
     private fun showErrorMessage(errorMessage: String) {
         binding.root.showSnackBar(errorMessage)
-        viewModel.onEvent(AddReportPageEvents.ResetErrorMessageOfUploadToNull)
     }
 
     override fun setUp() {
@@ -133,7 +118,6 @@ class AddReportFragment :
                 desc = binding.etDescription.text.toString(),
                 damageLevel = binding.sbDamageLevel.progress
             ))
-
         }
         binding.btnGenerateDesc.setOnClickListener {
             viewModel.onEvent(AddReportPageEvents.GetDescription)
@@ -168,10 +152,12 @@ class AddReportFragment :
 
         state.description?.let {
             binding.etDescription.setText(it)
+            viewModel.onEvent(AddReportPageEvents.ResetErrorMessageOfDescriptionToNull)
         }
 
         state.errorMessage?.let{
             showErrorMessage(it)
+
         }
     }
 
@@ -224,6 +210,10 @@ class AddReportFragment :
 
     override fun onRemoveImage(uri: Uri) {
         viewModel.onEvent(AddReportPageEvents.RemoveImageFromList(uri))
+    }
+
+    private fun returnBackAndCloseFragment(){
+        findNavController().popBackStack()
     }
 
 

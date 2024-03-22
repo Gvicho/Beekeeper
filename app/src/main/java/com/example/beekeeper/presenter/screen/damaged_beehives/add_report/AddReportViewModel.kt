@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.example.beekeeper.presenter.workers.reports.UploadReportWorker
@@ -14,7 +15,7 @@ import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.assistant.GetDamageDescUseCase
 import com.example.beekeeper.presenter.event.damage_beehives.AddReportPageEvents
 import com.example.beekeeper.presenter.state.damage_report.DamageDescriptionState
-import com.example.beekeeper.presenter.state.damage_report.DamageReportState
+import com.example.beekeeper.presenter.state.worker_states.WorkerStatusState
 import com.example.beekeeper.presenter.state.damage_report.imagesList.ImagesListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,8 +35,6 @@ class AddReportViewModel @Inject constructor(
     private val application: Application
 ) : ViewModel() {
 
-    private val _reportUIState = MutableStateFlow(DamageReportState())
-    val reportUIState: StateFlow<DamageReportState> = _reportUIState.asStateFlow()
 
     private val _descFlow = MutableStateFlow(DamageDescriptionState())
     val descFlow: StateFlow<DamageDescriptionState> = _descFlow.asStateFlow()
@@ -43,14 +42,20 @@ class AddReportViewModel @Inject constructor(
     private val _imagesList = MutableStateFlow(ImagesListState())
     val imagesList = _imagesList.asStateFlow()
 
+    private val _workStatus = MutableStateFlow(WorkerStatusState())
+    val workStatus = _workStatus.asStateFlow()
+
     fun onEvent(event:AddReportPageEvents){
         when(event){
             AddReportPageEvents.GetDescription -> getDescription()
             AddReportPageEvents.ResetErrorMessageOfDescriptionToNull -> resetErrorMessageOfDescriptionStateToNull()
-            AddReportPageEvents.ResetErrorMessageOfUploadToNull -> resetErrorMessageOfReportStateToNull()
             is AddReportPageEvents.UploadReport -> uploadReport(desc = event.desc , damageLevel = event.damageLevel)
             is AddReportPageEvents.AddImagesToList -> addImagesToList(event.images)
             is AddReportPageEvents.RemoveImageFromList -> removeImageFromList(event.uri)
+            AddReportPageEvents.ResetBlockToNull -> resetBlocked()
+            AddReportPageEvents.ResetCancelToNull -> resetCancelled()
+            AddReportPageEvents.ResetFailToNull -> resetFailed()
+            AddReportPageEvents.ResetSuccessToNull -> resetUploadedSuccessfully()
         }
     }
 
@@ -71,7 +76,7 @@ class AddReportViewModel @Inject constructor(
         val urisStringArray = _imagesList.value.images.map { it.toString() }.toTypedArray()
         val data =
             workDataOf(
-                "id" to 10000 + Random(System.currentTimeMillis()).nextInt(900000),
+                "id" to generateRandomIdForReport(),
                 "damageDescription" to desc,
                 "damageLevelIndicator" to damageLevel,
                 "dateUploaded" to LocalDateTime.now()
@@ -87,6 +92,47 @@ class AddReportViewModel @Inject constructor(
         WorkManager.getInstance(application)
             .enqueueUniqueWork("uploadReport", ExistingWorkPolicy.KEEP, worker)
 
+        bindReportUploadWorkObserver()
+    }
+
+    private fun bindReportUploadWorkObserver() {
+        viewModelScope.launch {
+            WorkManager.getInstance(application).getWorkInfosForUniqueWorkFlow("uploadReport")
+                .collect { workInfoList ->
+                    workInfoList.forEach { workInfo ->
+                        when(workInfo.state){
+                            WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING -> {
+                                _workStatus.value = WorkerStatusState(isLoading = true)
+                            }
+                            WorkInfo.State.SUCCEEDED -> {
+                                _workStatus.value = WorkerStatusState(
+                                    isLoading = false,
+                                    uploadedSuccessfully = Unit
+                                )
+                            }
+                            WorkInfo.State.FAILED -> {
+                                val errorMessage = workInfo.outputData.getString("error_message") ?: "Unknown error"
+                                _workStatus.value = WorkerStatusState(
+                                    isLoading = false,
+                                    failedMessage = errorMessage
+                                )
+                            }
+                            WorkInfo.State.BLOCKED -> {
+                                _workStatus.value = WorkerStatusState(
+                                    isLoading = false,
+                                    blocked = Unit
+                                )
+                            }
+                            WorkInfo.State.CANCELLED -> {
+                                _workStatus.value = WorkerStatusState(
+                                    isLoading = false,
+                                    wasCanceled = Unit
+                                )
+                            }
+                        }
+                    }
+                }
+        }
     }
 
     private fun getDescription() {
@@ -109,16 +155,33 @@ class AddReportViewModel @Inject constructor(
             }
         }
     }
-
-    private fun resetErrorMessageOfReportStateToNull(){
-        _reportUIState.update {
-            it.copy(errorMessage = null)
-        }
-    }
-
     private fun resetErrorMessageOfDescriptionStateToNull(){
         _descFlow.update {
             it.copy(errorMessage = null)
         }
+    }
+
+    private fun resetUploadedSuccessfully() {
+        val currentState = _workStatus.value
+        _workStatus.value = currentState.copy(uploadedSuccessfully = null)
+    }
+
+    private fun resetFailed() {
+        val currentState = _workStatus.value
+        _workStatus.value = currentState.copy(failedMessage = null)
+    }
+
+    private fun resetCancelled() {
+        val currentState = _workStatus.value
+        _workStatus.value = currentState.copy(wasCanceled = null)
+    }
+
+    private fun resetBlocked() {
+        val currentState = _workStatus.value
+        _workStatus.value = currentState.copy(blocked = null)
+    }
+
+    private fun generateRandomIdForReport():Int{
+        return 10000 + Random(System.currentTimeMillis()).nextInt(900000)
     }
 }
