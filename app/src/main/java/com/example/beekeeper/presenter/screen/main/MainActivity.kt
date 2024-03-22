@@ -160,7 +160,6 @@ class MainActivity : AppCompatActivity() {
                 d( "Fetching FCM registration token failed", task.exception.toString())
                 return@OnCompleteListener
             }
-
             // Get new FCM registration token
             //val token = task.result
 

@@ -1,62 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:layout_height="match_parent"
-    tools:context=".presenter.screen.authentication.register.RegistrationFragment"
-    android:background="@color/bg_sky">
+    android:background="@color/honey"
+    android:orientation="vertical"
+    tools:context=".presenter.screen.authentication.register.RegistrationFragment">
 
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etEmail"
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="@string/email"
-        android:textSize="25sp"
-        android:textColorHint="#322E2E"
-        android:textColor="#009688"
-        android:inputType="textEmailAddress" />
+        android:textColor="@color/bg_pink"
+        android:textSize="36sp"
+        android:text="Register"
+        android:layout_gravity="center_vertical"/>
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="@string/password"
-        android:textSize="25sp"
-        android:textColorHint="#322E2E"
-        android:textColor="#009688"
-        android:inputType="textPassword" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etRepeatPassword"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/registerContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="@string/repeat_password"
-        android:textSize="25sp"
-        android:textColor="#009688"
-        android:textColorHint="#322E2E"
-        android:inputType="textPassword" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/bg_login_screen"
+        android:padding="25dp">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="#ffce31"
-        android:text="@string/register"
-        android:textColor="#FFF" />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:textColor="#009688"
+            android:textColorHint="#322E2E"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:textColor="#009688"
+            android:textColorHint="#322E2E"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etEmail" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etRepeatPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/repeat_password"
+            android:inputType="textPassword"
+            android:textColor="#009688"
+            android:textColorHint="#322E2E"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etPassword" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#ffce31"
+            android:text="@string/register"
+            android:textColor="#FFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etRepeatPassword" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/pbRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:layout_gravity="center"
+        android:layout_marginTop="15dp"
         android:visibility="gone" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -168,13 +168,14 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
         val slideInLeft = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
         val slideInBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
         binding.apply {
+            loginContainer.startAnimation(slideInBottom)
             ivSemiCircle.startAnimation(slideDownAnimation)
-            etEmail.startAnimation(slideInLeft)
-            etPassword.startAnimation(slideInRight)
-            cbRememberMe.startAnimation(slideInLeft)
-            btnLogIn.startAnimation(slideInRight)
-            btnRegister.startAnimation(slideInLeft)
-            tvRecoverPassword.startAnimation(slideInBottom)
+//            etEmail.startAnimation(slideInLeft)
+//            etPassword.startAnimation(slideInRight)
+//            cbRememberMe.startAnimation(slideInLeft)
+//            btnLogIn.startAnimation(slideInRight)
+//            btnRegister.startAnimation(slideInLeft)
+//            tvRecoverPassword.startAnimation(slideInBottom)
         }
     }
 

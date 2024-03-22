@@ -4,49 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/honey"
     android:orientation="vertical"
     tools:context=".presenter.screen.authentication.login.LoginFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivSemiCircle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
         android:scaleType="fitXY"
-        android:src="@drawable/semi_circle"
+        android:src="@drawable/ic_beekeeper_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loginContainer"
         android:layout_width="match_parent"
-        android:layout_marginTop="40dp"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:layout_marginTop="40dp"
+        android:background="@drawable/bg_login_screen"
+        android:padding="25dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvGetStarted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:gravity="center"
+            android:text="Let's get started!"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/bg_et_rect"
             android:hint="@string/e_mail"
             android:inputType="textEmailAddress"
+            android:padding="10dp"
             android:textColor="#322E2E"
             android:textColorHint="#322E2E"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tvGetStarted" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:background="@drawable/bg_et_rect"
             android:hint="@string/password"
             android:inputType="textPassword"
+            android:padding="10dp"
             android:textColor="#322E2E"
             android:textColorHint="#322E2E"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etEmail" />
@@ -59,6 +82,7 @@
             android:buttonTint="#322E2E"
             android:text="@string/remember_me"
             android:textColor="#322E2E"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etPassword" />
 
@@ -66,22 +90,28 @@
             android:id="@+id/btnLogIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="46dp"
             android:background="@drawable/bg_button"
             android:text="@string/log_in"
-            android:textColor="#FFF"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cbRememberMe" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_button"
+            android:layout_marginTop="30dp"
+            android:background="@color/bg_pink"
+            android:gravity="center"
             android:text="@string/register"
-            android:textColor="#FFF"
+            android:textColor="@color/honey"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnLogIn" />
@@ -91,13 +121,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="12dp"
             android:text="@string/forgot_password"
-            android:textColor="#322E2E"
-            android:textSize="20sp"
+            android:textColor="@color/honey"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/cbRememberMe"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnRegister" />
+            app:layout_constraintTop_toTopOf="@+id/cbRememberMe" />
 
         <ProgressBar
             android:id="@+id/pbLogIn"
