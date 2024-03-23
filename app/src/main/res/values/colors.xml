@@ -15,9 +15,9 @@
     <color name="grey">#7E7E7E</color>
     <color name="background_color_level1">#3C3C3C</color>
     <color name="background_color_level2">#616161</color>
-    <color name="bg_pink">#F5DEE6</color>
-    <color name="bg_sky">#E6EAFA</color>
-    <color name="bg_honey">#FFF1D8</color>
+    <color name="bg_pink">#D0F5DEE6</color>
+    <color name="bg_sky">#B2E6EAFA</color>
+    <color name="bg_honey">#B2FFF1D8</color>
     <color name="ic_beekeper_logo_background">#F3D66C</color>
     <color name="red">#EC122B</color>
 </resources>

@@ -147,9 +147,9 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
     }
 
     private fun setUpBtnAnim() {
-        val anim = AlphaAnimation(0.7f, 1.0f)
+        val anim = AlphaAnimation(0.6f, 1.0f)
         anim.apply {
-            duration = 1200
+            duration = 900
             repeatMode = Animation.REVERSE
             repeatCount = Animation.INFINITE
         }

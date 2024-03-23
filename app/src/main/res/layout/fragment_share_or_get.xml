@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presenter.screen.get_analytics.ShareOrGetFragment"
-    android:background="@color/bg_sky">
+    tools:context=".presenter.screen.get_analytics.ShareOrGetFragment">
 
 
     <androidx.appcompat.widget.AppCompatButton
