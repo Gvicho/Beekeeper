@@ -8,14 +8,7 @@
     android:orientation="vertical"
     tools:context=".presenter.screen.home.farm_details_page.FarmDetailsFragment">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnBack"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:text="Go back"
-        android:textAllCaps="false"
-        android:textSize="20sp" />
+
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTemp"
@@ -34,6 +27,16 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_back_36"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
