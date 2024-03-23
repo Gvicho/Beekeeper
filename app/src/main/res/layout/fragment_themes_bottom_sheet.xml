@@ -31,7 +31,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:id="@+id/btnSave"
-        android:text="Save"
+        android:text="@string/save"
         android:layout_gravity="center"
         />
 

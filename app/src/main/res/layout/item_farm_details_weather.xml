@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="5dp"
-        android:text="Today's Weather"
+        android:text="@string/today_s_weather"
         android:textAppearance="@style/title_white"
         android:textStyle="bold"/>
 
@@ -128,7 +128,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
-        android:text="min Temperature: "
+        android:text="@string/min_temperature"
         android:textAppearance="@style/text_white"/>
 
     <TextView
@@ -139,7 +139,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
-        android:text="max Temperature: "
+        android:text="@string/max_temperature"
         android:textAppearance="@style/text_white"/>
 
     <TextView
@@ -150,7 +150,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
-        android:text="Pressure: "
+        android:text="@string/pressure"
         android:textAppearance="@style/text_white"/>
 
     <TextView
