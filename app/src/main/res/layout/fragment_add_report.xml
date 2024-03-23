@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:padding="20dp"
     tools:context=".presenter.screen.damaged_beehives.add_report.AddReportFragment">
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/add_damaged_beehive"
+        android:text="Add report"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -20,31 +20,35 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
-
-    <androidx.appcompat.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/btnGenerateDesc"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:textSize="14sp"
+        android:drawableStart="@drawable/ic_robot"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="Analyze images"
         android:textAllCaps="false"
-        android:text="Generate Description and recommendations"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAddBeehive" />
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/btnPick"
+        app:layout_constraintTop_toBottomOf="@id/etDescription" />
 
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:padding="10dp"
+        android:layout_height="200dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/bg_et_rect"
         android:gravity="start"
-        android:hint="@string/description"
-        android:textColorHint="@color/grey_transparent"
+        android:hint="@string/write_damage_description_here"
+        android:textColorHint="@color/grey"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnGenerateDesc" />
+        app:layout_constraintTop_toBottomOf="@id/tvAddBeehive" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvAssessDamage"
@@ -55,7 +59,7 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etDescription" />
+        app:layout_constraintTop_toBottomOf="@id/uploadedPicturesRecycler" />
 
     <androidx.appcompat.widget.AppCompatSeekBar
         android:id="@+id/sbDamageLevel"
@@ -64,22 +68,30 @@
         android:layout_marginTop="20dp"
         android:max="4"
         android:min="1"
-        android:progress="0"
+        android:progress="3"
+        android:progressTint="@color/honey"
+        android:thumbTint="@color/honey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAssessDamage" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/btnPick"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pick Image"
+        android:drawableStart="@drawable/ic_add_images"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="@string/pick_image"
+        android:textColor="@color/black"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sbDamageLevel" />
+        app:layout_constraintTop_toBottomOf="@id/etDescription" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/uploadedPicturesRecycler"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,10 +102,15 @@
         android:id="@+id/btnUpload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:text="Upload Report"
+        android:background="@drawable/bg_button"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/uploadedPicturesRecycler" />
+        app:layout_constraintTop_toBottomOf="@id/sbDamageLevel" />
 
     <ProgressBar
         android:id="@+id/pbUpload"

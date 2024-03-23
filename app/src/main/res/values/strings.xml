@@ -49,4 +49,6 @@
     <string name="NOT_FOUND">not found</string>OTHER_NETWORK_ERROR
     <string name="OTHER_NETWORK_ERROR">unknown network error</string>
     <string name="take_a_picture">Take a picture</string>
+    <string name="pick_image">Pick Image</string>
+    <string name="write_damage_description_here">Write damage description here</string>
 </resources>
