@@ -1,52 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presenter.screen.get_analytics.ShareOrGetFragment">
+    tools:context=".presenter.screen.get_analytics.ShareOrGetFragment"
+    android:background="@color/bg_sky">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="@color/black"
-        android:text="Share or Get analytics page"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/scanBtn"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:text="open scanner"
         android:layout_gravity="top|center_horizontal"
-        android:layout_marginBottom="20dp"
         android:background="@drawable/shadow_scann_button"
         android:shadowColor="@color/white"
         android:shadowRadius="8"
+        android:text="open scanner"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:layout_marginTop="20dp"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"/>
 
     <TextView
         android:id="@+id/tvServiceNotAvailable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/red"
-        android:text="Without Bluetooth permission this service is not available"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
-        android:visibility="gone"/>
+        android:text="Without Bluetooth permission this service is not available"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/beehiveImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_beehives_bluetooth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="240dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp"
         android:indeterminateTint="@color/honey"
         android:visibility="gone"
-        app:layout_goneMarginTop="20dp"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="90dp"/>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
