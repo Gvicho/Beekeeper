@@ -131,7 +131,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")
     implementation ("com.google.firebase:firebase-database-ktx")
-    implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
+    implementation("com.google.firebase:firebase-messaging")
 
     implementation ("androidx.activity:activity-ktx:1.8.2")
 

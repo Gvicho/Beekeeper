@@ -8,8 +8,10 @@ import com.example.beekeeper.domain.usecase.dark_mode.ReadDarkModeUseCase
 import com.example.beekeeper.presenter.event.main.MainActivityEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,8 +28,8 @@ class MainViewModel @Inject constructor(
     val darkModeFlow: SharedFlow<Boolean> get() = _darkModeFlow
 
 
-    private val _pageNavigationEvent = MutableSharedFlow<MessagePageNavigationEvents>()
-    val pageNavigationEvent get() = _pageNavigationEvent.asSharedFlow()
+    private val _pageNavigationEvent = MutableStateFlow<MessagePageNavigationEvents?>(null)
+    val pageNavigationEvent get() = _pageNavigationEvent.asStateFlow()
 
     private var sessionToken:String = ""
 
@@ -41,6 +43,7 @@ class MainViewModel @Inject constructor(
             MainActivityEvents.LogOutEvent -> logOut()
             MainActivityEvents.ReadDarkMode -> readDarkMode()
             is MainActivityEvents.IntentReceivedWithReportId -> ifSessionEmitNavigateEvent(event.reportId)
+            MainActivityEvents.ResetNavigationToNull -> resetNavigationToNull()
         }
     }
 
@@ -75,6 +78,12 @@ class MainViewModel @Inject constructor(
             readSessionTokenUseCase().collect { token ->
                 sessionToken = token
             }
+        }
+    }
+
+    private fun resetNavigationToNull(){
+        _pageNavigationEvent.update {
+            null
         }
     }
 

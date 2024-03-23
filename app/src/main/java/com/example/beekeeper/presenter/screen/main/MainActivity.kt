@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log.d
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -49,14 +48,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel.onEvent(MainActivityEvents.ReadDarkMode)
-        observeDarkMode()
+
         observeNavigationEvents()
-        requestPermission()
 
         handleIntent(intent)
         intent.extras?.clear()
         intent = Intent()
+
+        viewModel.onEvent(MainActivityEvents.ReadDarkMode)
+        observeDarkMode()
+        requestPermission()
 
 
         val navView: BottomNavigationView = binding.appBarMain.contentMain.navView
@@ -153,7 +154,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.darkModeFlow.collect { isDarkModeEnabled ->
-                   applyTheme(isDarkModeEnabled)//
+                   applyTheme(isDarkModeEnabled)
                 }
             }
         }
@@ -164,7 +165,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.pageNavigationEvent
-                    .debounce(500) // Debounce for 1 second (1000 milliseconds)
+                    .debounce(1500)
                     .collect { event ->
                         handleNavigation(event)
                     }
@@ -172,9 +173,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleNavigation(event: MainViewModel.MessagePageNavigationEvents){
-        when(event){
-            is MainViewModel.MessagePageNavigationEvents.NavigateToReportDetailsPage -> openReportDetailsFragment(reportId = event.reportId)
+    private fun handleNavigation(event: MainViewModel.MessagePageNavigationEvents?){
+        event?.let {
+            when(it){
+                is MainViewModel.MessagePageNavigationEvents.NavigateToReportDetailsPage -> {
+                    openReportDetailsFragment(it.reportId)
+                    viewModel.onEvent(MainActivityEvents.ResetNavigationToNull)
+                }
+            }
         }
     }
 
@@ -198,12 +204,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleIntent(intent: Intent) {
-        d("tag123","handling intent")
         intent.extras?.let { bundle ->
             if (bundle.containsKey("reportId")) {
-                val reportId = bundle.getInt("reportId", -1)
-                d("tag123","bundle contained key, it was  $reportId")
-                viewModel.onEvent(MainActivityEvents.IntentReceivedWithReportId(reportId))
+                val reportId = bundle.getString("reportId")
+                viewModel.onEvent(MainActivityEvents.IntentReceivedWithReportId(reportId?.toInt()?:1))
             }
         }
     }

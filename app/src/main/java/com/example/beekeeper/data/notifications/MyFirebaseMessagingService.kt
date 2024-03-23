@@ -27,7 +27,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         d("tag123","service ->  $reportId")
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.putExtra("reportId", reportId)
+        intent.putExtra("reportId", reportId.toString())
 
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
