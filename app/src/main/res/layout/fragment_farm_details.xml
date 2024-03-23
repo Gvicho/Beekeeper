@@ -8,17 +8,6 @@
     android:orientation="vertical"
     tools:context=".presenter.screen.home.farm_details_page.FarmDetailsFragment">
 
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTemp"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detailsRecycler"
         android:layout_width="match_parent"
