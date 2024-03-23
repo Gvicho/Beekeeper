@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.usecase.credentials.ReadSessionTokenUseCase
 import com.example.beekeeper.domain.usecase.dark_mode.ReadDarkModeUseCase
+import com.example.beekeeper.presenter.event.splash.SplashEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,7 +26,15 @@ class SplashViewModel@Inject constructor(
     private val _navigationEvent = MutableSharedFlow<SplashNavigationEvent>()
     val navigationEvent: SharedFlow<SplashNavigationEvent> get() = _navigationEvent
 
-    fun navigateToNextScreen() {
+
+    fun onEvent(event:SplashEvent){
+        when(event){
+            SplashEvent.NavigateToNextScreen -> navigateToNextScreen()
+            SplashEvent.ReadDarkMode -> readDarkMode()
+        }
+    }
+
+    private fun navigateToNextScreen() {
         viewModelScope.launch {
             val splashDelayInMillis = 1500L
             delay(splashDelayInMillis)
@@ -39,16 +48,16 @@ class SplashViewModel@Inject constructor(
         }
     }
 
-    sealed interface SplashNavigationEvent{
-        data object NavigateToLogin :SplashNavigationEvent
-        data object NavigateToHome :SplashNavigationEvent
-    }
-
-    fun readDarkMode() {
+    private fun readDarkMode() {
         viewModelScope.launch {
             readDarkModeUseCase().collect{
                 _darkModeFlow.emit(it)
             }
         }
+    }
+
+    sealed interface SplashNavigationEvent{
+        data object NavigateToLogin :SplashNavigationEvent
+        data object NavigateToHome :SplashNavigationEvent
     }
 }

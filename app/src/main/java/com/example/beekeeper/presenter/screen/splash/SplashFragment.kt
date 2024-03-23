@@ -10,9 +10,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentSplashScreenBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
+import com.example.beekeeper.presenter.event.splash.SplashEvent
 import com.example.beekeeper.presenter.extension.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -23,12 +23,12 @@ class SplashFragment :
 
 
     override fun setUp() {
-        viewModel.readDarkMode()
+        viewModel.onEvent(SplashEvent.ReadDarkMode)
         observeDarkMode()
     }
 
     override fun loadData() {
-        viewModel.navigateToNextScreen()
+        viewModel.onEvent(SplashEvent.NavigateToNextScreen)
     }
 
     override fun bind() {
@@ -89,7 +89,5 @@ class SplashFragment :
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-
-
     }
 }
