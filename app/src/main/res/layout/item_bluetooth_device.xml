@@ -3,26 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@drawable/shape_edit_text">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginStart="10dp">
+        android:layout_marginStart="30dp"
+        android:layout_marginVertical="5dp">
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"/>
+            android:text="Name"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Address"/>
+            android:text="Address"
+            android:textColor="@color/black"/>
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

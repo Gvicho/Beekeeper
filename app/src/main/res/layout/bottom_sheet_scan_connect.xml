@@ -22,7 +22,10 @@
         android:layout_height="200dp"
         android:layout_marginTop="25dp"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:background="@drawable/shape_recycler"
+        android:padding="10dp"
+        android:layout_marginHorizontal="5dp"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -40,7 +43,10 @@
         android:layout_height="200dp"
         android:layout_marginTop="25dp"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:background="@drawable/shape_recycler"
+        android:padding="10dp"
+        android:layout_marginHorizontal="5dp"/>
 
 
     <ProgressBar
