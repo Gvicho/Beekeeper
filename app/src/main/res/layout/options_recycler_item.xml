@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="Dark mode"
+        android:text="@string/dark_mode"
         android:textColor="@color/black"
         android:textSize="14sp" />
 

@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Saved Analytics"
+            android:text="@string/saved_analytics"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -28,7 +28,7 @@
             android:id="@+id/reloadBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reload"
+            android:text="@string/reload"
             android:layout_marginStart="20dp"
             android:layout_gravity="end"/>
 
@@ -46,14 +46,14 @@
             android:id="@+id/deleteBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete"
+            android:text="@string/delete"
             android:layout_marginStart="20dp"/>
 
         <Button
             android:id="@+id/uploadBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload"
+            android:text="@string/upload"
             android:layout_marginStart="20dp"/>
 
         <TextView
@@ -63,7 +63,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:textColor="@color/black"
-            android:text="0"/>
+            android:text="@string/_0"/>
 
     </LinearLayout>
 
