@@ -23,7 +23,7 @@ import com.example.beekeeper.databinding.ActivityMainBinding
 import com.example.beekeeper.presenter.adapter.options.OptionsRecyclerAdapter
 import com.example.beekeeper.presenter.event.main.MainActivityEvents
 import com.example.beekeeper.presenter.extension.showSnackBar
-import com.example.beekeeper.presenter.model.Option
+import com.example.beekeeper.presenter.model.drawer_menu.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var options: MutableList<Option>
 
-    private val  requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){}
-
+    private val requestPermission =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {}
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,21 +104,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecycler() {
-        optionsAdapter = OptionsRecyclerAdapter{
+        optionsAdapter = OptionsRecyclerAdapter {
             when (it.type) {
                 Options.DARK_MODE -> {
                     val navController = findNavController(R.id.nav_host_fragment_activity_main)
                     navController.navigate(R.id.themesBottomSheetFragment)
                 }
+
                 Options.LOG_OUT -> {
                     viewModel.onEvent(MainActivityEvents.LogOutEvent)
                     binding.root.showSnackBar("LogOut")
                     navigateToLoginFragmentClearingBackStack()
                 }
+
                 Options.PROFILE -> {
                     val navController = findNavController(R.id.nav_host_fragment_activity_main)
                     navController.navigate(R.id.profileFragment)
                 }
+
                 Options.CHANGE_PASSWORD -> {
                     val navController = findNavController(R.id.nav_host_fragment_activity_main)
                     navController.navigate(R.id.changePasswordFragment)
@@ -131,14 +134,13 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             optionsRecyclerView.adapter = optionsAdapter
             optionsRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-                options = mutableListOf(
-                Option(Options.LANGUAGE),
-                Option(Options.LOG_OUT),
-                Option(Options.CHANGE_PASSWORD),
-                Option(Options.DARK_MODE),
-                Option(Options.PROFILE),
+            options = mutableListOf(
+                Option("Language", Options.LANGUAGE, icon = R.drawable.ic_language),
+                Option("Themes", Options.DARK_MODE, icon = R.drawable.ic_themes),
+                Option("Profile", Options.PROFILE, icon = R.drawable.ic_beekeeper_24),
+                Option("Log out", Options.LOG_OUT, icon = R.drawable.ic_log_out),
 
-            )
+                )
             optionsAdapter.submitList(options)
         }
     }
@@ -150,20 +152,21 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.loginFragment)
 
     }
+
     private fun observeDarkMode() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.darkModeFlow.collect { isDarkModeEnabled ->
-                   applyTheme(isDarkModeEnabled)
+                    applyTheme(isDarkModeEnabled)
                 }
             }
         }
     }
 
     @OptIn(FlowPreview::class)
-    private fun observeNavigationEvents(){
+    private fun observeNavigationEvents() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.pageNavigationEvent
                     .debounce(1500)
                     .collect { event ->
@@ -173,9 +176,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleNavigation(event: MainViewModel.MessagePageNavigationEvents?){
+    private fun handleNavigation(event: MainViewModel.MessagePageNavigationEvents?) {
         event?.let {
-            when(it){
+            when (it) {
                 is MainViewModel.MessagePageNavigationEvents.NavigateToReportDetailsPage -> {
                     openReportDetailsFragment(it.reportId)
                     viewModel.onEvent(MainActivityEvents.ResetNavigationToNull)
@@ -196,7 +199,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun requestPermission(){
+    private fun requestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermission.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
         }
@@ -207,12 +210,16 @@ class MainActivity : AppCompatActivity() {
         intent.extras?.let { bundle ->
             if (bundle.containsKey("reportId")) {
                 val reportId = bundle.getString("reportId")
-                viewModel.onEvent(MainActivityEvents.IntentReceivedWithReportId(reportId?.toInt()?:1))
+                viewModel.onEvent(
+                    MainActivityEvents.IntentReceivedWithReportId(
+                        reportId?.toInt() ?: 1
+                    )
+                )
             }
         }
     }
 
-    private fun openReportDetailsFragment(reportId:Int){
+    private fun openReportDetailsFragment(reportId: Int) {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val bundle = Bundle().apply {
             putInt("id", reportId) // Make sure the key matches the argument name in your nav graph

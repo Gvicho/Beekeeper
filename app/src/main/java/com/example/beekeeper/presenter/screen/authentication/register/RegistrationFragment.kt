@@ -22,49 +22,55 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RegistrationFragment : BaseFragment<FragmentRegistrationBinding>(FragmentRegistrationBinding::inflate) {
+class RegistrationFragment :
+    BaseFragment<FragmentRegistrationBinding>(FragmentRegistrationBinding::inflate) {
 
-    private val viewModel:RegistrationViewModel by viewModels()
+    private val viewModel: RegistrationViewModel by viewModels()
     private lateinit var gestureDetector: GestureDetector
-    override fun bind() {
+    override fun startAnimas() {
         animations()
     }
-
     override fun bindObservers() {
         observeRegistrationState()
         observeNavigationEvent()
     }
 
-    private fun observeRegistrationState(){
+    override fun setListeners() {
+        binding.btnLogIn.setOnClickListener {
+            closeRegistrationFragment()
+        }
+    }
+
+    private fun observeRegistrationState() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.registrationState.collect{
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.registrationState.collect {
                     handleResponse(it)
                 }
             }
         }
     }
 
-    private fun observeNavigationEvent(){
+    private fun observeNavigationEvent() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.navigationEventFlow.collect{
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.navigationEventFlow.collect {
                     handleNavigation(it)
                 }
             }
         }
     }
 
-    private fun handleNavigation(navigationEvent: RegistrationViewModel.NavigationEvent){
-        when(navigationEvent){
+    private fun handleNavigation(navigationEvent: RegistrationViewModel.NavigationEvent) {
+        when (navigationEvent) {
             is RegistrationViewModel.NavigationEvent.NavigateBackToLoginPage -> {
-                returnResultAndFinishRegistration(navigationEvent.email,navigationEvent.password)
+                returnResultAndFinishRegistration(navigationEvent.email, navigationEvent.password)
                 closeRegistrationFragment()
             }
         }
     }
 
-    private fun returnResultAndFinishRegistration(email: String,password: String){
+    private fun returnResultAndFinishRegistration(email: String, password: String) {
         val result = Bundle().apply {
             putString(getString(R.string.email), email)
             putString(getString(R.string.password), password)
@@ -78,13 +84,13 @@ class RegistrationFragment : BaseFragment<FragmentRegistrationBinding>(FragmentR
 
     override fun bindViewActionListeners() {
         binding.apply {
-            btnRegister.setOnClickListener{
+            btnRegister.setOnClickListener {
                 registerUser()
             }
         }
     }
 
-    private fun handleResponse(registerState: RegisterState){
+    private fun handleResponse(registerState: RegisterState) {
         registerState.errorMessage?.let {
             errorWhileRegistration(it)
         }
@@ -92,46 +98,55 @@ class RegistrationFragment : BaseFragment<FragmentRegistrationBinding>(FragmentR
         showOrHideProgressBar(registerState.isLoading)
 
         registerState.userAuthenticator?.let {
-            successRegistration(it.email,it.password)
+            successRegistration(it.email, it.password)
         }
     }
 
-    private fun successRegistration(email:String,password: String){
+    private fun successRegistration(email: String, password: String) {
         binding.root.showSnackBar(getString(R.string.successful_registration))
-        viewModel.onEvent(RegisterEvent.MoveBackToLogin(email,password))
+        viewModel.onEvent(RegisterEvent.MoveBackToLogin(email, password))
     }
 
-    private fun showOrHideProgressBar(isLoading:Boolean){
+    private fun showOrHideProgressBar(isLoading: Boolean) {
         binding.apply {
-            pbRegister.visibility = if(isLoading) View.VISIBLE else View.GONE
+            pbRegister.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 
-    private fun errorWhileRegistration(errorMessage:String){
+    private fun errorWhileRegistration(errorMessage: String) {
         binding.root.showSnackBar(errorMessage)
         viewModel.onEvent(RegisterEvent.ResetErrorMessage)
     }
 
-    private fun registerUser(){
+    private fun registerUser() {
         val email = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
         val repeatedPassword = binding.etRepeatPassword.text.toString()
 
-        requestRegistrationToViewModel(email,password,repeatedPassword)
+        requestRegistrationToViewModel(email, password, repeatedPassword)
     }
 
-    private fun requestRegistrationToViewModel(email: String,password: String,repeatedPassword:String){
-        viewModel.onEvent(RegisterEvent.RegisterUser(email,password,repeatedPassword))
+    private fun requestRegistrationToViewModel(
+        email: String,
+        password: String,
+        repeatedPassword: String
+    ) {
+        viewModel.onEvent(RegisterEvent.RegisterUser(email, password, repeatedPassword))
     }
 
-    private fun animations(){
+    private fun animations() {
         val slideInRight = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_right)
         val slideInLeft = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
+        val slideInBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
+        val slideInTop = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
         binding.apply {
-            etEmail.startAnimation(slideInLeft)
-            etPassword.startAnimation(slideInRight)
-            etRepeatPassword.startAnimation(slideInLeft)
-            btnRegister.startAnimation(slideInRight)
+//            etEmail.startAnimation(slideInLeft)
+//            etPassword.startAnimation(slideInRight)
+//            etRepeatPassword.startAnimation(slideInLeft)
+//            btnRegister.startAnimation(slideInRight)
+            registerContainer.startAnimation(slideInBottom)
+            ivBee.startAnimation(slideInTop)
+
         }
     }
 
@@ -161,5 +176,6 @@ class RegistrationFragment : BaseFragment<FragmentRegistrationBinding>(FragmentR
         }
 
     }
+
 
 }

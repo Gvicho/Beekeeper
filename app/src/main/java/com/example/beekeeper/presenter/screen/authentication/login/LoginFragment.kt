@@ -28,10 +28,6 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
         private const val TEST_PASSWORD = "123456"
     }
 
-    override fun setUp() {
-        super.setUp()
-        animations()
-    }
     override fun bind() {
         bindLoginBtnClickListener()
         bindRegisterBtnClickListener()
@@ -163,13 +159,13 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
 
 
     private fun animations(){
-        val slideDownAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
+        val slideInTop = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
         val slideInRight = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_right)
         val slideInLeft = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
         val slideInBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
         binding.apply {
             loginContainer.startAnimation(slideInBottom)
-            ivSemiCircle.startAnimation(slideDownAnimation)
+            ivSemiCircle.startAnimation(slideInTop)
 //            etEmail.startAnimation(slideInLeft)
 //            etPassword.startAnimation(slideInRight)
 //            cbRememberMe.startAnimation(slideInLeft)
@@ -177,6 +173,10 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
 //            btnRegister.startAnimation(slideInLeft)
 //            tvRecoverPassword.startAnimation(slideInBottom)
         }
+    }
+
+    override fun startAnimas() {
+        animations()
     }
 
 

@@ -39,6 +39,7 @@ abstract class BaseFragment<VB: ViewBinding>(private val inflate : Inflater<VB>)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUp()
+        startAnimas()
         setListeners()
         bind()
         bindViewActionListeners()
@@ -64,4 +65,6 @@ abstract class BaseFragment<VB: ViewBinding>(private val inflate : Inflater<VB>)
     open fun bindViewActionListeners(){}
     open fun bindObservers(){}
     open fun initSwipeGesture(view: View){}
+
+    open fun startAnimas(){}
 }

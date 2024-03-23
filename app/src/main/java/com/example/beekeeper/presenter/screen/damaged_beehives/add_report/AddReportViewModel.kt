@@ -56,6 +56,7 @@ class AddReportViewModel @Inject constructor(
             AddReportPageEvents.ResetCancelToNull -> resetCancelled()
             AddReportPageEvents.ResetFailToNull -> resetFailed()
             AddReportPageEvents.ResetSuccessToNull -> resetUploadedSuccessfully()
+
         }
     }
 
