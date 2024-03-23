@@ -42,5 +42,11 @@
     <string name="username">Username</string>
     <string name="last_name">Last name</string>
     <string name="choose_from_gallery">Choose from gallery</string>
+    <string name="REQUEST_TIMEOUT">request time out</string>
+    <string name="NO_INTERNET">no internet</string>
+    <string name="SERVER_ERROR">server error</string>
+    <string name="BAD_REQUEST">bad request</string>
+    <string name="NOT_FOUND">not found</string>OTHER_NETWORK_ERROR
+    <string name="OTHER_NETWORK_ERROR">unknown network error</string>
     <string name="take_a_picture">Take a picture</string>
 </resources>

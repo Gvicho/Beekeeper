@@ -119,10 +119,9 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideGetWeatherRepository(
-        weatherService: WeatherService,
-        handleResponse: HandleResponse
+        weatherService: WeatherService
     ): WeatherRepository {
-        return WeatherRepositoryImpl(weatherService, handleResponse)
+        return WeatherRepositoryImpl(weatherService)
 
 
     }

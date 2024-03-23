@@ -2,7 +2,6 @@ package com.example.beekeeper.presenter.screen.home.farm_details_page
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -62,13 +61,12 @@ class FarmDetailsFragment : BaseFragment<FragmentFarmDetailsBinding>(FragmentFar
 
     private fun handleResponse(state: FarmDetailsStateUi){
         state.errorMessage?.let {
-            showErrorMessage(it)
+            showErrorMessage(requireContext().getString(it))
         }
 
         showOrHideProgressBar(state.isLoading)
 
         state.farmDetails?.let {
-            Log.d("tag12345"," list -> $it")
             detailsRecyclerAdapter.submitList(it)
         }
     }
