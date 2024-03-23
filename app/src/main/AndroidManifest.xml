@@ -78,7 +78,7 @@
             android:value="channel_analytics" />
 
         <service
-            android:name=".data.notifications.MyFirebaseMessagingService"
+            android:name=".data.firebase_messiging.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

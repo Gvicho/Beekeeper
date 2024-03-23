@@ -1,4 +1,4 @@
-package com.example.beekeeper.data.notifications
+package com.example.beekeeper.data.firebase_messiging
 
 import android.app.NotificationManager
 import android.app.PendingIntent

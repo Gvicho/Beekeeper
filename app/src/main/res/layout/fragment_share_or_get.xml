@@ -13,13 +13,20 @@
         android:textColor="@color/black"
         android:text="Share or Get analytics page"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/scanBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:text="open scanner"
         android:layout_gravity="top|center_horizontal"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shadow_scann_button"
+        android:shadowColor="@color/white"
+        android:shadowRadius="8"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:layout_marginTop="20dp"
+        />
 
     <TextView
         android:id="@+id/tvServiceNotAvailable"

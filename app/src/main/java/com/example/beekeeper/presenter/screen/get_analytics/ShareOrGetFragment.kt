@@ -7,6 +7,8 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -88,6 +90,10 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
         getBooleanResult()
     }
 
+    override fun setUp() {
+        setUpBtnAnim()
+    }
+
     private fun getScanResult(){
         // Register the listener
         setFragmentResultListener("device") { key, bundle ->
@@ -140,12 +146,22 @@ class ShareOrGetFragment : BaseFragment<FragmentShareOrGetBinding>(FragmentShare
         bindNavigationObservers()
     }
 
+    private fun setUpBtnAnim() {
+        val anim = AlphaAnimation(0.7f, 1.0f)
+        anim.apply {
+            duration = 1200
+            repeatMode = Animation.REVERSE
+            repeatCount = Animation.INFINITE
+        }
+        binding.scanBtn.startAnimation(anim)
+    }
+
     @OptIn(FlowPreview::class)
     private fun bindNavigationObservers(){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.pageNavigationEvent
-                    .debounce(500) // Debounce for 1 second (1000 milliseconds)
+                    .debounce(500)
                     .collect { event ->
                         handleNavigation(event)
                     }
