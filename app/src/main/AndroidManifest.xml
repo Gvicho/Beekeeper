@@ -48,7 +48,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_beekeeper_logo_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Beekeeper"
+        android:theme="@style/Theme.Beekeeper.NoActionBar"
         tools:targetApi="31">
 
         <activity
