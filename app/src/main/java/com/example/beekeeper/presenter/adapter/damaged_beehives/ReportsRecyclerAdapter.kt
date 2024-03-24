@@ -55,9 +55,11 @@ class ReportsRecyclerAdapter(private val onItemClick: (DamageReportUI) -> Unit) 
                 tvDesc.text = report.damageDescription
                 tvId.text = report.id.toString()
                 if (damage > 2) {
-                    indicatorLogo.setImageResource(R.drawable.ic_red_cross_28)
+                    indicatorLogo.setImageResource(R.drawable.circle_red)
+                } else if (damage == 2) {
+                    indicatorLogo.setImageResource(R.drawable.circle_orange)
                 } else {
-                    indicatorLogo.setImageResource(R.drawable.ic_warning_yellow_28)
+                    indicatorLogo.setImageResource(R.drawable.circle_green)
                 }
             }
 

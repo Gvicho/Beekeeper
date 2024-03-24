@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".presenter.screen.user.ProfileFragment">
-
 
 
     <FrameLayout
@@ -16,46 +16,48 @@
         android:layout_marginBottom="10dp">
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivProfile"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:id="@+id/ivProfile"
             android:background="@color/grey_transparent"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/changeProfileImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="5dp"
             android:layout_marginEnd="5dp"
-            android:src="@drawable/ic_change_image_28"
-            android:background="@color/grey"/>
+            android:layout_marginBottom="5dp"
+            android:background="@color/grey"
+            android:src="@drawable/ic_change_image_28" />
 
     </FrameLayout>
 
 
     <TextView
         android:id="@+id/tvEmail"
-        android:layout_gravity="center_horizontal"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:textSize="16sp" />
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/etName"
-        android:textColor="@color/black"
-        android:hint="@string/name"/>
-
-    <androidx.appcompat.widget.AppCompatEditText
+        style="@style/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        android:hint="@string/name" />
+
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etLastName"
-        android:textColor="@color/black"
-        android:hint="@string/last_name"/>
+        style="@style/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/last_name" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/saveBtn"
@@ -64,7 +66,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="20dp"
-        android:text="@string/save"/>
+        android:text="@string/save" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBar"
@@ -73,10 +75,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
         android:visibility="gone" />
-
-
-
-
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

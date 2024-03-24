@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/blue_light"
     android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="5dp"
+    android:background="@color/blue_light"
     android:paddingBottom="15dp">
 
     <TextView
         android:id="@+id/header"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="5dp"
         android:text="@string/today_s_weather"
         android:textAppearance="@style/title_white"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvWeather"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="@string/none"
+        android:textAppearance="@style/desc_white"
         app:layout_constraintEnd_toEndOf="@+id/weatherIcon"
         app:layout_constraintStart_toStartOf="@+id/weatherIcon"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textAppearance="@style/desc_white"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/weatherIcon"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:background="@color/transparent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvWeather"
-        android:layout_marginTop="5dp"/>
+        app:layout_constraintTop_toBottomOf="@id/tvWeather" />
 
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -47,24 +50,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
         android:src="@drawable/ic_drop_28"
         app:layout_constraintBottom_toBottomOf="@+id/weatherIcon"
         app:layout_constraintEnd_toStartOf="@+id/tempIcon"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/weatherIcon"
-        app:layout_constraintTop_toTopOf="@+id/tvWeather"
-        android:layout_marginBottom="10dp"/>
+        app:layout_constraintTop_toTopOf="@+id/tvWeather" />
 
     <TextView
         android:id="@+id/tVHumidity"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="@string/_0"
+        android:textAppearance="@style/desc_white"
         app:layout_constraintEnd_toEndOf="@id/humidityIcon"
         app:layout_constraintStart_toStartOf="@id/humidityIcon"
-        app:layout_constraintTop_toBottomOf="@id/humidityIcon"
-        android:textAppearance="@style/desc_white"/>
+        app:layout_constraintTop_toBottomOf="@id/humidityIcon" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/tempIcon"
@@ -79,14 +83,15 @@
 
     <TextView
         android:id="@+id/tVTemp"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="@string/_0"
+        android:textAppearance="@style/desc_white"
         app:layout_constraintEnd_toEndOf="@id/tempIcon"
         app:layout_constraintStart_toStartOf="@id/tempIcon"
-        app:layout_constraintTop_toBottomOf="@id/tempIcon"
-        android:textAppearance="@style/desc_white"/>
+        app:layout_constraintTop_toBottomOf="@id/tempIcon" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/feelsIcon"
@@ -101,90 +106,97 @@
 
     <TextView
         android:id="@+id/tVFeelsTemp"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="@string/_0"
+        android:textAppearance="@style/desc_white"
         app:layout_constraintEnd_toEndOf="@id/feelsIcon"
         app:layout_constraintStart_toStartOf="@id/feelsIcon"
-        app:layout_constraintTop_toBottomOf="@id/feelsIcon"
-        android:textAppearance="@style/desc_white"/>
+        app:layout_constraintTop_toBottomOf="@id/feelsIcon" />
 
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        app:layout_constraintTop_toBottomOf="@id/weatherIcon"
+        android:layout_marginHorizontal="10dp"
         android:layout_marginTop="20dp"
-        android:background="@color/grey_transparent"
         android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="10dp"/>
+        android:background="@color/grey_transparent"
+        app:layout_constraintTop_toBottomOf="@id/weatherIcon" />
 
     <TextView
         android:id="@+id/minTemp"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/line"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:text="@string/min_temperature"
-        android:textAppearance="@style/text_white"/>
+        android:textAppearance="@style/text_white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line" />
 
     <TextView
         android:id="@+id/maxTemp"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/minTemp"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:text="@string/max_temperature"
-        android:textAppearance="@style/text_white"/>
+        android:textAppearance="@style/text_white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/minTemp" />
 
     <TextView
         android:id="@+id/pressure"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/maxTemp"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:text="@string/pressure"
-        android:textAppearance="@style/text_white"/>
+        android:textAppearance="@style/text_white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/maxTemp" />
 
     <TextView
         android:id="@+id/tvMinTemp"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@id/minTemp"
-        app:layout_constraintTop_toTopOf="@id/minTemp"
-        app:layout_constraintBottom_toBottomOf="@id/minTemp"
         android:text="@string/_0"
-        android:textAppearance="@style/text_white"/>
+        android:textAppearance="@style/text_white"
+        app:layout_constraintBottom_toBottomOf="@id/minTemp"
+        app:layout_constraintStart_toEndOf="@id/minTemp"
+        app:layout_constraintTop_toTopOf="@id/minTemp" />
 
     <TextView
         android:id="@+id/tvMaxTemp"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@id/maxTemp"
-        app:layout_constraintTop_toTopOf="@id/maxTemp"
-        app:layout_constraintBottom_toBottomOf="@id/maxTemp"
         android:text="@string/_0"
-        android:textAppearance="@style/text_white"/>
+        android:textAppearance="@style/text_white"
+        app:layout_constraintBottom_toBottomOf="@id/maxTemp"
+        app:layout_constraintStart_toEndOf="@id/maxTemp"
+        app:layout_constraintTop_toTopOf="@id/maxTemp" />
 
     <TextView
         android:id="@+id/tvPressure"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@id/pressure"
-        app:layout_constraintTop_toTopOf="@id/pressure"
-        app:layout_constraintBottom_toBottomOf="@id/pressure"
         android:text="@string/_0"
-        android:textAppearance="@style/text_white"/>
+        android:textAppearance="@style/text_white"
+        app:layout_constraintBottom_toBottomOf="@id/pressure"
+        app:layout_constraintStart_toEndOf="@id/pressure"
+        app:layout_constraintTop_toTopOf="@id/pressure" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

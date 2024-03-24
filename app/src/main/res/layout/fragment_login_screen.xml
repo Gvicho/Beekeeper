@@ -22,20 +22,28 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loginContainer"
+        style="@style/bottomContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="40dp"
-        android:background="@drawable/bg_bottom_container"
         android:padding="25dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/ic_bow"
+            app:layout_constraintBottom_toTopOf="@id/tvGetStarted"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvGetStarted"
+            style="@style/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
             android:gravity="center"
             android:text="@string/let_s_get_started"
-            android:textColor="@color/black"
             android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,6 +52,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etEmail"
+            style="@style/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
@@ -51,8 +60,6 @@
             android:hint="@string/e_mail"
             android:inputType="textEmailAddress"
             android:padding="10dp"
-            android:textColor="#322E2E"
-            android:textColorHint="@color/grey"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +67,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etPassword"
+            style="@style/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -67,8 +75,6 @@
             android:hint="@string/password"
             android:inputType="textPassword"
             android:padding="10dp"
-            android:textColor="#322E2E"
-            android:textColorHint="@color/grey"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -81,8 +87,9 @@
             android:layout_marginTop="8dp"
             android:buttonTint="#322E2E"
             android:text="@string/remember_me"
+            style="@style/text"
+            android:backgroundTint="@color/white"
             android:textSize="14sp"
-            android:textColor="#322E2E"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etPassword" />
 
@@ -91,8 +98,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="46dp"
-            android:text="@string/log_in"
             android:background="@drawable/bg_button"
+            android:text="@string/log_in"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="18sp"
@@ -103,10 +110,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btnRegister"
+            style="@style/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:background="@color/bg_pink"
+            android:background="@color/transparent"
             android:gravity="center"
             android:text="@string/register"
             android:textColor="@color/honey"
@@ -118,6 +126,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvRecoverPassword"
+            style="@style/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

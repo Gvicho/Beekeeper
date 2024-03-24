@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/background_drawer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".presenter.screen.media.ChooseMediaBottomSheetFragment">
 
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvGallery"
+        style="@style/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:drawableStart="@drawable/ic_gallery"
+        android:drawablePadding="15dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
         android:text="@string/choose_from_gallery"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="17sp" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/underline" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvCamera"
-        android:layout_marginTop="15dp"
+        style="@style/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:drawableStart="@drawable/ic_camera"
+        android:drawablePadding="15dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
         android:text="@string/take_a_picture"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="17sp" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

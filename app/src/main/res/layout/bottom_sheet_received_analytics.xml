@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:nestedScrollingEnabled="true"
+    style="@style/background"
     android:orientation="vertical">
 
     <TextView
@@ -12,6 +13,7 @@
         android:text="@string/received_analytics"
         android:textSize="18sp"
         android:textStyle="bold"
+        style="@style/text"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="5dp"/>
 
@@ -43,6 +45,7 @@
             android:layout_height="wrap_content"
             android:text="@string/beehive_id"
             android:textSize="18sp"
+            style="@style/text"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"/>
@@ -51,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_0"
+            style="@style/text"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"

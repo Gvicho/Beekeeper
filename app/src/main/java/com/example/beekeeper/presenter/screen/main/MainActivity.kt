@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
             options = mutableListOf(
                 Option("Language", Options.LANGUAGE, icon = R.drawable.ic_language),
                 Option("Themes", Options.DARK_MODE, icon = R.drawable.ic_themes),
-                Option("Profile", Options.PROFILE, icon = R.drawable.ic_beekeeper_24),
+                Option("Profile", Options.PROFILE, icon = R.drawable.ic_beekeper_drawer),
                 Option("Log out", Options.LOG_OUT, icon = R.drawable.ic_log_out),
 
                 )

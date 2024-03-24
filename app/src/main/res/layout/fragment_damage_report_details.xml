@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    style="@style/background"
     android:padding="16dp"
     tools:context=".presenter.screen.damaged_beehives.damage_report_details.DamageReportDetailsFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/text"
         android:layout_gravity="center_horizontal"
         android:text="@string/report_details"
         android:textStyle="bold"
@@ -25,6 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
+        style="@style/text"
         />
     </ScrollView>
 

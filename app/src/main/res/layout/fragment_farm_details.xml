@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_transparent"
     android:orientation="vertical"
+    style="@style/background"
     tools:context=".presenter.screen.home.farm_details_page.FarmDetailsFragment">
 
     <androidx.recyclerview.widget.RecyclerView

@@ -29,6 +29,39 @@
         <item name="android:windowBackground">@color/bg_pink</item>
     </style>
 
+    <style name="background">
+        <item name="android:background">@color/bg_pink</item>
+    </style>
+
+
+    <style name="background_drawer">
+        <item name="android:background">@color/bg_pink</item>
+    </style>
+
+    <style name="text">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
+    <style name="editText">
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
+    <style name="topContainer">
+        <item name="android:background">@drawable/bg_top_container</item>
+    </style>
+
+    <style name="bottomContainer">
+        <item name="android:background">@drawable/bg_bottom_container</item>
+    </style>
+
+    <style name="bottomSheetBackground">
+        <item name="android:background">@drawable/bg_rec</item>
+    </style>
+
+
 
 
 </resources>

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:padding="16dp"
+    style="@style/background_drawer"
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -13,13 +14,13 @@
         />
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
+        style="@style/text"
         android:layout_marginStart="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/dark_mode"
-        android:textColor="@color/black"
         android:textSize="14sp" />
 
 </LinearLayout>

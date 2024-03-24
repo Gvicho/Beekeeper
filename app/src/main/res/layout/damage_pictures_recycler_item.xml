@@ -3,14 +3,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="6dp"
-    android:background="@color/bg_pink"
+    style="@style/background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <androidx.cardview.widget.CardView
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:background="@color/bg_pink"
+        style="@style/background"
         >
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="60dp"

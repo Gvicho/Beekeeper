@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/background"
     tools:context=".presenter.screen.damaged_beehives.damage_reports.DamageReportsFragment">
 
     <TextView
@@ -14,6 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="10dp"
+        style="@style/text"
         android:textAppearance="@style/heading"
         android:text="@string/current_reports"
         android:textStyle="bold"

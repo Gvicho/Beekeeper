@@ -6,13 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presenter.screen.saved_analytics.analytic_details.AnalyticDetailsFragment"
     android:orientation="vertical"
-    android:background="@color/grey_transparent">
+    style="@style/background">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/saved_analytics_sec"
         android:textSize="18sp"
+        style="@style/text"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="5dp"/>
@@ -37,6 +38,7 @@
             android:text="@string/beehive_id"
             android:textSize="18sp"
             android:textStyle="bold"
+            style="@style/text"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"/>
         <TextView
@@ -46,6 +48,7 @@
             android:text="@string/_0"
             android:textSize="18sp"
             android:textStyle="bold"
+            style="@style/text"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"/>
 
@@ -55,6 +58,7 @@
             android:text="@string/save_time"
             android:textSize="18sp"
             android:textStyle="bold"
+            style="@style/text"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
             android:layout_marginStart="20dp"/>
@@ -63,6 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_01_01"
+            style="@style/text"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"

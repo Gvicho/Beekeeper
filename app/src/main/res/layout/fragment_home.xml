@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/background"
     tools:context=".presenter.screen.home.HomeFragment"
     android:orientation="vertical">
 
@@ -11,6 +12,7 @@
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        style="@style/editText"
         android:layout_marginTop="10dp"
         android:layout_marginHorizontal="20dp"
         android:background="@drawable/shape_edit_text"

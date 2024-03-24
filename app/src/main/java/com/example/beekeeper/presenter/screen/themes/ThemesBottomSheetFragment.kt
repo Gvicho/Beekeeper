@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 class ThemesBottomSheetFragment :
     BaseBottomSheetFragment<FragmentThemesBottomSheetBinding>(FragmentThemesBottomSheetBinding::inflate) {
 
-        private val viewModel: ThemesViewModel by viewModels()
-        private var isDarkThemeEnabled = false
+    private val viewModel: ThemesViewModel by viewModels()
+    private var isDarkThemeEnabled = false
 
 
     override fun setUp() {
@@ -30,11 +30,11 @@ class ThemesBottomSheetFragment :
 
         binding.cbDarkMode.setOnCheckedChangeListener { _, isChecked ->
 
-            if(isChecked){
+            if (isChecked) {
                 binding.cbLightMode.isChecked = false
                 isDarkThemeEnabled = true
                 setUpPreview()
-            }else{
+            } else {
                 binding.cbLightMode.isChecked = true
                 isDarkThemeEnabled = false
                 setUpPreview()
@@ -43,11 +43,11 @@ class ThemesBottomSheetFragment :
         }
 
         binding.cbLightMode.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 binding.cbDarkMode.isChecked = false
                 isDarkThemeEnabled = false
                 setUpPreview()
-            }else{
+            } else {
                 binding.cbDarkMode.isChecked = true
                 isDarkThemeEnabled = true
                 setUpPreview()
@@ -71,18 +71,18 @@ class ThemesBottomSheetFragment :
         }
     }
 
-    private fun setUpPreview(){
+    private fun setUpPreview() {
 
-        if (isDarkThemeEnabled){
+        if (isDarkThemeEnabled) {
             binding.cbDarkMode.isChecked = true
             binding.ivThemePreview.setImageResource(R.drawable.screen_dark_mode)
             // Set background to black
-            binding.root.setBackgroundColor(Color.GRAY)
-        }else{
+            binding.root.setBackgroundColor(Color.parseColor("#3A3838"))
+        } else {
             binding.cbLightMode.isChecked = true
             binding.ivThemePreview.setImageResource(R.drawable.screen_light_mode)
             // Set background to white
-            binding.root.setBackgroundColor(Color.WHITE)
+            binding.root.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
         }
 
     }
@@ -100,11 +100,11 @@ class ThemesBottomSheetFragment :
     }
 
 
-    private fun setCurrentState(){
-        if(isDarkThemeEnabled){
+    private fun setCurrentState() {
+        if (isDarkThemeEnabled) {
             binding.cbLightMode.isChecked = false
             binding.cbDarkMode.isChecked = true
-        }else{
+        } else {
             binding.cbLightMode.isChecked = true
             binding.cbDarkMode.isChecked = false
         }

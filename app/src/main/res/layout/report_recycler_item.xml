@@ -4,23 +4,25 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
+    style="@style/background"
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:textColor="@color/black"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/tvId"
+        style="@style/text"
         android:textStyle="bold"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        style="@style/text"
         android:textSize="15sp"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
         app:layout_constraintTop_toTopOf="@+id/frameLayout"
@@ -33,7 +35,7 @@
         android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:maxLines="5"
-        android:textColor="@color/black"
+        style="@style/text"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvDate"
@@ -51,7 +53,7 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="90dp" />
 
         <me.relex.circleindicator.CircleIndicator3
             android:id="@+id/indicator"
