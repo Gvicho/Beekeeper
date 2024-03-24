@@ -27,6 +27,7 @@ import com.example.beekeeper.presenter.extension.loadImage
 import com.example.beekeeper.presenter.model.drawer_menu.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
 import com.example.beekeeper.presenter.model.user.UserDataUI
+import com.example.beekeeper.presenter.state.configurations.AppConfigurationsState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
@@ -59,8 +60,9 @@ class MainActivity : AppCompatActivity() {
         intent = Intent()
 
         viewModel.onEvent(MainActivityEvents.ReadDarkMode)
-        observeDarkMode()
+        viewModel.onEvent(MainActivityEvents.ReadLanguageConfiguration)
         requestPermission()
+        bindConfigurationFlow()
 
 
         val navView: BottomNavigationView = binding.appBarMain.contentMain.navView
@@ -178,15 +180,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun observeDarkMode() {
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.darkModeFlow.collect { isDarkModeEnabled ->
-                    applyTheme(isDarkModeEnabled)
-                }
-            }
-        }
-    }
 
     @OptIn(FlowPreview::class)
     private fun observeNavigationEvents() {
@@ -263,6 +256,23 @@ class MainActivity : AppCompatActivity() {
         binding.appBarMain.contentMain.btnAddReport.setOnClickListener {
             openAddReportsFragment()
         }
+    }
+
+    private fun bindConfigurationFlow(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.configurationsState.collect { configuration ->
+                    handleConfigurationState(configuration)
+                    }
+            }
+        }
+    }
+
+    private fun handleConfigurationState(configuration: AppConfigurationsState){
+
+        applyTheme(configuration.theme)
+        setLocale(configuration.languages)
+
     }
 
     private fun setLocale(language: Boolean) {

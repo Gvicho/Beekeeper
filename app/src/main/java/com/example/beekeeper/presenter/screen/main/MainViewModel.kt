@@ -6,14 +6,14 @@ import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.credentials.CancelSessionUseCase
 import com.example.beekeeper.domain.usecase.credentials.ReadSessionTokenUseCase
 import com.example.beekeeper.domain.usecase.dark_mode.ReadDarkModeUseCase
+import com.example.beekeeper.domain.usecase.languages.ReadLanguageModeUseCase
 import com.example.beekeeper.domain.usecase.user.ReadUserDataUseCase
 import com.example.beekeeper.presenter.event.main.MainActivityEvents
 import com.example.beekeeper.presenter.mappers.user.toPresentation
 import com.example.beekeeper.presenter.model.user.UserDataUI
+import com.example.beekeeper.presenter.state.configurations.AppConfigurationsState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,12 +25,12 @@ class MainViewModel @Inject constructor(
     private val readDarkModeUseCase: ReadDarkModeUseCase,
     private val cancelSessionUseCase: CancelSessionUseCase,
     private val readSessionTokenUseCase: ReadSessionTokenUseCase,
-    private val readUserDataUseCase: ReadUserDataUseCase
+    private val readUserDataUseCase: ReadUserDataUseCase,
+    private val readLanguageModeUseCase: ReadLanguageModeUseCase
 ) : ViewModel() {
 
-
-    private val _darkModeFlow = MutableSharedFlow<Boolean>()
-    val darkModeFlow: SharedFlow<Boolean> get() = _darkModeFlow
+    private val _configurationsState = MutableStateFlow(AppConfigurationsState())
+    val configurationsState = _configurationsState.asStateFlow()
 
 
     private val _pageNavigationEvent = MutableStateFlow<MessagePageNavigationEvents?>(null)
@@ -39,6 +39,7 @@ class MainViewModel @Inject constructor(
 
     private val _userProfileState = MutableStateFlow(UserDataUI())
     val userProfileState = _userProfileState.asStateFlow()
+
 
 
     private var sessionToken:String = ""
@@ -54,13 +55,26 @@ class MainViewModel @Inject constructor(
             MainActivityEvents.ReadDarkMode -> readDarkMode()
             is MainActivityEvents.IntentReceivedWithReportId -> ifSessionEmitNavigateEvent(event.reportId)
             MainActivityEvents.ResetNavigationToNull -> resetNavigationToNull()
+            MainActivityEvents.ReadLanguageConfiguration -> readLanguageOption()
         }
     }
 
     private fun readDarkMode() {
         viewModelScope.launch {
-            readDarkModeUseCase().collect {
-                _darkModeFlow.emit(it)
+            readDarkModeUseCase().collect {theme->
+                _configurationsState.update {
+                    it.copy(theme = theme)
+                }
+            }
+        }
+    }
+
+    private fun readLanguageOption(){
+        viewModelScope.launch {
+            readLanguageModeUseCase().collect {language->
+                _configurationsState.update {
+                    it.copy(languages = language)
+                }
             }
         }
     }
