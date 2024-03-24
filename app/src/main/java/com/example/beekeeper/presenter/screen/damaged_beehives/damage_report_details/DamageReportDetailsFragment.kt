@@ -101,6 +101,8 @@ class DamageReportDetailsFragment :
         binding.apply {
             tvDescription.text = report.damageDescription
             halfGauge.value = report.damageLevelIndicator.toDouble()
+            tvId.text = report.id.toString()
+            tvDate.text = report.dateUploaded
         }
     }
 

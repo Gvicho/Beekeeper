@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,37 +10,101 @@
     tools:context=".presenter.screen.damaged_beehives.damage_report_details.DamageReportDetailsFragment">
 
     <TextView
+        android:id="@+id/textView3"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:text="@string/report_details"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:textSize="18sp"/>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvDescription"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/fieldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        style="@style/text"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/tvIdPrefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="id: "
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/text"/>
+
+        <TextView
+            android:id="@+id/tvId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="bala"
+            android:textSize="18sp"
+            style="@style/text"/>
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginStart="20dp"
+            style="@style/text"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/grey"
+        app:layout_constraintTop_toBottomOf="@+id/fieldText"
+        tools:layout_editor_absoluteX="16dp"
+        android:layout_marginTop="10dp"/>
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imagesFrame"
+        app:layout_constraintTop_toTopOf="@id/imagesFrame">
+        ">
+
+        <TextView
+            android:id="@+id/tvDescription"
+            style="@style/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"/>
     </ScrollView>
 
     <FrameLayout
-        android:layout_gravity="center_horizontal"
+        android:id="@+id/imagesFrame"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="20dp">
+        android:layout_gravity="center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line1"
+        android:layout_marginTop="30dp">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <me.relex.circleindicator.CircleIndicator3
             android:id="@+id/indicator"
@@ -51,11 +115,23 @@
 
     </FrameLayout>
 
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/grey"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        tools:layout_editor_absoluteX="16dp"
+        android:layout_marginTop="20dp"/>
+
     <com.ekn.gruzer.gaugelibrary.HalfGauge
         android:id="@+id/halfGauge"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        android:layout_gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line2"
         android:layout_marginTop="20dp"/>
 
     <ProgressBar
@@ -68,4 +144,4 @@
     app:layout_constraintStart_toStartOf="parent"
     android:visibility="gone" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>
