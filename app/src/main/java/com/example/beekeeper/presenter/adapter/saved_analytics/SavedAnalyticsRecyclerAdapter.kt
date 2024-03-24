@@ -41,7 +41,7 @@ class SavedAnalyticsRecyclerAdapter (
         }
 
         private fun bindUserBackgroundColor(isSelected:Boolean){
-            if(isSelected) binding.root.setBackgroundColor(itemView.context.getColor(R.color.grey_transparent))
+            if(isSelected) binding.root.setBackgroundResource(R.drawable.bg_button)
             else binding.root.setBackgroundColor(itemView.context.getColor(R.color.transparent))
         }
 

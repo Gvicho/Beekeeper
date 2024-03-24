@@ -35,7 +35,6 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         style="@style/text"
-        android:text="@string/title"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <androidx.appcompat.widget.AppCompatTextView

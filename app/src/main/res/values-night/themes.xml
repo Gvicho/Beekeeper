@@ -55,8 +55,13 @@
     <style name="report_item_background">
         <item name="android:background">@drawable/bg_rec_dark_rec_item</item>
     </style>
+
     <style name="text_rey">
         <item name="android:textColor">@color/bg_sky</item>
+    </style>
+
+    <style name="centerContainer">
+        <item name="android:background">@drawable/bg_center_container_dark</item>
     </style>
 
 

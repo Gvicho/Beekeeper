@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
         val profile: AppCompatImageView =
             binding.drawerNav.getHeaderView(0).findViewById(R.id.imageViewHeaderProfile)
         userDataUI.let {
-            tvName.text = it.name.plus(it.lastName)
+            tvName.text = it.name
             tvMail.text = it.email
 
             if (it.image.isNotEmpty()) profile.loadImage(it.image)

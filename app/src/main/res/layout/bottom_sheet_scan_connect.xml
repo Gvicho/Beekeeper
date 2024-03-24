@@ -40,21 +40,20 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"
-        android:indeterminateTint="@color/honey"
-        />
+        android:layout_marginTop="20dp"
+        android:indeterminateTint="@color/bg_pink"
+        android:visibility="gone" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         style="@style/bottomContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="bottom"
         android:layout_marginTop="10dp"
+        android:orientation="vertical"
         android:padding="16dp">
 
         <TextView
@@ -80,9 +79,6 @@
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

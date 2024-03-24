@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/background"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presenter.screen.saved_analytics.SavedAnalyticsFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".presenter.screen.saved_analytics.SavedAnalyticsFragment">
 
     <LinearLayout
+        style="@style/background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="15dp"
         android:layout_marginTop="10dp"
-        style="@style/background"
-        android:layout_gravity="center_horizontal">
+        android:background="@drawable/bg_button"
+        android:padding="10dp">
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/reloadBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_reload_36"
+            android:layout_marginStart="5dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginStart="5dp"/>
+            android:background="@color/transparent"
+            android:src="@drawable/ic_reload_36" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvHeader"
+            style="@style/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Saved Analytics"
-            style="@style/text"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="35dp"
-            android:layout_gravity="center_vertical" />
+            android:text="Saved Analytics"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -44,38 +46,39 @@
         android:id="@+id/buttonsLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:visibility="gone"
-        android:background="@color/grey_transparent"
-        android:layout_marginHorizontal="5dp">
+        android:layout_margin="15dp"
+        android:padding="10dp"
+        android:layout_marginHorizontal="5dp"
+        android:background="@drawable/bg_button"
+        android:visibility="gone">
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/deleteBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="20dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_delete_34"
-            android:layout_gravity="center_vertical"/>
+            android:src="@drawable/ic_delete_34" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/uploadBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="20dp"
             android:background="@color/transparent"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_upload_34"/>
+            android:src="@drawable/ic_upload_34" />
 
         <TextView
             android:id="@+id/tvSelectedCount"
+            style="@style/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="20dp"
             android:text="0"
-            style="@style/text"
-            android:textAppearance="@style/text_white"/>
+            android:textAppearance="@style/text_white" />
 
     </LinearLayout>
 
@@ -89,9 +92,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="25dp"
             android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_marginTop="25dp" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -106,10 +109,9 @@
             android:id="@+id/orderSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"/>
+            android:layout_gravity="end" />
 
     </FrameLayout>
-
 
 
 </LinearLayout>
