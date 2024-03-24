@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/report_item_background"
-    android:layout_width="wrap_content"
+    android:background="@drawable/bg_et_rect"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
-    android:layout_marginTop="10dp"
+    android:layout_margin="25dp"
     android:padding="16dp">
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -14,23 +13,24 @@
         style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="12124124"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@id/cvImages"
-        app:layout_constraintTop_toBottomOf="@id/cvImages" />
+        tools:layout_editor_absoluteX="236dp"
+        tools:layout_editor_absoluteY="16dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvDate"
-        style="@style/text"
+        style="@style/text_rey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:text="23 june, 2023"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@id/tvId"
-        app:layout_constraintTop_toBottomOf="@id/tvId" />
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        tools:layout_editor_absoluteX="252dp"
+        tools:layout_editor_absoluteY="232dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvDesc"
@@ -52,13 +52,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager2"
             android:layout_width="150dp"
-            android:layout_height="200dp" />
+            android:layout_height="100dp" />
 
         <me.relex.circleindicator.CircleIndicator3
             android:id="@+id/indicator"
@@ -73,14 +74,12 @@
         android:id="@+id/indicatorLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/circle_green"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="10dp"
+
         android:background="@color/transparent"
-      />
+        android:src="@drawable/circle_green"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+         />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -65,6 +65,12 @@
         <item name="android:background">@drawable/bg_rec</item>
     </style>
 
+    <style name="text_rey">
+        <item name="android:textColor">@color/background_color_level1</item>
+    </style>
+
+
+
 
 
 

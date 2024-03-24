@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         observeNavigationEvents()
         bindUserProfileInfoObserver()
-
+        listeners()
         handleIntent(intent)
         intent.extras?.clear()
         intent = Intent()
@@ -72,12 +72,12 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.damagedBeehivesFragment, R.id.navigation_home, R.id.shareOrGetFragment, R.id.savedAnalyticsFragment -> {
-                    binding.appBarMain.contentMain.navView.visibility = View.VISIBLE
+                    binding.appBarMain.contentMain.coordinator.visibility = View.VISIBLE
                     binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                 }
 
                 else -> {
-                    binding.appBarMain.contentMain.navView.visibility = View.GONE
+                    binding.appBarMain.contentMain.coordinator.visibility = View.GONE
                     binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 }
             }
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun bindUserProfileInfoObserver(){
+    private fun bindUserProfileInfoObserver() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userProfileState.collect { user ->
@@ -95,15 +95,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun bindUserHeader(userDataUI: UserDataUI){
-        val tvName :TextView = binding.drawerNav.getHeaderView(0).findViewById(R.id.tvDrawerUserName)
-        val tvMail :TextView = binding.drawerNav.getHeaderView(0).findViewById(R.id.tvHeaderMail)
-        val profile : AppCompatImageView = binding.drawerNav.getHeaderView(0).findViewById(R.id.imageViewHeaderProfile)
+    private fun bindUserHeader(userDataUI: UserDataUI) {
+        val tvName: TextView =
+            binding.drawerNav.getHeaderView(0).findViewById(R.id.tvDrawerUserName)
+        val tvMail: TextView = binding.drawerNav.getHeaderView(0).findViewById(R.id.tvHeaderMail)
+        val profile: AppCompatImageView =
+            binding.drawerNav.getHeaderView(0).findViewById(R.id.imageViewHeaderProfile)
         userDataUI.let {
             tvName.text = it.name.plus(it.lastName)
             tvMail.text = it.email
 
-            if(it.image.isNotEmpty())profile.loadImage(it.image)
+            if (it.image.isNotEmpty()) profile.loadImage(it.image)
         }
 
     }
@@ -217,6 +219,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     private fun handleIntent(intent: Intent) {
         intent.extras?.let { bundle ->
             if (bundle.containsKey("reportId")) {
@@ -238,5 +241,16 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.damageReportDetailsFragment, bundle)
     }
 
+    private fun openAddReportsFragment() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.navigate(R.id.addReportFragment)
+    }
+
+
+    private fun listeners() {
+        binding.appBarMain.contentMain.btnAddReport.setOnClickListener {
+            openAddReportsFragment()
+        }
+    }
 
 }

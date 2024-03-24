@@ -70,10 +70,13 @@ class AddReportFragment :
         }
 
         state.uploadedSuccessfully?.let {
-            binding.root.showSnackBar("success upload")
             viewModel.onEvent(AddReportPageEvents.ResetSuccessToNull)
+            disable()
         }
 
+    }
+    private fun disable(){
+        findNavController().popBackStack()
     }
 
 

@@ -86,7 +86,7 @@ class DamageReportsFragment :
         }
         binding.apply {
             reportsRecyclerView.adapter = reportsAdapter
-            reportsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+            reportsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
