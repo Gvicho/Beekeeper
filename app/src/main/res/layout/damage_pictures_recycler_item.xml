@@ -3,31 +3,29 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="6dp"
-    style="@style/background"
+    android:background="@color/transparent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        style="@style/background"
-        >
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:cropToPadding="true"
-            android:scaleType="centerCrop"
-            android:id="@+id/ivDamage"
-            android:src="@drawable/ic_robot"
-           />
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/removeBtn"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="end"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_red_cross_28" />
-    </androidx.cardview.widget.CardView>
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        android:id="@+id/ivDamage"
+        android:src="@drawable/ic_robot"
+        app:shapeAppearance="@style/RoundedCorners"
+        android:background="@color/grey"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/removeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_minus_24" />
 
 
 </FrameLayout>
