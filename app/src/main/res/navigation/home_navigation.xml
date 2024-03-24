@@ -3,15 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/splashFragment">
-
-
+    app:startDestination="@id/damagedBeehivesFragment">
 
 
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.beekeeper.presenter.screen.home.HomeFragment"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_farmDetailsFragment"
             app:destination="@id/farmDetailsFragment" />
@@ -22,7 +20,7 @@
         android:id="@+id/splashFragment"
         android:name="com.example.beekeeper.presenter.screen.splash.SplashFragment"
         android:label="fragment_splash_screen"
-        tools:layout="@layout/fragment_splash_screen" >
+        tools:layout="@layout/fragment_splash_screen">
 
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
@@ -39,7 +37,7 @@
         android:id="@+id/loginFragment"
         android:name="com.example.beekeeper.presenter.screen.authentication.login.LoginFragment"
         android:label="fragment_login_screen"
-        tools:layout="@layout/fragment_login_screen" >
+        tools:layout="@layout/fragment_login_screen">
         <action
             android:id="@+id/action_loginFragment_to_navigation_home"
             app:destination="@id/navigation_home"
@@ -56,7 +54,7 @@
         android:id="@+id/registrationFragment"
         android:name="com.example.beekeeper.presenter.screen.authentication.register.RegistrationFragment"
         android:label="fragment_registration"
-        tools:layout="@layout/fragment_registration" >
+        tools:layout="@layout/fragment_registration">
         <action
             android:id="@+id/action_registrationFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -70,7 +68,7 @@
         android:id="@+id/savedAnalyticsFragment"
         android:name="com.example.beekeeper.presenter.screen.saved_analytics.SavedAnalyticsFragment"
         android:label="fragment_saved_analytics"
-        tools:layout="@layout/fragment_saved_analytics" >
+        tools:layout="@layout/fragment_saved_analytics">
         <action
             android:id="@+id/action_savedAnalyticsFragment_to_analyticDetailsFragment"
             app:destination="@id/analyticDetailsFragment" />
@@ -79,7 +77,7 @@
         android:id="@+id/damagedBeehivesFragment"
         android:name="com.example.beekeeper.presenter.screen.damaged_beehives.damage_reports.DamageReportsFragment"
         android:label="fragment_damaged_beehives"
-        tools:layout="@layout/fragment_damaged_beehives" >
+        tools:layout="@layout/fragment_damaged_beehives">
         <action
             android:id="@+id/action_damagedBeehivesFragment_to_addReportFragment"
             app:destination="@id/addReportFragment" />
@@ -91,18 +89,18 @@
         android:id="@+id/shareOrGetFragment"
         android:name="com.example.beekeeper.presenter.screen.get_analytics.ShareOrGetFragment"
         android:label="fragment_share_or_get"
-        tools:layout="@layout/fragment_share_or_get" >
+        tools:layout="@layout/fragment_share_or_get">
         <action
             android:id="@+id/action_shareOrGetFragment_to_scanBottomSheet"
             app:destination="@id/scanBottomSheet" />
         <argument
             android:name="name"
-            app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue=""
+            app:argType="string" />
         <argument
             android:name="address"
-            app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue=""
+            app:argType="string" />
         <action
             android:id="@+id/action_shareOrGetFragment_to_receivedAnalyticsBottomSheet"
             app:destination="@id/receivedAnalyticsBottomSheet" />
@@ -110,18 +108,18 @@
             android:id="@+id/action_shareOrGetFragment_to_savedAnalyticsFragment"
             app:destination="@id/savedAnalyticsFragment"
             app:popUpTo="@id/shareOrGetFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
     <dialog
         android:id="@+id/scanBottomSheet"
         android:name="com.example.beekeeper.presenter.screen.get_analytics.scan.ScanBottomSheet"
         android:label="ScanBottomSheet"
-        tools:layout="@layout/bottom_sheet_scan_connect"/>
+        tools:layout="@layout/bottom_sheet_scan_connect" />
     <fragment
         android:id="@+id/addReportFragment"
         android:name="com.example.beekeeper.presenter.screen.damaged_beehives.add_report.AddReportFragment"
         android:label="fragment_add_report"
-        tools:layout="@layout/fragment_add_report" >
+        tools:layout="@layout/fragment_add_report">
         <action
             android:id="@+id/action_addReportFragment_to_chooseMediaBottomSheetFragment"
             app:destination="@id/chooseMediaBottomSheetFragment" />
@@ -136,8 +134,8 @@
         tools:layout="@layout/bottom_sheet_received_analytics">
         <argument
             android:name="id"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            android:defaultValue="-1"
+            app:argType="integer" />
         <argument
             android:name="weightData"
             app:argType="float[]" />
@@ -152,21 +150,21 @@
         android:id="@+id/analyticDetailsFragment"
         android:name="com.example.beekeeper.presenter.screen.saved_analytics.analytic_details.AnalyticDetailsFragment"
         android:label="fragment_analytic_details"
-        tools:layout="@layout/fragment_analytic_details" >
+        tools:layout="@layout/fragment_analytic_details">
         <argument
             android:name="beehiveId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            android:defaultValue="-1"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/farmDetailsFragment"
         android:name="com.example.beekeeper.presenter.screen.home.farm_details_page.FarmDetailsFragment"
         android:label="fragment_farm_details"
-        tools:layout="@layout/fragment_farm_details" >
+        tools:layout="@layout/fragment_farm_details">
         <argument
             android:name="farmId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            android:defaultValue="-1"
+            app:argType="integer" />
     </fragment>
     <dialog
         android:id="@+id/themesBottomSheetFragment"
@@ -177,7 +175,7 @@
         android:id="@+id/damageReportDetailsFragment"
         android:name="com.example.beekeeper.presenter.screen.damaged_beehives.damage_report_details.DamageReportDetailsFragment"
         android:label="fragment_damage_report_details"
-        tools:layout="@layout/fragment_damage_report_details" >
+        tools:layout="@layout/fragment_damage_report_details">
         <argument
             android:name="id"
             app:argType="integer" />
@@ -186,7 +184,7 @@
         android:id="@+id/profileFragment"
         android:name="com.example.beekeeper.presenter.screen.user.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_chooseMediaBottomSheetFragment"
             app:destination="@id/chooseMediaBottomSheetFragment" />
@@ -198,7 +196,7 @@
         android:id="@+id/chooseMediaBottomSheetFragment"
         android:name="com.example.beekeeper.presenter.screen.media.ChooseMediaBottomSheetFragment"
         android:label="fragment_choose_media_bottom_sheet"
-        tools:layout="@layout/fragment_choose_media_bottom_sheet" >
+        tools:layout="@layout/fragment_choose_media_bottom_sheet">
         <action
             android:id="@+id/action_chooseMediaBottomSheetFragment_to_cameraBottomSheetFragment"
             app:destination="@id/cameraBottomSheetFragment" />
@@ -220,5 +218,5 @@
         android:id="@+id/languagesBottomSheet"
         android:name="com.example.beekeeper.presenter.screen.configurations.language.LanguagesBottomSheet"
         android:label="LanguagesBottomSheet"
-        tools:layout="@layout/bottom_sheet_languages"/>
+        tools:layout="@layout/bottom_sheet_languages" />
 </navigation>

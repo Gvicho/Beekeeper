@@ -140,7 +140,11 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.changePasswordFragment)
                 }
 
-                Options.LANGUAGE -> TODO()
+                Options.LANGUAGE ->
+                {
+                    val navController = findNavController(R.id.nav_host_fragment_activity_main)
+                    navController.navigate(R.id.languagesBottomSheet)
+                }
             }
 
         }
