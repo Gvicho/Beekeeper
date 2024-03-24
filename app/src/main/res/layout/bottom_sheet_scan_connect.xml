@@ -1,55 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/background"
     android:layout_width="match_parent"
     android:layout_height="600dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    style="@style/background"
-    android:nestedScrollingEnabled="true">
+    android:background="@color/honey"
+    android:nestedScrollingEnabled="true"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/paired_devices"
-        android:textSize="18sp"
-        style="@style/text"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pairedDevicesRecycler"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        style="@style/topContainer"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="25dp"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:background="@drawable/shape_recycler"
-        android:padding="10dp"
-        android:layout_marginHorizontal="5dp"/>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/scanned_devices"
-        android:textSize="18sp"
-        style="@style/text"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/scannedDevicesRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="25dp"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:background="@drawable/shape_recycler"
-        android:padding="10dp"
-        android:layout_marginHorizontal="5dp"/>
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:text="@string/paired_devices"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/pairedDevicesRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        style="@style/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="40dp"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:text="@string/scanned_devices"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/scannedDevicesRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 
     <ProgressBar
@@ -58,12 +79,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/errorViewHolder"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:id="@+id/errorViewHolder"/>
+        android:layout_height="60dp" />
 
 </LinearLayout>

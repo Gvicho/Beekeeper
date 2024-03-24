@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:orientation="horizontal"
-   style="@style/background">
+    android:background="@drawable/bg_et_rect"
+    android:orientation="horizontal">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginVertical="5dp"
         android:layout_marginStart="30dp"
-        android:layout_marginVertical="5dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvName"
+            style="@style/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/name"
-            style="@style/text"/>
+            android:text="@string/name" />
 
         <TextView
             android:id="@+id/tvAddress"
+            style="@style/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/address"
-            style="@style/text"/>
+            android:text="@string/address" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -36,8 +37,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|center_vertical"
-        android:src="@drawable/ic_beehive_32"
         android:layout_marginEnd="20dp"
-        android:visibility="gone"/>
+        android:src="@drawable/ic_beehive_32"
+        android:visibility="gone" />
 
 </FrameLayout>
