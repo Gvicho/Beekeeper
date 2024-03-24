@@ -61,6 +61,10 @@
         <item name="android:background">@drawable/bg_rec</item>
     </style>
 
+    <style name="report_item_background">
+        <item name="android:background">@drawable/bg_rec</item>
+    </style>
+
 
 
 

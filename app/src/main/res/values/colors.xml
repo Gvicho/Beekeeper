@@ -23,5 +23,6 @@
     <color name="red">#EC122B</color>
     <color name="hint_color_light">#ECE8E8</color>
     <color name="dark_background">#1B1A1A</color>
+    <color name="drawer_dark">#3A3838</color>
 
 </resources>

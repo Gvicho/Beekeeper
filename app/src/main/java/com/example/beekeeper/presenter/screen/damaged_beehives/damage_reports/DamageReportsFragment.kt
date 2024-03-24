@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentDamagedBeehivesBinding
@@ -80,12 +81,12 @@ class DamageReportsFragment :
     }
 
     private fun bindRecycler() {
-        reportsAdapter = ReportsRecyclerAdapter{
+        reportsAdapter = ReportsRecyclerAdapter {
             openDetails(it.id)
         }
         binding.apply {
             reportsRecyclerView.adapter = reportsAdapter
-            reportsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+            reportsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         }
     }
 

@@ -27,7 +27,7 @@
 
 
     <style name="background_drawer">
-        <item name="android:background">#3A3838</item>
+        <item name="android:background">@color/drawer_dark</item>
     </style>
 
     <style name="text">
@@ -51,6 +51,10 @@
         <item name="android:background">@drawable/bg_rec_dark</item>
     </style>
 
+
+    <style name="report_item_background">
+        <item name="android:background">@drawable/bg_rec_dark_rec_item</item>
+    </style>
 
 
 </resources>
