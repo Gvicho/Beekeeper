@@ -14,6 +14,7 @@ import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -45,7 +46,7 @@ class AssistantRepositoryImpl @Inject constructor(private val generativeModel: G
             d("errorinRepoAnalys", e.toString())
             emit(Resource.Failed("Failed: ${e.localizedMessage}"))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     override fun getSuggestions(): Flow<Resource<String>> = flow{
         try {

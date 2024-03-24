@@ -6,8 +6,10 @@ import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.repository.auth.AuthRepository
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -19,7 +21,7 @@ class AuthRepositoryImpl @Inject constructor(
 
         return handleResponse.safeApiCall {
             firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-        }
+        }.flowOn(Dispatchers.IO)
 
     }
 
@@ -27,7 +29,7 @@ class AuthRepositoryImpl @Inject constructor(
 
         return handleResponse.safeApiCall {
             firebaseAuth.signInWithEmailAndPassword(email, password).await()
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     override suspend fun recoverPassword(email: String): Flow<Resource<Boolean>> =
@@ -42,7 +44,7 @@ class AuthRepositoryImpl @Inject constructor(
                 d("exceptionInRepo", e.toString())
             }
 
-        }  // this doesn't validate if email is valid and there is any account by that email (FireBase Security issues)
+        }.flowOn(Dispatchers.IO)  // this doesn't validate if email is valid and there is any account by that email (FireBase Security issues)
 
 
     override suspend fun updatePassword(
@@ -65,7 +67,7 @@ class AuthRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             emit(Resource.Failed(e.message ?: "Failed with Exception!"))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
 
 }

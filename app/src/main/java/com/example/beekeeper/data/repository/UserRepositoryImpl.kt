@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -64,10 +65,10 @@ class UserRepositoryImpl @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    private suspend fun uploadImageAndGetUrl(imageUri: Uri, token: String): String {
+    private suspend fun uploadImageAndGetUrl(imageUri: Uri, token: String): String  = withContext(Dispatchers.IO){
         val imageRef = storage.reference.child("user_images/${token}")
         imageRef.putFile(imageUri).await()
-        return imageRef.downloadUrl.await().toString()
+        imageRef.downloadUrl.await().toString()
     }
 
 }
