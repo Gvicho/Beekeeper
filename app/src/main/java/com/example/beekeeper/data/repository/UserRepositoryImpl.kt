@@ -1,7 +1,6 @@
 package com.example.beekeeper.data.repository
 
 import android.net.Uri
-import android.util.Log.d
 import androidx.core.net.toUri
 import com.example.beekeeper.data.source.remote.internet.mappers.user.toData
 import com.example.beekeeper.data.source.remote.internet.mappers.user.toDomain
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
-
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -68,7 +66,7 @@ class UserRepositoryImpl @Inject constructor(
 
     private suspend fun uploadImageAndGetUrl(imageUri: Uri, token: String): String {
         val imageRef = storage.reference.child("user_images/${token}")
-        val uploadTask = imageRef.putFile(imageUri).await()
+        imageRef.putFile(imageUri).await()
         return imageRef.downloadUrl.await().toString()
     }
 

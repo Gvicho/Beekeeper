@@ -5,25 +5,27 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.ActivityMainBinding
 import com.example.beekeeper.presenter.adapter.options.OptionsRecyclerAdapter
 import com.example.beekeeper.presenter.event.main.MainActivityEvents
-import com.example.beekeeper.presenter.extension.showSnackBar
+import com.example.beekeeper.presenter.extension.loadImage
 import com.example.beekeeper.presenter.model.drawer_menu.Option
 import com.example.beekeeper.presenter.model.drawer_menu.Options
+import com.example.beekeeper.presenter.model.user.UserDataUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
@@ -49,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         observeNavigationEvents()
+        bindUserProfileInfoObserver()
 
         handleIntent(intent)
         intent.extras?.clear()
@@ -63,16 +66,6 @@ class MainActivity : AppCompatActivity() {
         initRecycler()
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home,
-                R.id.savedAnalyticsFragment,
-                R.id.damagedBeehivesFragment,
-                R.id.shareOrGetFragment
-            )
-        )
 
         navView.setupWithNavController(navController)
 
@@ -88,6 +81,29 @@ class MainActivity : AppCompatActivity() {
                     binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 }
             }
+        }
+
+    }
+
+    private fun bindUserProfileInfoObserver(){
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userProfileState.collect { user ->
+                    bindUserHeader(user)
+                }
+            }
+        }
+    }
+
+    private fun bindUserHeader(userDataUI: UserDataUI){
+        val tvName :TextView = binding.drawerNav.getHeaderView(0).findViewById(R.id.tvDrawerUserName)
+        val tvMail :TextView = binding.drawerNav.getHeaderView(0).findViewById(R.id.tvHeaderMail)
+        val profile : AppCompatImageView = binding.drawerNav.getHeaderView(0).findViewById(R.id.imageViewHeaderProfile)
+        userDataUI.let {
+            tvName.text = it.name.plus(it.lastName)
+            tvMail.text = it.email
+
+            if(it.image.isNotEmpty())profile.loadImage(it.image)
         }
 
     }
@@ -109,7 +125,6 @@ class MainActivity : AppCompatActivity() {
 
                 Options.LOG_OUT -> {
                     viewModel.onEvent(MainActivityEvents.LogOutEvent)
-                    binding.root.showSnackBar("LogOut")
                     navigateToLoginFragmentClearingBackStack()
                 }
 

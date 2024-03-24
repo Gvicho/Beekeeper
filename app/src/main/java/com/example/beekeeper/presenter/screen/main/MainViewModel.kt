@@ -2,10 +2,14 @@ package com.example.beekeeper.presenter.screen.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.credentials.CancelSessionUseCase
 import com.example.beekeeper.domain.usecase.credentials.ReadSessionTokenUseCase
 import com.example.beekeeper.domain.usecase.dark_mode.ReadDarkModeUseCase
+import com.example.beekeeper.domain.usecase.user.ReadUserDataUseCase
 import com.example.beekeeper.presenter.event.main.MainActivityEvents
+import com.example.beekeeper.presenter.mappers.user.toPresentation
+import com.example.beekeeper.presenter.model.user.UserDataUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +24,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val readDarkModeUseCase: ReadDarkModeUseCase,
     private val cancelSessionUseCase: CancelSessionUseCase,
-    private val readSessionTokenUseCase: ReadSessionTokenUseCase
+    private val readSessionTokenUseCase: ReadSessionTokenUseCase,
+    private val readUserDataUseCase: ReadUserDataUseCase
 ) : ViewModel() {
 
 
@@ -30,6 +35,11 @@ class MainViewModel @Inject constructor(
 
     private val _pageNavigationEvent = MutableStateFlow<MessagePageNavigationEvents?>(null)
     val pageNavigationEvent get() = _pageNavigationEvent.asStateFlow()
+
+
+    private val _userProfileState = MutableStateFlow(UserDataUI())
+    val userProfileState = _userProfileState.asStateFlow()
+
 
     private var sessionToken:String = ""
 
@@ -73,10 +83,27 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun readUserData(token:String){
+        viewModelScope.launch {
+            readUserDataUseCase(token).collect{result->
+                when(result){
+                    is Resource.Failed -> {}
+                    is Resource.Loading -> {}
+                    is Resource.Success -> {
+                        _userProfileState.update {
+                            result.responseData.toPresentation()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun readToken(){
         viewModelScope.launch {
             readSessionTokenUseCase().collect { token ->
                 sessionToken = token
+                readUserData(token)
             }
         }
     }
