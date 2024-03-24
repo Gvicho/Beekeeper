@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-
-
     <item
         android:id="@+id/damagedBeehivesFragment"
         android:icon="@drawable/ic_beehives"
-        android:title="@string/damaged_beehives"
+        android:title="@string/reports"
         />
 
     <item
@@ -22,6 +19,6 @@
     <item
         android:id="@+id/savedAnalyticsFragment"
         android:icon="@drawable/ic_saved_analytics_24"
-        android:title="@string/saved_analytics" />
+        android:title="@string/analytics" />
 
 </menu>

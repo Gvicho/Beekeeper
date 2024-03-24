@@ -2,6 +2,7 @@ package com.example.beekeeper.presenter.screen.main
 
 import android.Manifest
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -31,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -49,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setLocale("ka")
         observeNavigationEvents()
         bindUserProfileInfoObserver()
         listeners()
@@ -140,8 +142,7 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.changePasswordFragment)
                 }
 
-                Options.LANGUAGE ->
-                {
+                Options.LANGUAGE -> {
                     val navController = findNavController(R.id.nav_host_fragment_activity_main)
                     navController.navigate(R.id.languagesBottomSheet)
                 }
@@ -152,10 +153,18 @@ class MainActivity : AppCompatActivity() {
             optionsRecyclerView.adapter = optionsAdapter
             optionsRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
             options = mutableListOf(
-                Option("Language", Options.LANGUAGE, icon = R.drawable.ic_language),
-                Option("Themes", Options.DARK_MODE, icon = R.drawable.ic_themes),
-                Option("Profile", Options.PROFILE, icon = R.drawable.ic_beekeper_drawer),
-                Option("Log out", Options.LOG_OUT, icon = R.drawable.ic_log_out),
+                Option(
+                    getString(R.string.languages),
+                    Options.LANGUAGE,
+                    icon = R.drawable.ic_language
+                ),
+                Option(getString(R.string.themes), Options.DARK_MODE, icon = R.drawable.ic_themes),
+                Option(
+                    getString(R.string.profile),
+                    Options.PROFILE,
+                    icon = R.drawable.ic_beekeper_drawer
+                ),
+                Option(getString(R.string.log_out), Options.LOG_OUT, icon = R.drawable.ic_log_out),
 
                 )
             optionsAdapter.submitList(options)
@@ -257,4 +266,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
+
+
+    }
 }

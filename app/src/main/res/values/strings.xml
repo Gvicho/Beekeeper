@@ -7,7 +7,7 @@
     <string name="splash">Splash</string>
     <string name="saved_analytics">Saved Analytics</string>
     <string name="damaged_beehives">Damaged Beehives</string>
-    <string name="share_get">Share/Get</string>
+    <string name="share_get">Connect</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="requestkey">requestKey</string>
@@ -96,5 +96,11 @@
     <string name="title">Title</string>
     <string name="kotejaparidz9e_gmail_com">Kotejaparidz9e@gmail.com</string>
     <string name="all_reports">All reports</string>
-    <string name="id">id:</string>
+    <string name="id">ID:</string>
+    <string name="languages">Languages</string>
+    <string name="themes">Themes</string>
+    <string name="profile">Profile</string>
+    <string name="log_out">Log out</string>
+    <string name="reports">Reports</string>
+    <string name="analytics">Analytics</string>
 </resources>
