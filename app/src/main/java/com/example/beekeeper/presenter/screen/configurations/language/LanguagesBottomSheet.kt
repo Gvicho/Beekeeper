@@ -9,6 +9,8 @@ import com.example.beekeeper.databinding.BottomSheetLanguagesBinding
 import com.example.beekeeper.presenter.base_fragment.BaseBottomSheetFragment
 import com.example.beekeeper.presenter.event.configutrations.language.LanguageBottomSheetEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -52,10 +54,13 @@ class LanguagesBottomSheet: BaseBottomSheetFragment<BottomSheetLanguagesBinding>
         }
     }
 
+    @OptIn(FlowPreview::class)
     private fun bindNavigationObserver(){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.navigationFlow.collect{
+                viewModel.navigationFlow
+                    .debounce(500)
+                    .collect{
                     handleNavigation(it)
                 }
             }
