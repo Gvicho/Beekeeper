@@ -103,4 +103,6 @@
     <string name="log_out">Log out</string>
     <string name="reports">Reports</string>
     <string name="analytics">Analytics</string>
+    <string name="ka">ka</string>
+    <string name="en">en</string>
 </resources>

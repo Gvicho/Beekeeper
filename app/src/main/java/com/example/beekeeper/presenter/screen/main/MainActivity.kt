@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setLocale("ka")
         observeNavigationEvents()
         bindUserProfileInfoObserver()
         listeners()
@@ -266,13 +265,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setLocale(languageCode: String) {
+    private fun setLocale(language: Boolean) {
+        val languageCode =
+            if (language) {
+                getString(R.string.ka)
+            } else {
+                getString(R.string.en)
+            }
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
         val config = Configuration()
         config.setLocale(locale)
         baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
-
 
     }
 }

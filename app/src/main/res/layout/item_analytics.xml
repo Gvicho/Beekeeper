@@ -3,47 +3,48 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="10dp"
-    android:paddingVertical="5dp">
+    android:background="@drawable/bg_et_rect"
+    android:padding="10dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_beehive_32"
-        android:layout_marginStart="5dp"/>
+        android:layout_marginStart="5dp"
+        android:src="@drawable/ic_beehive_32" />
 
     <TextView
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="20dp"
-        android:text="@string/beehiveid"
-        style="@style/text"/>
+        android:text="@string/beehiveid" />
 
     <TextView
         android:id="@+id/tvBeehiveId"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="5dp"
-        android:text="@string/_0"
-        style="@style/text"/>
+        android:text="@string/_0" />
 
     <TextView
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="20dp"
-        android:text="@string/save_time"
-        style="@style/text"/>
+        android:text="@string/save_time" />
 
     <TextView
         android:id="@+id/tvSaveTime"
+        style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="5dp"
-        android:text="@string/_0"
-        android:maxLines="1"
         android:ellipsize="end"
-        style="@style/text"/>
+        android:maxLines="1"
+        android:text="@string/_0" />
 </LinearLayout>
