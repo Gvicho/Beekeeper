@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.screen.themes
+package com.example.beekeeper.presenter.screen.configurations.themes
 
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatDelegate
@@ -9,7 +9,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentThemesBottomSheetBinding
 import com.example.beekeeper.presenter.base_fragment.BaseBottomSheetFragment
-import com.example.beekeeper.presenter.event.themes.ThemeEvents
+import com.example.beekeeper.presenter.event.configutrations.themes.ThemeEvents
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

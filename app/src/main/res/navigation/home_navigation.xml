@@ -170,7 +170,7 @@
     </fragment>
     <dialog
         android:id="@+id/themesBottomSheetFragment"
-        android:name="com.example.beekeeper.presenter.screen.themes.ThemesBottomSheetFragment"
+        android:name="com.example.beekeeper.presenter.screen.configurations.themes.ThemesBottomSheetFragment"
         android:label="fragment_themes_bottom_sheet"
         tools:layout="@layout/fragment_themes_bottom_sheet" />
     <fragment
@@ -216,4 +216,9 @@
         android:name="com.example.beekeeper.presenter.screen.authentication.change_password.ChangePasswordFragment"
         android:label="fragment_change_password"
         tools:layout="@layout/fragment_change_password" />
+    <dialog
+        android:id="@+id/languagesBottomSheet"
+        android:name="com.example.beekeeper.presenter.screen.configurations.language.LanguagesBottomSheet"
+        android:label="LanguagesBottomSheet"
+        tools:layout="@layout/bottom_sheet_languages"/>
 </navigation>
