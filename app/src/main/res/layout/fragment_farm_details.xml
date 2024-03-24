@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     style="@style/background"
+    android:padding="16dp"
     tools:context=".presenter.screen.home.farm_details_page.FarmDetailsFragment">
 
     <androidx.recyclerview.widget.RecyclerView

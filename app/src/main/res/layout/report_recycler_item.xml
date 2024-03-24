@@ -39,7 +39,7 @@
         android:id="@+id/tvDesc"
         style="@style/text"
         android:layout_width="160dp"
-        android:layout_height="36dp"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:maxLines="3"
@@ -59,7 +59,7 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager2"
             android:layout_width="150dp"
-            android:layout_height="100dp" />
+            android:layout_height="114dp" />
 
         <me.relex.circleindicator.CircleIndicator3
             android:id="@+id/indicator"

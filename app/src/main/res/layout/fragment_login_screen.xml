@@ -82,13 +82,13 @@
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cbRememberMe"
+            style="@style/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:buttonTint="#322E2E"
-            android:text="@string/remember_me"
-            style="@style/text"
             android:backgroundTint="@color/white"
+            android:buttonTint="@color/honey"
+            android:text="@string/remember_me"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etPassword" />
@@ -144,10 +144,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
+            android:indeterminateTint="@color/honey"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvRecoverPassword" />
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

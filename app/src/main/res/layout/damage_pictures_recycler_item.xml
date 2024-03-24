@@ -13,7 +13,6 @@
         android:cropToPadding="true"
         android:scaleType="centerCrop"
         android:id="@+id/ivDamage"
-        android:src="@drawable/ic_robot"
         app:shapeAppearance="@style/RoundedCorners"
         android:background="@color/grey"
         android:layout_marginTop="10dp"

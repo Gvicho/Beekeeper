@@ -37,26 +37,29 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
     override fun setListeners() {
         setChangeProfilePictureBtnListener()
         setSaveBtnListener()
+
+        binding.tvChangePassword.setOnClickListener {
+            openChangePassword()
+        }
     }
 
-    private fun setChangeProfilePictureBtnListener(){
+    private fun setChangeProfilePictureBtnListener() {
         binding.changeProfileImageButton.setOnClickListener {
             openChooseMediaBottomSheet()
         }
     }
 
-    private fun setSaveBtnListener(){
+    private fun setSaveBtnListener() {
         binding.saveBtn.setOnClickListener {
             requestUpload()
         }
     }
 
 
-
-    private fun requestUpload(){
+    private fun requestUpload() {
         val name = binding.etName.text.toString()
         val lastName = binding.etLastName.text.toString()
-        viewModel.onEvent(ProfilePageEvents.SaveNewProfileInfo(name,lastName))
+        viewModel.onEvent(ProfilePageEvents.SaveNewProfileInfo(name, lastName))
     }
 
     override fun bindObservers() {
@@ -64,7 +67,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         bindWorkerResultObserver()
     }
 
-    private fun bindWorkerResultObserver(){
+    private fun bindWorkerResultObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.workStatus.collect {
@@ -74,7 +77,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         }
     }
 
-    private fun handleWorkerStatusState(state: WorkerStatusState){
+    private fun handleWorkerStatusState(state: WorkerStatusState) {
 
         showOrHideProgressBar(state.isLoading)
         enableDisableUploadBtn(!state.isLoading) //upload button will be disabled
@@ -102,7 +105,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
     }
 
 
-    private fun bindUserCredentialsObserver(){
+    private fun bindUserCredentialsObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userCredentialsFlow.collect {
@@ -112,14 +115,14 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         }
     }
 
-    private fun handleUserDetails(userCredentials: UserCredentials){
+    private fun handleUserDetails(userCredentials: UserCredentials) {
         userCredentials.token?.let {
             viewModel.onEvent(ProfilePageEvents.RequestCurrentProfileInfo(it))
-            d("tag1234","fragment -> token : $it")
+            d("tag1234", "fragment -> token : $it")
         }
 
-        binding.tvEmail.text = userCredentials.mail?:"No Email"
-        d("tag1234","fragment -> mail : ${userCredentials.mail}")
+        binding.tvEmail.text = userCredentials.mail ?: "No Email"
+        d("tag1234", "fragment -> mail : ${userCredentials.mail}")
     }
 
     private fun openChooseMediaBottomSheet() {
@@ -140,8 +143,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         }
     }
 
-    private fun handleImage(image:String){
-        d("tag1234","fragment image set request")
+    private fun handleImage(image: String) {
+        d("tag1234", "fragment image set request")
         viewModel.onEvent(ProfilePageEvents.ImageSelected(image))
     }
 
@@ -156,43 +159,46 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         }
     }
 
-    private fun handleState(state:ProfilePageState){
+    private fun handleState(state: ProfilePageState) {
         showOrHideProgressBar(state.isLoading)
 
         state.errorMessage?.let {
             showErrorMessage(it)
         }
 
-        d("tag1234","fragment new State")
+        d("tag1234", "fragment new State")
 
         state.userDataUI?.let {
             handleUserInfo(it)
         }
     }
 
-    private fun handleUserInfo(userDataUI: UserDataUI){
-        d("tag1234","fragment new UserDataUI")
+    private fun handleUserInfo(userDataUI: UserDataUI) {
+        d("tag1234", "fragment new UserDataUI")
         binding.tvEmail.text = userDataUI.email
         binding.ivProfile.loadImage(userDataUI.image)
         binding.etName.setText(userDataUI.name)
         binding.etLastName.setText(userDataUI.lastName)
     }
 
-    private fun showOrHideProgressBar(isLoading:Boolean){
+    private fun showOrHideProgressBar(isLoading: Boolean) {
         binding.apply {
-            progressBar.visibility = if(isLoading) View.VISIBLE else View.GONE
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 
-    private fun showErrorMessage(errorMessage:String){
+    private fun showErrorMessage(errorMessage: String) {
         binding.root.showSnackBar(errorMessage)
         viewModel.onEvent(ProfilePageEvents.ResetErrorMessageToNull)
     }
 
-    private fun enableDisableUploadBtn(enable:Boolean){
+    private fun enableDisableUploadBtn(enable: Boolean) {
         binding.saveBtn.isEnabled = enable
     }
 
+    private fun openChangePassword() {
+        findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToChangePasswordFragment())
+    }
 
 
 }

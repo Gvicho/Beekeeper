@@ -2,32 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/background"
-    tools:context=".presenter.screen.home.HomeFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".presenter.screen.home.HomeFragment">
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/searchEditText"
+        style="@style/editText"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        style="@style/editText"
-        android:layout_marginTop="10dp"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/bg_et_rect"
         android:hint="@string/search_farm"
         android:paddingStart="20dp"
-        android:paddingEnd="20dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/farmsRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="15dp"/>
+        android:paddingEnd="20dp" />
 
     <ProgressBar
         android:id="@+id/pbLogIn"
@@ -35,6 +26,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
+        android:indeterminateTint="@color/honey"
         android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/farmsRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
 
 </LinearLayout>

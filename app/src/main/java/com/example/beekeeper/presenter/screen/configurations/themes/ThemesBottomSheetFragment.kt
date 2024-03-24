@@ -78,11 +78,15 @@ class ThemesBottomSheetFragment :
             binding.ivThemePreview.setImageResource(R.drawable.screen_dark_mode)
             // Set background to black
             binding.root.setBackgroundColor(Color.parseColor("#3A3838"))
+            binding.cbLightMode.setTextColor(Color.WHITE)
+            binding.cbDarkMode.setTextColor(Color.WHITE)
         } else {
             binding.cbLightMode.isChecked = true
             binding.ivThemePreview.setImageResource(R.drawable.screen_light_mode)
             // Set background to white
             binding.root.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            binding.cbLightMode.setTextColor(Color.BLACK)
+            binding.cbDarkMode.setTextColor(Color.BLACK)
         }
 
     }

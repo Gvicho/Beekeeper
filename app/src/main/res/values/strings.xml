@@ -105,4 +105,5 @@
     <string name="analytics">Analytics</string>
     <string name="ka">ka</string>
     <string name="en">en</string>
+    <string name="change_password">Change password</string>
 </resources>

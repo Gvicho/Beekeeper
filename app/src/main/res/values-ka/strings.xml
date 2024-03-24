@@ -104,6 +104,9 @@
     <string name="log_out">გასვლა</string>
     <string name="reports">რეპორტები</string>
     <string name="analytics">ანალიზები</string>
+    <string name="ka">ka</string>
+    <string name="en">en</string>
+    <string name="change_password">პაროლის შეცვლა</string>
 
 
 </resources>
