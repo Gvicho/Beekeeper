@@ -7,4 +7,5 @@ object PreferencesKeys {
     val TOKEN = stringPreferencesKey("access_token")
     val MAIL = stringPreferencesKey("access_mail")
     val DARK_MODE = booleanPreferencesKey("dark_mode")
+    val Language = booleanPreferencesKey("language")
 }
