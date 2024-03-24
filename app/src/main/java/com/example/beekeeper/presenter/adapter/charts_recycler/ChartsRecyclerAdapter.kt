@@ -3,6 +3,7 @@ package com.example.beekeeper.presenter.adapter.charts_recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.beekeeper.R
 import com.example.beekeeper.databinding.ItemAnalyticsBarChartBinding
 import com.example.beekeeper.databinding.ItemAnalyticsLineCahrtBinding
 import com.example.beekeeper.presenter.model.beehive_analytics.analytics_wrapper.AnalyticType
@@ -89,6 +90,8 @@ class ChartsRecyclerAdapter(private val analyticsList: List<AnalyticsWrapper>) :
             // Create a BarDataSet from the entries
             val dataSet = BarDataSet(entries, "Beehive Weight").apply {
                 setDrawValues(true) // Show the values on top of the bars
+                valueTextColor = itemView.context.getColor(R.color.teal_700)
+                valueTextSize = 12f
             }
             // Create a BarData object and set it to the chart
             val data = BarData(dataSet)
@@ -140,6 +143,8 @@ class ChartsRecyclerAdapter(private val analyticsList: List<AnalyticsWrapper>) :
                 setDrawValues(true)
                 setDrawCircles(false)
                 setDrawFilled(true)
+                valueTextColor = itemView.context.getColor(R.color.teal_700)
+                valueTextSize = 10f
                 //mode = LineDataSet.Mode.CUBIC_BEZIER // Make the line smooth
             }
 

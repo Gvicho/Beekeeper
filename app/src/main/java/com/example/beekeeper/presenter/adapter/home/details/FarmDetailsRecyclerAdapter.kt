@@ -250,8 +250,11 @@ class FarmDetailsRecyclerAdapter (
                     BarEntry((idx + 1).toFloat(), chartData.lastYearsGrowth[idx].toFloat())
                 }
                 // Create a BarDataSet from the entries
-                val dataSet = BarDataSet(entries, "Beehive Weight").apply {
+                val dataSet = BarDataSet(entries, "Number of Beehive").apply {
                     setDrawValues(true) // Show the values on top of the bars
+                    valueTextColor = itemView.context.getColor(R.color.teal_700)
+                    valueTextSize = 12f
+
                 }
                 // Create a BarData object and set it to the chart
                 val data = BarData(dataSet)

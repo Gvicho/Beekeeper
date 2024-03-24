@@ -1,11 +1,11 @@
 package com.example.beekeeper.presenter.adapter.saved_analytics
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.beekeeper.R
 import com.example.beekeeper.databinding.ItemAnalyticsBinding
 import com.example.beekeeper.presenter.model.beehive_analytics.saved_analytics.SavedAnalyticsPartialUI
 
@@ -41,8 +41,8 @@ class SavedAnalyticsRecyclerAdapter (
         }
 
         private fun bindUserBackgroundColor(isSelected:Boolean){
-            if(isSelected) binding.root.setBackgroundColor(Color.GRAY)
-            else binding.root.setBackgroundColor(Color.WHITE)
+            if(isSelected) binding.root.setBackgroundColor(itemView.context.getColor(R.color.grey_transparent))
+            else binding.root.setBackgroundColor(itemView.context.getColor(R.color.transparent))
         }
 
         private fun bindItemsClickListener(id:Int){
