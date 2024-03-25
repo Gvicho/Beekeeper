@@ -13,7 +13,6 @@
         style="@style/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="12124124"
         android:textSize="15sp"
         android:textStyle="bold"
         android:visibility="gone"
@@ -27,7 +26,6 @@
         style="@style/text_rey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="23 june, 2023"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -38,14 +36,16 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvDesc"
         style="@style/text"
-        android:layout_width="160dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:maxLines="3"
         android:textSize="13sp"
+        app:layout_constraintEnd_toStartOf="@+id/cvImages"
         app:layout_constraintStart_toStartOf="@+id/tvDate"
-        app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDate"
+        android:layout_marginEnd="10dp" />
 
 
     <androidx.cardview.widget.CardView
@@ -70,7 +70,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/indicatorLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
