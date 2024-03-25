@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.beekeeper.R
 import com.example.beekeeper.databinding.FragmentChangePasswordBinding
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.auth.ChangePasswordEvent
@@ -66,7 +67,7 @@ class ChangePasswordFragment
     }
 
     private fun passwordChangeSuccessful(){
-        binding.root.showSnackBar("Success")
+        binding.root.showSnackBar(getString(R.string.success))
     }
 
     private fun showOrHideProgressBar(isLoading:Boolean){

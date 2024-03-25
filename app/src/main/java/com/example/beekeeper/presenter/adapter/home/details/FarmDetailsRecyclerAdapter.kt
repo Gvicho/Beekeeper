@@ -15,7 +15,7 @@ import com.example.beekeeper.databinding.ItemFarmDetailsHeaderBinding
 import com.example.beekeeper.databinding.ItemFarmDetailsImagesBinding
 import com.example.beekeeper.databinding.ItemFarmDetailsOwnerDetailsBinding
 import com.example.beekeeper.databinding.ItemFarmDetailsWeatherBinding
-import com.example.beekeeper.presenter.adapter.ImagesPager2Adapter
+import com.example.beekeeper.presenter.adapter.images_pager.ImagesPager2Adapter
 import com.example.beekeeper.presenter.extension.loadImage
 import com.example.beekeeper.presenter.model.home.LocationUi
 import com.example.beekeeper.presenter.model.home.details.FarmDetailsItemWrapper

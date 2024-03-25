@@ -34,7 +34,6 @@ class UploadUserDataWorker @AssistedInject constructor(
         writeUserDataUseCase.invoke(userData).collect {result->
             when(result){
                 is Resource.Failed -> {
-                    //Log.d("UploadUserStatus","in worker, error : ${result.message}")
                     val outputData = workDataOf("error_message" to result.message)
                     workResult = Result.failure(outputData)
                     workResult = Result.success()
@@ -43,7 +42,6 @@ class UploadUserDataWorker @AssistedInject constructor(
                    // Log.d("UploadUserStatus","in worker, loading")
                 }
                 is Resource.Success -> {
-                    //Log.d("UploadUserStatus","in worker, success")
                     workResult = Result.success()
                 }
             }

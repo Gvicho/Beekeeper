@@ -106,4 +106,6 @@
     <string name="ka">ka</string>
     <string name="en">en</string>
     <string name="change_password">Change password</string>
+    <string name="success">Success</string>
+    <string name="successful_login">Successful Login</string>
 </resources>

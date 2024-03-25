@@ -83,13 +83,12 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
         showOrHideProgressBar(loginState.isLoading)
 
         loginState.accessToken?.let {
-
             successRegistration()
         }
     }
 
     private fun successRegistration(){
-        binding.root.showSnackBar("Successful Login")
+        binding.root.showSnackBar(getString(R.string.successful_login))
     }
 
     private fun showOrHideProgressBar(isLoading:Boolean){
@@ -160,18 +159,10 @@ class LoginFragment : BaseFragment<FragmentLoginScreenBinding>(FragmentLoginScre
 
     private fun animations(){
         val slideInTop = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
-        val slideInRight = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_right)
-        val slideInLeft = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
         val slideInBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
         binding.apply {
             loginContainer.startAnimation(slideInBottom)
             ivSemiCircle.startAnimation(slideInTop)
-//            etEmail.startAnimation(slideInLeft)
-//            etPassword.startAnimation(slideInRight)
-//            cbRememberMe.startAnimation(slideInLeft)
-//            btnLogIn.startAnimation(slideInRight)
-//            btnRegister.startAnimation(slideInLeft)
-//            tvRecoverPassword.startAnimation(slideInBottom)
         }
     }
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.beekeeper.domain.common.Resource
 import com.example.beekeeper.domain.usecase.damage_report.GetReportByIdUseCase
 import com.example.beekeeper.presenter.event.damage_beehives.DamageReportDetailsPageEvent
-import com.example.beekeeper.presenter.mappers.toPresentation
+import com.example.beekeeper.presenter.mappers.damage_report.toPresentation
 import com.example.beekeeper.presenter.state.damage_report.details.DamageReportDetailsPageState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

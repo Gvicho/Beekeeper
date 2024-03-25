@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="35dp"
-            android:text="Saved Analytics"
+            android:text="@string/saved_analytics"
             android:textSize="24sp"
             android:textStyle="bold" />
 

@@ -2,7 +2,6 @@ package com.example.beekeeper.presenter.workers.reports
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -29,7 +28,6 @@ class UploadReportWorker @AssistedInject constructor(
             dateUploaded = inputData.getString("dateUploaded") ?: "",
             imageUris = uris
         )
-        Log.d("UploadUserStatus","in Upload worker start report -> $report")
         return uploadReport(report)
     }
 

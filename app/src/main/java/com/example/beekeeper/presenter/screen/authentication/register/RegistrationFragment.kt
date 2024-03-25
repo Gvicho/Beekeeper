@@ -135,15 +135,9 @@ class RegistrationFragment :
     }
 
     private fun animations() {
-        val slideInRight = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_right)
-        val slideInLeft = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
         val slideInBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
         val slideInTop = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
         binding.apply {
-//            etEmail.startAnimation(slideInLeft)
-//            etPassword.startAnimation(slideInRight)
-//            etRepeatPassword.startAnimation(slideInLeft)
-//            btnRegister.startAnimation(slideInRight)
             registerContainer.startAnimation(slideInBottom)
             ivBee.startAnimation(slideInTop)
 

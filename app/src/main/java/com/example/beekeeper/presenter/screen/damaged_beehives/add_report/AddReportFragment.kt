@@ -215,9 +215,4 @@ class AddReportFragment :
         viewModel.onEvent(AddReportPageEvents.RemoveImageFromList(uri))
     }
 
-    private fun returnBackAndCloseFragment(){
-        findNavController().popBackStack()
-    }
-
-
 }

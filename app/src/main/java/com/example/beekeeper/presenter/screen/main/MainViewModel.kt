@@ -41,7 +41,6 @@ class MainViewModel @Inject constructor(
     val userProfileState = _userProfileState.asStateFlow()
 
 
-
     private var sessionToken:String = ""
 
     init {

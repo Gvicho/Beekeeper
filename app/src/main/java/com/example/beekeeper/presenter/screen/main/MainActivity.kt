@@ -153,21 +153,7 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             optionsRecyclerView.adapter = optionsAdapter
             optionsRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-            options = mutableListOf(
-                Option(
-                    getString(R.string.languages),
-                    Options.LANGUAGE,
-                    icon = R.drawable.ic_language
-                ),
-                Option(getString(R.string.themes), Options.DARK_MODE, icon = R.drawable.ic_themes),
-                Option(
-                    getString(R.string.profile),
-                    Options.PROFILE,
-                    icon = R.drawable.ic_beekeper_drawer
-                ),
-                Option(getString(R.string.log_out), Options.LOG_OUT, icon = R.drawable.ic_log_out),
-
-                )
+            options = getOptions()
             optionsAdapter.submitList(options)
         }
     }
@@ -287,8 +273,21 @@ class MainActivity : AppCompatActivity() {
         val config = Configuration()
         config.setLocale(locale)
         baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
-        
-
-
     }
+
+    private fun getOptions() = mutableListOf(
+        Option(
+            getString(R.string.languages),
+            Options.LANGUAGE,
+            icon = R.drawable.ic_language
+        ),
+        Option(getString(R.string.themes), Options.DARK_MODE, icon = R.drawable.ic_themes),
+        Option(
+            getString(R.string.profile),
+            Options.PROFILE,
+            icon = R.drawable.ic_beekeper_drawer
+        ),
+        Option(getString(R.string.log_out), Options.LOG_OUT, icon = R.drawable.ic_log_out),
+
+        )
 }

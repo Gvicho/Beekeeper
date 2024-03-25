@@ -1,4 +1,4 @@
-package com.example.beekeeper.presenter.adapter
+package com.example.beekeeper.presenter.adapter.images_pager
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

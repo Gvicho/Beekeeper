@@ -10,7 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.ekn.gruzer.gaugelibrary.Range
 import com.example.beekeeper.databinding.FragmentDamageReportDetailsBinding
-import com.example.beekeeper.presenter.adapter.ImagesPager2Adapter
+import com.example.beekeeper.presenter.adapter.images_pager.ImagesPager2Adapter
 import com.example.beekeeper.presenter.base_fragment.BaseFragment
 import com.example.beekeeper.presenter.event.damage_beehives.DamageReportDetailsPageEvent
 import com.example.beekeeper.presenter.extension.showSnackBar

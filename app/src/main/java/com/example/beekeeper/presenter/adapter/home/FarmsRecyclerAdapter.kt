@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.beekeeper.databinding.ItemFarmBinding
-import com.example.beekeeper.presenter.adapter.ImagesPager2Adapter
+import com.example.beekeeper.presenter.adapter.images_pager.ImagesPager2Adapter
 import com.example.beekeeper.presenter.model.home.FarmUi
 import com.example.beekeeper.presenter.model.home.LocationUi
 import me.relex.circleindicator.CircleIndicator3

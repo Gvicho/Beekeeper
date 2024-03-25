@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.beekeeper.R
 import com.example.beekeeper.databinding.ReportRecyclerItemBinding
-import com.example.beekeeper.presenter.adapter.ImagesPager2Adapter
+import com.example.beekeeper.presenter.adapter.images_pager.ImagesPager2Adapter
 import com.example.beekeeper.presenter.model.damaged_beehives.DamageReportUI
 import me.relex.circleindicator.CircleIndicator3
 
